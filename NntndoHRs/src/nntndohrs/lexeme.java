@@ -9,15 +9,23 @@
 
 package nntndohrs;
 
+import java.lang.reflect.Type;
+
+
+
 /**
  *
  * @author adam pluth
  */
- class lexeme extends types{
+ class lexeme implements Type{
      
         String type;
         String string;
         int integer;
         double real;
+
+    lexeme(String t) {
+        type=t;
+    }
 }
 
