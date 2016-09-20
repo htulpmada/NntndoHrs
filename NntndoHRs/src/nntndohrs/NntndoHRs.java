@@ -22,8 +22,8 @@ import java.nio.charset.Charset;
  */
 public class NntndoHRs {        
 static PushbackReader src;
-static int chr;
-static char c;
+static int chr=0;
+static char c=0;
 static String token="";
 static lexeme l;
     public static void main(String[] args) throws FileNotFoundException, IOException {
@@ -31,18 +31,15 @@ static lexeme l;
         new InputStreamReader(
         new FileInputStream(args[0]),
         Charset.forName("UTF-8")));
-        //Reader should be ready to read til EOF//
-        chr=src.read();
-        while(chr!=-1){l=lex();System.out.println(l);}
-        //lex();
+        while(chr!=65535){l=lex();System.out.println(l);}
     }
     
     public static lexeme lex() throws IOException{    
-        skipWhitSpace();
-        chr=src.read();
-        if(chr!=-1){c=(char)chr;}
-        else{return new lexeme("ENDofINPUT");}
-        switch(c){
+        
+       skipWhitSpace();
+       chr=src.read();
+       if(c=='\uffff'){return new lexeme("ENDofINPUT");}
+       switch(c){
             case '(': return new lexeme("OPAREN");
             case ')': return new lexeme("CPAREN");
             case ',': return new lexeme("COMMA");
@@ -67,14 +64,12 @@ static lexeme l;
             default:
                 //multi char tokens
                 if(Character.isDigit(c)){
-                    src.unread(c);
                     return lexNummber();
                 }
                 else if(Character.isLetter(c)){
-                    src.unread(c);
                     return lexVariableorKeyword();
                 }
-                else if(c=='\"'){//might be wrong needs to be just " accomidate for escape chars
+                else if(c=='\"'){
                     return lexString();
                 }
                 else{//needs to be last
@@ -87,32 +82,23 @@ static lexeme l;
      *  skips all whitespace and pushes back extra char after end of whitespace
      */
     private static void skipWhitSpace() throws IOException {
-        int ch=src.read();
-        if(ch==-1){src.unread(ch);return;}
-        int cw=(char) ch;
-        while(Character.isWhitespace(cw)){
-            ch=src.read();
-            if(ch==-1){src.unread(ch);return;}
-            cw=(char) ch;
+        chr=src.read();
+        c=(char) chr;
+        while(Character.isWhitespace(c)){
+            chr=src.read();
+            c=(char) chr;
         }
-        src.unread(cw);
+       src.unread(c);
     }
     
     private static lexeme lexVariableorKeyword() throws IOException{
-        char ch;
-        int i;
         token="";
-        i=src.read();
-        if(i==-1){src.unread(i);return new lexeme("ENDofINPUT");}
-        ch=(char)i;
-        token+=ch;
-        while(Character.isLetter(ch)||Character.isDigit(ch)){
-            i=src.read();
-            if(i==-1){break;}
-            ch=(char)i;
-            token+=ch;
+        while(Character.isLetter(c)||Character.isDigit(c)){
+            token+=c;
+            chr=src.read();
+            c=(char)chr;
         }
-        src.unread(i);
+        src.unread(chr);
         //read for keywords
         if(token.equals("if")){}//if
         else if(token.equals("boolean")){}//boolean/p1
@@ -125,51 +111,38 @@ static lexeme l;
         else if(token.equals("")){}//else/luigi
         else if(token.equals("")){}//for/yoshi
         else if(token.equals("")){}//if/mario
-        else if(token.equals("")){}//int/pit
+        else if(token.equals("int")||token.equals("pit")){return new lexeme("INTEGER_TYPE");}//int/pit
         else if(token.equals("")){}//new/startGame
         else if(token.equals("")){}//return/gameOver
         else if(token.equals("")){}//switch/turn
-        else if(token.equals("")){}//while/kirby
+        else if(token.equals("while")||token.equals("pit")){return new lexeme("WHILE");}//while/kirby
         else {return new lexeme("VARIABLE",token);}
         
         return new lexeme(token);//probably wrong
     }
 
     private static lexeme lexString() throws IOException {
-        char ch;
-        int i;
-        token="";
-        i=src.read();
-        if(i==-1){src.unread(i);return new lexeme("ENDofINPUT");}
-        ch=(char)i;
-        token+=ch;
-        while(ch!='"'){
-            i=src.read();
-            if(i==-1){break;}
-            ch=(char)i;
-            token+=ch;
+        token="\"";
+        chr=src.read();
+        c=(char)chr;
+        token+=c;
+        while(c!='\"'){
+            chr=src.read();
+            c=(char)chr;
+            token+=c;
         }
-        src.unread(i);
         return new lexeme("STRING",token);
     }
 
     private static lexeme lexNummber() throws IOException {
-        char ch;
-        int i;
         token="";
-        i=src.read();
-        if(i==-1){src.unread(i);return new lexeme("ENDofINPUT");}
-        ch=(char)i;
-        token+=ch;
-        while(Character.isDigit(ch)){
-            i=src.read();
-            if(i==-1){break;}
-            ch=(char)i;
-            if(!Character.isDigit(ch)){break;}
-            token+=ch;
+        while(Character.isDigit(c)){
+            token+=c;
+            chr=src.read();
+            c=(char)chr;
         }
-        src.unread(i);
-        return new lexeme("INTEGER",Integer.parseInt(token));
+        src.unread(chr);
+        return new lexeme("INTEGER",token);
     }
     
 }

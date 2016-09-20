@@ -41,10 +41,10 @@ import java.lang.reflect.Type;
         String s="";
         if(type!=null){s+=type+" ";}
         if(string!=null){s+=string+" ";}
-        try{s+=integer+" ";}
-        catch(Exception e){}
-        try{s+=real+" ";}
-        catch(Exception e){}
+        //try{s+=integer+" ";}
+        //catch(Exception e){}
+        //try{s+=real+" ";}
+        //catch(Exception e){}
         return s;
     }
 }
