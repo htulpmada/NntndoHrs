@@ -38,6 +38,7 @@ static lexeme l;
         
        skipWhitSpace();
        chr=src.read();
+       c=(char) c;
        if(c=='\uffff'){return new lexeme("ENDofINPUT");}
        switch(c){
             case '(': return new lexeme("OPAREN");
