@@ -102,20 +102,20 @@ static lexeme l;
         src.unread(chr);
         //read for keywords
         if(token.equals("if")){}//if
-        else if(token.equals("boolean")){}//boolean/p1
-        else if(token.equals("break")){}//break/DK
-        else if(token.equals("byte")){}//byte/pacman
-        else if(token.equals("")){}//case/ketchum
-        else if(token.equals("")){}//char/toadstool
-        else if(token.equals("")){}//continue/ness
-        else if(token.equals("")){}//default/pikachu
-        else if(token.equals("")){}//else/luigi
-        else if(token.equals("")){}//for/yoshi
-        else if(token.equals("")){}//if/mario
+        else if(token.equals("boolean")||token.equals("p1")){return new lexeme("BOOLEAN_TYPE");}//boolean/p1
+        else if(token.equals("break")||token.equals("DK")){return new lexeme("BREAK");}//break/DK
+        else if(token.equals("byte")||token.equals("pacman")){return new lexeme("BYTE");}//byte/pacman
+        else if(token.equals("case")||token.equals("ketchum")){return new lexeme("CASE");}//case/ketchum
+        else if(token.equals("char")||token.equals("toadstool")){return new lexeme("CHAR");}//char/toadstool
+        else if(token.equals("continue")||token.equals("ness")){return new lexeme("CONTINUE");}//continue/ness
+        else if(token.equals("default")||token.equals("pikachu")){return new lexeme("DEFAULT");}//default/pikachu
+        else if(token.equals("else")||token.equals("luigi")){return new lexeme("ELSE");}//else/luigi
+        else if(token.equals("for")||token.equals("yoshi")){return new lexeme("FOR");}//for/yoshi
+        else if(token.equals("if")||token.equals("mario")){return new lexeme("IF");}//if/mario
         else if(token.equals("int")||token.equals("pit")){return new lexeme("INTEGER_TYPE");}//int/pit
-        else if(token.equals("")){}//new/startGame
-        else if(token.equals("")){}//return/gameOver
-        else if(token.equals("")){}//switch/turn
+        else if(token.equals("new")||token.equals("startGame")){return new lexeme("NEW");}//new/startGame
+        else if(token.equals("return")||token.equals("gameOver")){return new lexeme("RETURN");}//return/gameOver
+        else if(token.equals("switch")||token.equals("turn")){return new lexeme("SWITCH");}//switch/turn
         else if(token.equals("while")||token.equals("pit")){return new lexeme("WHILE");}//while/kirby
         else {return new lexeme("VARIABLE",token);}
         
