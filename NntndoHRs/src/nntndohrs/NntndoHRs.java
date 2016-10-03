@@ -26,12 +26,21 @@ static int chr=0;
 static char c=0;
 static String token="";
 static lexeme l;
+static lexeme t;
+static lexeme n;
+
     public static void main(String[] args) throws FileNotFoundException, IOException {
         src = new PushbackReader(
         new InputStreamReader(
         new FileInputStream(args[0]),
         Charset.forName("UTF-8")));
-        while(chr!=65535){l=lex();System.out.println(l);}
+        while(chr!=65535){
+            l=lex();
+            //System.out.println(l);
+            if(t==null){t=l;n=t;}
+            else{n.left=l;n=n.left;}
+        }
+        System.out.println(t);
     }
     
     public static lexeme lex() throws IOException{    

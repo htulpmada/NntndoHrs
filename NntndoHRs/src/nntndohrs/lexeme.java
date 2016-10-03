@@ -23,6 +23,8 @@ import java.lang.reflect.Type;
         String string=null;
         int integer=0;
         double real=0;
+        lexeme right=null;
+        lexeme left=null;
 
     lexeme(String t) {
         type=t;
@@ -41,6 +43,8 @@ import java.lang.reflect.Type;
         String s="";
         if(type!=null){s+=type+" ";}
         if(string!=null){s+=string+" ";}
+        if(left!=null){s+="\n"+left.toString();}
+        if(right!=null){s+="\n"+right.toString();}
         //try{s+=integer+" ";}
         //catch(Exception e){}
         //try{s+=real+" ";}
