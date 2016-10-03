@@ -1,0 +1,20 @@
+operator :   PLUS | MINUS | Times | DIVIDE
+
+expression : unary 
+        |   unary operator expression
+
+unary :     INTEGER
+        |   VARIABLE
+        |   VARIABLE OPAREN optExpressionList CPAREN
+        |   OPAREN expression CPAREN
+
+optExpressionList:  expressionList | EMPTY
+
+expressionList: expression
+        |   expression COMMA expressionList
+
+optArgList: argList
+        | EMPTY
+
+argList:    expression
+        | expression COMMA argList
