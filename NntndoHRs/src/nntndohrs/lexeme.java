@@ -21,6 +21,7 @@ import java.lang.reflect.Type;
      
         String type=null;
         String string=null;
+        boolean bool;
         int integer=0;
         double real=0;
         lexeme right=null;
@@ -33,6 +34,11 @@ import java.lang.reflect.Type;
     lexeme(String t, int value) {
         type=t;
         integer=value;
+    }
+    
+    lexeme(String t, boolean value) {
+        type=t;
+        bool=value;
     }
     
     lexeme(String t, String value) {

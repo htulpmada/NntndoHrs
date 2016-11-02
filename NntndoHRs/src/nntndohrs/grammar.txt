@@ -1,20 +1,90 @@
-operator :   PLUS | MINUS | Times | DIVIDE
+prog:       definition 
+    |       definition prog
+
+definition : varDef
+    | funcDef
+
+varDef : VAR ID EQUALS expression SEMI
+
+funcDef : FUNCTION ID OPAREN optParamList CPAREN block
+
+idDef : ID
+    | ID OPAREN optExprList CPAREN
+    | ID OBRACKET expr CBRACKET
+
+operator :  PLUS 
+    | MINUS 
+    | TIMES 
+    | DIVIDE
+    | EQUAL
+    | NOTEQUAL
+    | GREATER
+    | LESS
+    | GREATEREQUAL
+    | LESSEQUAL
+    | INTDIVIDE
+    | POWER
+    | AND
+    | OR
+    | DOUBLEEQUAL
 
 expression : unary 
         |   unary operator expression
 
-unary :     INTEGER
-        |   VARIABLE
-        |   VARIABLE OPAREN optExpressionList CPAREN
-        |   OPAREN expression CPAREN
+unary : INTEGER
+    | STRING
+    | idDef
+    | NOT unary
+    | OPAREN expr CPAREN
+    | k_lambda
+    | funcDef
+    | OBRACKET optExprList CBRACKET
+    | NIL
+    | BOOLEAN
+    | PRINT OPAREN exprList CPAREN
+    | APPEND OPAREN exprList CPAREN
+    | INSERT OPAREN exprList CPAREN
+    | REMOVE OPAREN exprList CPAREN
+    | SET OPAREN exprList CPAREN
+    | LENGTH OPAREN exprList CPAREN
 
 optExpressionList:  expressionList | EMPTY
 
 expressionList: expression
-        |   expression COMMA expressionList
+    |   expression COMMA expressionList
 
-optArgList: argList
-        | EMPTY
+optParamList : EMPTY
+    | paramList
 
-argList:    expression
-        | expression COMMA argList
+paramList : ID
+    | ID COMMA paramList
+
+expr : primary
+    | primary operator expr
+
+block : OBRACE optStatementList CBRACE
+
+optStatementList : EMPTY
+    | statementList
+
+statementList : statement
+    | statement statementList
+
+statement : variableDefinition
+    | functionDefinition
+    | expr SEMI
+    | whileLoop
+    | ifStatement
+    | RETURN expr SEMI
+
+whileLoop : WHILE OPAREN expr CPAREN block
+
+ifStatement : IF OPAREN expr CPAREN block optElseStatement
+
+optElseStatement : EMPTY
+    | elseStatement
+
+elseStatement : ELSE block
+    | ELSE ifStatement
+
+k_lambda : LAMBDA OPAREN optParamList CPAREN block
