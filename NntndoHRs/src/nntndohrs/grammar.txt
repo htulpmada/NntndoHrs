@@ -4,9 +4,9 @@ prog:       definition
 definition : varDef
     | funcDef
 
-varDef : VAR ID EQUALS expression SEMI
+varDef : ID EQUALS expr SEMI
 
-funcDef : FUNCTION ID OPAREN optParamList CPAREN block
+funcDef : ID OPAREN optPList CPAREN block
 
 idDef : ID
     | ID OPAREN optExprList CPAREN
@@ -19,7 +19,7 @@ operator :  PLUS
     | EQUAL
     | NOTEQUAL
     | GREATER
-    | LESS
+    | LESSTHAN
     | GREATEREQUAL
     | LESSEQUAL
     | INTDIVIDE
@@ -29,7 +29,7 @@ operator :  PLUS
     | DOUBLEEQUAL
 
 expression : unary 
-        |   unary operator expression
+        |   unary op expr
 
 unary : INTEGER
     | STRING
@@ -48,43 +48,43 @@ unary : INTEGER
     | SET OPAREN exprList CPAREN
     | LENGTH OPAREN exprList CPAREN
 
-optExpressionList:  expressionList | EMPTY
+optExprList:  exprList | EMPTY
 
-expressionList: expression
-    |   expression COMMA expressionList
+exprList: expr
+    |   expr COMMA exprList
 
-optParamList : EMPTY
-    | paramList
+optPList : EMPTY
+    | pList
 
-paramList : ID
-    | ID COMMA paramList
+pList : ID
+    | ID COMMA pList
 
-expr : primary
-    | primary operator expr
+expr : unary
+    | unary op expr
 
-block : OBRACE optStatementList CBRACE
+block : OBRACE optSList CBRACE
 
-optStatementList : EMPTY
-    | statementList
+optSList : EMPTY
+    | sList
 
-statementList : statement
-    | statement statementList
+sList : state
+    | state sList
 
-statement : variableDefinition
-    | functionDefinition
+state : varDef
+    | funcDef
     | expr SEMI
     | whileLoop
-    | ifStatement
+    | ifState
     | RETURN expr SEMI
 
 whileLoop : WHILE OPAREN expr CPAREN block
 
-ifStatement : IF OPAREN expr CPAREN block optElseStatement
+ifState : IF OPAREN expr CPAREN block optElseState
 
-optElseStatement : EMPTY
-    | elseStatement
+optElseState : EMPTY
+    | elseState
 
-elseStatement : ELSE block
-    | ELSE ifStatement
+elseState : ELSE block
+    | ELSE ifState
 
-k_lambda : LAMBDA OPAREN optParamList CPAREN block
+lambda : LAMBDA OPAREN optPList CPAREN block
