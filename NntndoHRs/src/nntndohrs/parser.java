@@ -44,6 +44,7 @@ static lexeme t;
     public lexeme advance(){
         lexeme old = t;
         t=t.left;
+        System.out.println(old.type+" "+old.integer+" "+old.string);
         return old;
     }
     
@@ -87,7 +88,7 @@ static lexeme t;
     }
 
     public lexeme functionDefinition(){
-        lexeme f = match("FUNCTION");
+        lexeme f = match("FUNC");
         lexeme e = match("ID");
         lexeme o = match("OPAREN");
         lexeme op = optParamList();
@@ -321,9 +322,9 @@ static lexeme t;
     }
     
      public lexeme block(){
-        lexeme o = match("OBRACE");
+        lexeme o = match("OCURLY");
         lexeme s = optStatementList();
-        lexeme c = match("CBRACE");
+        lexeme c = match("CCURLY");
         return cons("BLOCK", o, cons("JOIN", s, cons("JOIN", c, null)));
      }
     
@@ -436,10 +437,10 @@ static lexeme t;
     public boolean exprPending(){return unaryPending();}
     public boolean unaryPending(){return idDefPending() | check("STRING") | check("INTEGER") | check("NOT") | check("NOT") | check("OPAREN") | check("OPAREN") | k_lambdaPending() | functionDefinitionPending() | check("OBRACKET") | check("NIL") | check("BOOLEAN") | check("PRINT") | check("APPEND") | check("INSERT") | check("REMOVE") | check("SET") | check("LENGTH");}
     public boolean opPending(){return check("EQUAL") | check("NOTEQUAL") | check("GREATER") | check("LESS") | check("GREATEREQUAL") | check("LESSEQUAL") | check("PLUS") | check("MINUS") | check("MULTIPLY") | check("DIVIDE") | check("INTEGERDIVIDE") | check("POWER") | check("AND") | check("OR") | check("ASSIGN") | check("DOUBLEEQUAL");}
-    public boolean blockPending(){return check("OBRACE");}
+    public boolean blockPending(){return check("OCURLY");}
     public boolean statementListPending(){return statementPending();}
     public boolean statementPending(){return variableDefinitionPending() | functionDefinitionPending() | exprPending() | whileLoopPending() | ifStatementPending() | check("RETURN");}
-    public boolean whileLoopPending(){return check("while");}
+    public boolean whileLoopPending(){return check("WHILE");}
     public boolean ifStatementPending(){return check("IF");}
     public boolean elseStatementPending(){return check("ELSE");}
     public boolean k_lambdaPending(){return check("LAMBDA");}
