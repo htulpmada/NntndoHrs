@@ -40,7 +40,12 @@ import java.lang.reflect.Type;
         type=t;
         bool=value;
     }
-    
+    lexeme(String t, String value, lexeme l, lexeme r) {
+        type=t;
+        string=value;
+        left=l;
+        right=r;
+    }
     lexeme(String t, String value) {
         type=t;
         string=value;

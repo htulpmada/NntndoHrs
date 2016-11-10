@@ -23,18 +23,23 @@ public class lexer {
     static lexeme l;
     static lexeme t;
     static lexeme n;
+    /**
+     * @param file
+     * @param go boolean to print lex list or not
+     * @throws IOException 
+     */
 public lexer(String file,boolean go) throws IOException{
         src = new PushbackReader(
             new InputStreamReader(
             new FileInputStream(file),
             Charset.forName("UTF-8")));
-    if(go){
         while(chr!=65535){
             l=lex();
             //System.out.println(l);
             if(t==null){t=l;n=t;}
             else{n.left=l;n=n.left;}
         }
+    if(go){
         System.out.println(t);
     }
 }
@@ -140,6 +145,7 @@ public static lexeme lex() throws IOException{
         else if(token.equals("real")||token.equals("link")){return new lexeme("TYPE","real");}//int/pit
         else if(token.equals("while")||token.equals("kirby")){return new lexeme("WHILE","while");}//while/kirby
         else if(token.equals("return")||token.equals("gameOver")){return new lexeme("RETURN","return");}//return/gameOver
+        else if (token.equals("func")){return new lexeme("FUNC", "func");}
         else if (token.equals("nil")){return new lexeme("NIL", "nil");}
         else if (token.equals("true")){return new lexeme("BOOLEAN", true);}
         else if (token.equals("false")){return new lexeme("BOOLEAN", false);}

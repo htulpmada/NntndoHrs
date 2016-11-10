@@ -24,13 +24,14 @@ import java.util.ArrayList;
 public class NntndoHRs {        
 static lexer n;
 static parser p;
-static ArrayList<lexeme> tree;
+static lexeme tree;
 String file="";
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        try{String file = args[0]; n=new lexer(file,false);}
-        catch(ArrayIndexOutOfBoundsException e){n=new lexer("file.txt",false);}
-        try{String file = args[0]; p=new parser(file,true);}
-        catch(ArrayIndexOutOfBoundsException e){p=new parser("file.txt",true);}
+        try{String file = args[0]; n=new lexer(file,true);}
+        catch(ArrayIndexOutOfBoundsException e){n=new lexer("file.txt",true);}
+        try{String file = args[0]; p=new parser();}
+        catch(ArrayIndexOutOfBoundsException e){p=new parser();}
         tree=p.parse();
+        
     }
 }
