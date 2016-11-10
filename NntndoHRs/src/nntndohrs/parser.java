@@ -5,14 +5,8 @@
  */
 package nntndohrs;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PushbackReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import static nntndohrs.lexer.lex;
 
 /**
  *

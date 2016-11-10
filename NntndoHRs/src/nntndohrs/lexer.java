@@ -130,7 +130,7 @@ public static lexeme lex() throws IOException{
     
     private static lexeme lexVariableorKeyword() throws IOException{
         token="";
-        while(Character.isLetter(c)||Character.isDigit(c)){
+        while(Character.isLetter(c)||Character.isDigit(c)||c=='.'){
             token+=c;
             chr=src.read();
             c=(char)chr;

@@ -3,7 +3,7 @@ func main(){
 
     while (alpha > 0) 
           { 
-          println("alpha is " + alpha); 
+          Sysytem.out.println("alpha is " + alpha); 
           alpha = alpha - 1; 
           }
 }
