@@ -28,7 +28,7 @@ static lexeme t;
         return cons("PARSE",root,eof);
     }
     
-    public void fatal(String problem){
+    public static void fatal(String problem){
         System.out.println("\nERROR; "+problem);
         System.exit(1);
     }
@@ -540,8 +540,6 @@ static lexeme t;
             //b.left=null;
         return cons("LAMBDA", l ,cons("JOIN", o, cons("JOIN", op, cons("JOIN", c, cons("JOIN", b, null)))));
     }
-    
-    
     //pending functions
     public boolean programPending(){return definitionPending();}
     public boolean definitionPending(){return variableDefinitionPending() | functionDefinitionPending() | idDefPending();}
@@ -560,7 +558,4 @@ static lexeme t;
     public boolean ifStatementPending(){return check("IF");}
     public boolean elseStatementPending(){return check("ELSE");}
     public boolean k_lambdaPending(){return check("LAMBDA");}
-
-    
-
 }
