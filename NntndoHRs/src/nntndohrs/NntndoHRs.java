@@ -32,6 +32,6 @@ String file="";
         try{String file = args[0]; p=new parser();}
         catch(ArrayIndexOutOfBoundsException e){p=new parser();}
         tree=p.parse();
-        
+        System.out.println(tree);
     }
 }

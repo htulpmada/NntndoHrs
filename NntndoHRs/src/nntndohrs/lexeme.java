@@ -54,8 +54,8 @@ import java.lang.reflect.Type;
         String s="";
         if(type!=null){s+=type+" ";}
         if(string!=null){s+=string+" ";}
-        if(left!=null){s+="\n"+left.toString();}
-        if(right!=null){s+="\n"+right.toString();}
+        if(left!=null){s+="\nLeft: "+left.toString();}
+        if(right!=null){s+="\nRight: "+right.toString();}
         //try{s+=integer+" ";}
         //catch(Exception e){}
         //try{s+=real+" ";}
