@@ -346,15 +346,31 @@ public class evaluator {
 
 
     private lexeme evalPARAMLIST(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme r = null;
+        lexeme n = null;
+        if(tree.right == null){
+            return evaluate(tree.left, env);
+        }
+        if(tree.right.right.left != null){
+            r = evaluate(tree.right.right.left, env);
+            n = new lexeme("JOIN", "JOIN", evaluate(tree.left, env), r);
+        }
+        return n;
     }
 
     private lexeme evalOPTPARAMLIST(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            if(tree.left != null){
+                return evaluate(tree.left, env);
+            }
+        return null;
+
     }
 
     private lexeme evalOPTEXPRLIST(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(tree.left != null){
+            return evaluate(tree.left, env);
+        }
+        return null;
     }
 
     private lexeme evalEXPRLIST(lexeme tree, lexeme env) {
