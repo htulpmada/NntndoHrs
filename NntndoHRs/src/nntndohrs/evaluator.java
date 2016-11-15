@@ -346,27 +346,68 @@ public class evaluator {
 
 
     private lexeme evalPARAMLIST(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme r = null;
+        lexeme n = null;
+        if(tree.right == null){
+            return evaluate(tree.left, env);
+        }
+        if(tree.right.right.left != null){
+            r = evaluate(tree.right.right.left, env);
+            n = new lexeme("JOIN", "JOIN", evaluate(tree.left, env), r);
+        }
+        return n;
     }
 
     private lexeme evalOPTPARAMLIST(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            if(tree.left != null){
+                return evaluate(tree.left, env);
+            }
+        return null;
+
     }
 
     private lexeme evalOPTEXPRLIST(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(tree.left != null){
+            return evaluate(tree.left, env);
+        }
+        return null;
     }
 
     private lexeme evalEXPRLIST(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme r = null;
+        lexeme n = null;
+        if(tree.right == null){
+            return evaluate(tree.left, env);
+        }
+        if(tree.right.right.left != null){
+            r = evaluate(tree.right.right.left, env);
+            n = new lexeme("JOIN", "JOIN", evaluate(tree.left, env), r);
+        }
+        return n;
     }
 
     private lexeme evalEXPR(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(tree.right == null){
+            return evaluate(tree.left, env);
+        }
+        else{
+            return evaluate(tree.right, env);
+        }
     }
 
     private lexeme evalPRIMARY(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme elements = null;
+        if(tree.right == null){
+            return evaluate(tree.left, env);
+        }
+        else if(tree.left.type == "OPAREN"){
+            return evaluate(tree.right.left, env);
+        }        
+        else if(tree.left.type == "OBRACKET"){
+            elements = evaluate(tree.right.left, env);
+            //arr = makeArgList(elements, env);
+        }
+        return evaluate(new lexeme("ARRAY", "ARRAY", elements, null), env);//not sure about that
     }
 
     private lexeme evalOPERATOR(lexeme tree, lexeme env) {
