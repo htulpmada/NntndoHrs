@@ -10,6 +10,7 @@
 package nntndohrs;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 
 
@@ -26,6 +27,7 @@ import java.lang.reflect.Type;
         double real=0;
         lexeme right=null;
         lexeme left=null;
+        ArrayList<lexeme> strings;
 
     lexeme(String t) {
         type=t;
@@ -62,5 +64,10 @@ import java.lang.reflect.Type;
         //catch(Exception e){}
         return s;
     }
+    public int size(){
+    int i=0;
+    return size(i);
+    }
+    public int size(int j){return right.size(j+1);}
 }
 
