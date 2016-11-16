@@ -33,15 +33,15 @@ import java.util.ArrayList;
         type=t;
     }
 
-    lexeme(String t, int value) {
+    /*lexeme(String t, int value) {
         type=t;
         integer=value;
-    }
+    }*/
     
-    lexeme(String t, boolean value) {
+/*    lexeme(String t, boolean value) {
         type=t;
         bool=value;
-    }
+    }*/
     lexeme(String t, String value, lexeme l, lexeme r) {
         type=t;
         string=value;

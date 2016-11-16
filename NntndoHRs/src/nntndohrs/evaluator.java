@@ -79,7 +79,7 @@ public class evaluator {
             }
             env=cdr(env);
         }
-        parser.fatal("variable "+ var + " is undefined");
+        fatal("variable "+ var + " is undefined");
         return;
     }
     
@@ -188,7 +188,7 @@ public class evaluator {
         return evalPRINT(tree, env);}
     else if(tree.type == "CLOSURE"){
         return evalCLOSURE(tree, env);}
-    else if(tree.type == "EQUAL"){
+    else if(tree.type == "EQUAL"){//maybe needs to be evalASSIGN()
         return evalEQUAL(tree, env);}
     else if(tree.type == "NOTEQUAL"){
         return evalNOTEQUAL(tree, env);}
@@ -218,7 +218,7 @@ public class evaluator {
         return evalOR(tree, env);}
     else if(tree.type == "ASSIGN"){
         return evalASSIGN(tree, env);}
-    else if(tree.type == "DOUBLEEQUAL"){
+    else if(tree.type == "DOUBLEEQUAL"){//maybe needs to be evalEQUAL()
         return evalDOUBLEEQUAL(tree, env);}
     else if(tree.type == "ARRAY"){
         return evalARRAY(tree, env);}
@@ -505,7 +505,7 @@ public class evaluator {
     }
 
     private lexeme evalJOIN(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       
     }
 
     private lexeme evalSTRING(lexeme tree, lexeme env) {
@@ -517,23 +517,23 @@ public class evaluator {
     }
 
     private lexeme evalFUNCTION(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalVAR(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalWHILE(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalIF(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalELSE(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalRETURN(lexeme tree, lexeme env) {
@@ -541,7 +541,7 @@ public class evaluator {
     }
 
     private lexeme evalINCLUDE(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalID(lexeme tree, lexeme env) {
@@ -549,7 +549,7 @@ public class evaluator {
     }
 
     private lexeme evalNIL(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return tree;
     }
 
     private lexeme evalBOOLEAN(lexeme tree, lexeme env) {
@@ -557,27 +557,38 @@ public class evaluator {
     }
 
     private lexeme evalPRINT(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme eargs = evaluate(tree.right.right.left, env);
+        System.out.print(eargs.string);
+        return eargs;//might be wrong 
     }
 
     private lexeme evalCLOSURE(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalEQUAL(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
+        String v;
+        int i;
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
-            return new lexeme("BOOLEAN", (l.string == r.string));
-        }
+            i=l.string.compareTo(r.string);
+            v=(i==0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);}
         else if((l.type == "STRING") && (r.type == "STRING")){
-            return new lexeme("BOOLEAN", (l.string == r.string));
+            i=l.string.compareTo(r.string);
+            v=(i==0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
-            return new lexeme("BOOLEAN", (l.string == r.string));
+            i=l.string.compareTo(r.string);
+            v=(i==0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
         }
         else if((l.type == "STRING") && (r.type == "INTEGER")){
-            return new lexeme("BOOLEAN", (l.string == r.string));
+            i=l.string.compareTo(r.string);
+            v=(i==0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
         }
         else if(l.type == "NIL"){
             if(r.type == "NIL"){
@@ -599,17 +610,26 @@ public class evaluator {
     private lexeme evalNOTEQUAL(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
+        String v;
+        int i;
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
-            return new lexeme("BOOLEAN", (l.string != r.string));
-        }
+            i=l.string.compareTo(r.string);
+            v=(i!=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);}
         else if((l.type == "STRING") && (r.type == "STRING")){
-            return new lexeme("BOOLEAN", (l.string != r.string));
+            i=l.string.compareTo(r.string);
+            v=(i!=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
-            return new lexeme("BOOLEAN", (l.string != r.string));
+            i=l.string.compareTo(r.string);
+            v=(i!=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
         }
         else if((l.type == "STRING") && (r.type == "INTEGER")){
-            return new lexeme("BOOLEAN", (l.string != r.string));
+            i=l.string.compareTo(r.string);
+            v=(i!=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
         }
         else if(l.type == "NIL"){
             if(r.type != "NIL"){
@@ -620,7 +640,7 @@ public class evaluator {
             }
         }
         else if(r.type == "NIL"){
-            return new lexeme("BOOLEAN", "TRUE");
+            return new lexeme("BOOLEAN", "FALSE");
         }
         else{
             fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
@@ -629,59 +649,284 @@ public class evaluator {
     }
 
     private lexeme evalGREATER(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        String v;
+        int i;
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i>0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);}
+        else if((l.type == "STRING") && (r.type == "STRING")){
+            i=l.string.compareTo(r.string);
+            v=(i>0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            i=l.string.compareTo(r.string);
+            v=(i>0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "STRING") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i>0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if(l.type == "NIL"){
+            if(r.type == "NIL"){
+                return new lexeme("BOOLEAN", "TRUE");
+            }
+            else{
+                return new lexeme("BOOLEAN", "FALSE");
+            }
+        }
+        else if(r.type == "NIL"){
+            return new lexeme("BOOLEAN", "FALSE");
+        }
+        else{
+            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            return null;
+        }
     }
 
     private lexeme evalLESS(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        String v;
+        int i;
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i<0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);}
+        else if((l.type == "STRING") && (r.type == "STRING")){
+            i=l.string.compareTo(r.string);
+            v=(i<0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            i=l.string.compareTo(r.string);
+            v=(i<0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "STRING") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i<0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if(l.type == "NIL"){
+            if(r.type == "NIL"){
+                return new lexeme("BOOLEAN", "TRUE");
+            }
+            else{
+                return new lexeme("BOOLEAN", "FALSE");
+            }
+        }
+        else if(r.type == "NIL"){
+            return new lexeme("BOOLEAN", "FALSE");
+        }
+        else{
+            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            return null;
+        }
     }
 
     private lexeme evalGREATEREQUAL(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        String v;
+        int i;
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i>=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);}
+        else if((l.type == "STRING") && (r.type == "STRING")){
+            i=l.string.compareTo(r.string);
+            v=(i>=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            i=l.string.compareTo(r.string);
+            v=(i>=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "STRING") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i>=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if(l.type == "NIL"){
+            if(r.type == "NIL"){
+                return new lexeme("BOOLEAN", "TRUE");
+            }
+            else{
+                return new lexeme("BOOLEAN", "FALSE");
+            }
+        }
+        else if(r.type == "NIL"){
+            return new lexeme("BOOLEAN", "FALSE");
+        }
+        else{
+            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            return null;
+        }
     }
 
     private lexeme evalLESSEQUAL(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        String v;
+        int i;
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i<=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);}
+        else if((l.type == "STRING") && (r.type == "STRING")){
+            i=l.string.compareTo(r.string);
+            v=(i<=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            i=l.string.compareTo(r.string);
+            v=(i<=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "STRING") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i<=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if(l.type == "NIL"){
+            if(r.type == "NIL"){
+                return new lexeme("BOOLEAN", "TRUE");
+            }
+            else{
+                return new lexeme("BOOLEAN", "FALSE");
+            }
+        }
+        else if(r.type == "NIL"){
+            return new lexeme("BOOLEAN", "FALSE");
+        }
+        else{
+            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            return null;
+        }
     }
 
     private lexeme evalPLUS(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string))));
+        }
+        else if((l.type == "STRING") && (r.type == "STRING")){
+            return new lexeme("STRING", l.string+r.string);
+        }
+        else{
+            fatal("ERROR: Can't add: "+l.type+" and "+r.type);
+            return null;
+        }
     }
 
     private lexeme evalMINUS(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) - Integer.parseInt(r.string))));
+        }
+        else{
+            fatal("ERROR: Can't subtract: "+l.type+" and "+r.type);
+            return null;
+        }
     }
 
     private lexeme evalMULTIPLY(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) * Integer.parseInt(r.string))));
+        }
+        else{
+            fatal("ERROR: Can't multiply: "+l.type+" and "+r.type);
+            return null;
+        }
     }
 
     private lexeme evalDIVIDE(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        if(r.string=="0"){fatal("EEROR: divide by zero Paradox???????");return null;}
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string))));
+        }
+        else{
+            fatal("ERROR: Can't divide: "+l.type+" and "+r.type);
+            return null;
+        }
     }
 
     private lexeme evalINTEGERDIVIDE(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        if(r.string=="0"){fatal("EEROR: divide by zero Paradox???????");return null;}
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+        }
+        else{
+            fatal("ERROR: Can't divide: "+l.type+" and "+r.type);
+            return null;
+        }
     }
 
     private lexeme evalPOWER(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
+        }
+        else{
+            fatal("ERROR: Can't add: "+l.type+" and "+r.type);
+            return null;
+        }
     }
 
     private lexeme evalAND(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) & Integer.parseInt(r.string)));
+        }
+        else if((l.type == "BOOLEAN") && (r.type == "BOOLEAN")){
+            return new lexeme("BOOLEAN", Boolean.toString(Boolean.parseBoolean(l.string) & Boolean.parseBoolean(r.string)));
+        }
+        else{
+            fatal("ERROR: Can't and: "+l.type+" and "+r.type);
+            return null;
+        }
+
     }
 
     private lexeme evalOR(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) | Integer.parseInt(r.string)));
+        }
+        else if((l.type == "BOOLEAN") && (r.type == "BOOLEAN")){
+            return new lexeme("BOOLEAN", Boolean.toString(Boolean.parseBoolean(l.string) | Boolean.parseBoolean(r.string)));
+        }
+        else{
+            fatal("ERROR: Can't and: "+l.type+" and "+r.type);
+            return null;
+        }
+
     }
 
     private lexeme evalASSIGN(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalDOUBLEEQUAL(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return evalEQUAL(tree,env);
     }
 
     private lexeme evalARRAY(lexeme tree, lexeme env) {
@@ -689,22 +934,23 @@ public class evaluator {
     }
 
     private lexeme evalAPPEND(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalINSERT(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalREMOVE(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalSET(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private lexeme evalLENGTH(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
+    
 }
