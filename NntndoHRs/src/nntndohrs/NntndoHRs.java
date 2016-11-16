@@ -33,7 +33,7 @@ static evaluator eval_er;
         try{String file = args[0]; p=new parser();}
         catch(ArrayIndexOutOfBoundsException e){p=new parser();}
         tree=p.parse();
-        //System.out.println(tree);
+        System.out.println(tree);
         eval_er=new evaluator();
         
     }

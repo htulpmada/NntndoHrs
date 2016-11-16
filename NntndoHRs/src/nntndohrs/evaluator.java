@@ -137,7 +137,7 @@ public class evaluator {
     else if(tree.type == "EXPR"){
         return evalEXPR(tree, env);}
     else if(tree.type == "PRIMARY"){
-        return evalPRIMARY(tree, env);}
+        return evalUNARY(tree, env);}
     else if(tree.type == "OPERATOR"){
         return evalOPERATOR(tree, env);}
     else if(tree.type == "BLOCK"){
@@ -395,7 +395,7 @@ public class evaluator {
         }
     }
 
-    private lexeme evalPRIMARY(lexeme tree, lexeme env) {
+    private lexeme evalUNARY(lexeme tree, lexeme env) {
         lexeme elements = null;
         if(tree.right == null){
             return evaluate(tree.left, env);
@@ -411,43 +411,97 @@ public class evaluator {
     }
 
     private lexeme evalOPERATOR(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = tree.left;
+        lexeme r = tree.right;
+        String op = tree.string;
+        lexeme n = new lexeme(op, op, l, r);
+        return evaluate(n, env);
     }
 
     private lexeme evalBLOCK(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return evaluate(tree.right.left, env);
     }
 
     private lexeme evalOPTSTATEMENTLIST(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(tree.left != null){
+            return evaluate(tree.left, env);
+        }
+    return null;
     }
 
     private lexeme evalSTATEMENTLIST(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme result=null;
+        while(tree!=null){
+            result = evaluate(tree.left, env);
+            if(tree.right!=null){
+                tree = tree.right.left;
+            }
+            else{
+                break;
+            }
+        }
+        return result;
     }
 
     private lexeme evalSTATEMENT(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(tree.right == null){
+            return evaluate(tree.left, env);
+        }
+        else if(tree.left.type == "EXPR"){
+            return evaluate(tree.left, env);
+        }
+        else if(tree.left.type == "RETURN"){
+            return evaluate(tree.right.left, env);
+        }
+        else if(tree.left.type == "PRINT"){
+            return evaluate(tree.left, env);
+        }
+        else{
+            fatal("ERROR: BAD STATEMENT");
+        }
+        return null;
     }
 
     private lexeme evalWHILELOOP(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme conditional = tree.right.right.left;
+        lexeme block = tree.right.right.right.right.left;
+        lexeme x = null;
+        while((evaluate(conditional, env)).string == "TRUE"){
+            x = evaluate(block, env);
+        }
+        return x;
     }
 
     private lexeme evalIFSTATEMENT(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme conditional = tree.right.right.left;
+        lexeme block = tree.right.right.right.right.left;
+        lexeme optElse = tree.right.right.right.right.right.left;
+        if((evaluate(conditional, env)).string == "True"){
+            return evaluate(block, env);
+        }
+        else{
+            return evaluate(optElse, env);
+        }
     }
 
     private lexeme evalOPTELSESTATEMENT(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(tree.left != null){
+            return evaluate(tree.left, env);
+        }
+        return null;
     }
 
     private lexeme evalELSESTATEMENT(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return evaluate(tree.right.left, env);
     }
 
     private lexeme evalLAMBDA(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme params = tree.right.right.left;
+        lexeme body = tree.right.right.right.right.left;
+        lexeme right = new lexeme("JOIN", "JOIN", body, env);
+        lexeme close = new lexeme("CLOSURE", "CLOSURE", params, right);
+        return close;
+
     }
 
     private lexeme evalJOIN(lexeme tree, lexeme env) {
@@ -455,11 +509,11 @@ public class evaluator {
     }
 
     private lexeme evalSTRING(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return tree;
     }
 
     private lexeme evalINTEGER(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return tree;
     }
 
     private lexeme evalFUNCTION(lexeme tree, lexeme env) {
@@ -483,7 +537,7 @@ public class evaluator {
     }
 
     private lexeme evalRETURN(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return evaluate(tree,env);
     }
 
     private lexeme evalINCLUDE(lexeme tree, lexeme env) {
@@ -491,7 +545,7 @@ public class evaluator {
     }
 
     private lexeme evalID(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return lookup(env, tree.string);
     }
 
     private lexeme evalNIL(lexeme tree, lexeme env) {
@@ -499,7 +553,7 @@ public class evaluator {
     }
 
     private lexeme evalBOOLEAN(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return tree;
     }
 
     private lexeme evalPRINT(lexeme tree, lexeme env) {
@@ -511,11 +565,67 @@ public class evaluator {
     }
 
     private lexeme evalEQUAL(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            return new lexeme("BOOLEAN", (l.string == r.string));
+        }
+        else if((l.type == "STRING") && (r.type == "STRING")){
+            return new lexeme("BOOLEAN", (l.string == r.string));
+        }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            return new lexeme("BOOLEAN", (l.string == r.string));
+        }
+        else if((l.type == "STRING") && (r.type == "INTEGER")){
+            return new lexeme("BOOLEAN", (l.string == r.string));
+        }
+        else if(l.type == "NIL"){
+            if(r.type == "NIL"){
+                return new lexeme("BOOLEAN", "TRUE");
+            }
+            else{
+                return new lexeme("BOOLEAN", "FALSE");
+            }
+        }
+        else if(r.type == "NIL"){
+            return new lexeme("BOOLEAN", "FALSE");
+        }
+        else{
+            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            return null;
+        }
     }
-
+    
     private lexeme evalNOTEQUAL(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        lexeme l = evaluate(tree.left, env);
+        lexeme r = evaluate(tree.right, env);
+        if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            return new lexeme("BOOLEAN", (l.string != r.string));
+        }
+        else if((l.type == "STRING") && (r.type == "STRING")){
+            return new lexeme("BOOLEAN", (l.string != r.string));
+        }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            return new lexeme("BOOLEAN", (l.string != r.string));
+        }
+        else if((l.type == "STRING") && (r.type == "INTEGER")){
+            return new lexeme("BOOLEAN", (l.string != r.string));
+        }
+        else if(l.type == "NIL"){
+            if(r.type != "NIL"){
+                return new lexeme("BOOLEAN", "TRUE");
+            }
+            else{
+                return new lexeme("BOOLEAN", "FALSE");
+            }
+        }
+        else if(r.type == "NIL"){
+            return new lexeme("BOOLEAN", "TRUE");
+        }
+        else{
+            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            return null;
+        }
     }
 
     private lexeme evalGREATER(lexeme tree, lexeme env) {
@@ -575,7 +685,7 @@ public class evaluator {
     }
 
     private lexeme evalARRAY(lexeme tree, lexeme env) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return tree;
     }
 
     private lexeme evalAPPEND(lexeme tree, lexeme env) {
