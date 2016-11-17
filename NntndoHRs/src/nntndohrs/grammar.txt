@@ -62,7 +62,7 @@ pList : ID
 expr : unary
     | unary op expr
 
-block : OBRACE optSList CBRACE
+block : OCURLY optSList CCURLY
 
 optSList : EMPTY
     | sList

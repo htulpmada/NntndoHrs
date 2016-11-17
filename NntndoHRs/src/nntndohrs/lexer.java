@@ -86,7 +86,7 @@ public static lexeme lex() throws IOException{
                 else if(c=='\"'){
                     return lexString();
                 }
-                else if(c=='<'|c=='>'|c=='='|c=='='){
+                else if(c=='<'|c=='>'|c=='='|c=='='|c=='!'){
                     return lexOperator();
                 }
                 else{//needs to be last

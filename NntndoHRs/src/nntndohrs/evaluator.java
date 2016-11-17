@@ -61,7 +61,7 @@ public class evaluator {
     }
     
     public void update(lexeme env,String var, String val){
-    lexeme table;
+        lexeme table;
         lexeme vars;
         lexeme vals;
         while(env!=null){
@@ -69,7 +69,7 @@ public class evaluator {
             vars=car(table);
             vals=cdr(table);
             while(vars!=null){
-                if(var.equals(car(vars).type)){//maybe an issue not sure yett
+                if(var.equals(car(vars).string)){//maybe an issue not sure yett
                     setcar(vals,new lexeme(val,val,null,null));
                     setcar(vars,new lexeme(var,var,null,null));
                     return;
@@ -125,7 +125,7 @@ public class evaluator {
     else if(tree.type == "OPTEXPRLIST"){return evalOPTEXPRLIST(tree, env);}
     else if(tree.type == "EXPRLIST"){return evalEXPRLIST(tree, env);}
     else if(tree.type == "EXPR"){return evalEXPR(tree, env);}
-    else if(tree.type == "PRIMARY"){return evalUNARY(tree, env);}
+    else if(tree.type == "PRIMARY"){return evalUNARY(tree, env);}//need to change to unary
     else if(tree.type == "OPERATOR"){return evalOPERATOR(tree, env);}
     else if(tree.type == "BLOCK"){return evalBLOCK(tree, env);}
     else if(tree.type == "OPTSTATEMENTLIST"){return evalOPTSTATEMENTLIST(tree, env);}
@@ -151,7 +151,7 @@ public class evaluator {
     else if(tree.type == "BOOLEAN"){return evalBOOLEAN(tree, env);}
     else if(tree.type == "PRINT"){return evalPRINT(tree, env);}
     //else if(tree.type == "CLOSURE"){return evalCLOSURE(tree, env);}
-    else if(tree.type == "EQUAL"){return evalEQUAL(tree, env);}//maybe needs to be evalASSIGN()
+    else if(tree.type == "EQUAL"){return evalASSIGN(tree, env);}//maybe needs to be evalASSIGN()
     else if(tree.type == "NOTEQUAL"){return evalNOTEQUAL(tree, env);}
     else if(tree.type == "GREATER"){return evalGREATER(tree, env);}
     else if(tree.type == "LESS"){return evalLESS(tree, env);}
@@ -159,7 +159,7 @@ public class evaluator {
     else if(tree.type == "LESSEQUAL"){return evalLESSEQUAL(tree, env);}
     else if(tree.type == "PLUS"){return evalPLUS(tree, env);}
     else if(tree.type == "MINUS"){return evalMINUS(tree, env);}
-    else if(tree.type == "MULTIPLY"){return evalMULTIPLY(tree, env);}
+    else if(tree.type == "TIMES"){return evalMULTIPLY(tree, env);}
     else if(tree.type == "DIVIDE"){return evalDIVIDE(tree, env);}
     else if(tree.type == "INTEGERDIVIDE"){return evalINTEGERDIVIDE(tree, env);}
     else if(tree.type == "POWER"){return evalPOWER(tree, env);}
@@ -417,7 +417,7 @@ public class evaluator {
         lexeme conditional = tree.right.right.left;
         lexeme block = tree.right.right.right.right.left;
         lexeme optElse = tree.right.right.right.right.right.left;
-        if((evaluate(conditional, env)).string == "True"){
+        if((evaluate(conditional, env)).string == "TRUE"){
             return evaluate(block, env);
         }
         else{
@@ -851,7 +851,14 @@ public class evaluator {
 
     }
 
-    //private lexeme evalASSIGN(lexeme tree, lexeme env) {}
+    private lexeme evalASSIGN(lexeme tree, lexeme env) {
+        lexeme var = tree.left.left.left;
+        lexeme val = evaluate(tree.right.left, env);
+        lexeme ret = insert(var, val, env);//problem here
+        //lexeme l=lookup(env, var.string);
+        //if(l==null){insert(var, val, env);}
+        return ret;
+    }
 
     private lexeme evalDOUBLEEQUAL(lexeme tree, lexeme env) {
         return evalEQUAL(tree,env);

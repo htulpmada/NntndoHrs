@@ -363,10 +363,10 @@ static lexeme t;
             //op.left=null;
             return cons("MINUS", op, null);
         }
-        else if(check("MULTIPLY")){
-            lexeme op = match("MULTIPLY");
+        else if(check("TIMES")){
+            lexeme op = match("TIMES");
             //op.left=null;
-            return cons("MULTIPLY", op, null);
+            return cons("TIMES", op, null);
         }
         else if(check("DIVIDE")){
             lexeme op = match("DIVIDE");
@@ -393,10 +393,10 @@ static lexeme t;
             //op.left=null;
             return cons("OR", op, null);
         }
-        else if(check("ASSIGN")){
-            lexeme op = match("ASSIGN");
+        else if(check("EQUAL")){
+            lexeme op = match("EQUAL");
             //op.left=null;
-            return cons("ASSIGN", op, null);
+            return cons("EQUAL", op, null);
         }
         else if(check("DOUBLEEQUAL")){
             lexeme op = match("DOUBLEEQUAL");
@@ -558,7 +558,7 @@ static lexeme t;
     public boolean exprListPending(){return exprPending();}
     public boolean exprPending(){return unaryPending();}
     public boolean unaryPending(){return idDefPending() | check("STRING") | check("INTEGER") | check("NOT") | check("OPAREN") | k_lambdaPending() | functionDefinitionPending() | check("OBRACKET") | check("NIL") | check("BOOLEAN") | check("PRINT") | check("APPEND") | check("INSERT") | check("REMOVE") | check("SET") | check("LENGTH");}
-    public boolean opPending(){return check("EQUAL") | check("NOTEQUAL") | check("GREATER") | check("LESS") | check("GREATEREQUAL") | check("LESSEQUAL") | check("PLUS") | check("MINUS") | check("MULTIPLY") | check("DIVIDE") | check("INTEGERDIVIDE") | check("POWER") | check("AND") | check("OR") | check("ASSIGN") | check("DOUBLEEQUAL");}
+    public boolean opPending(){return check("EQUAL") | check("NOTEQUAL") | check("GREATER") | check("LESS") | check("GREATEREQUAL") | check("LESSEQUAL") | check("PLUS") | check("MINUS") | check("TIMES") | check("DIVIDE") | check("INTEGERDIVIDE") | check("POWER") | check("AND") | check("OR") | check("ASSIGN") | check("DOUBLEEQUAL");}
     public boolean blockPending(){return check("OCURLY");}
     public boolean statementListPending(){return statementPending();}
     public boolean statementPending(){return variableDefinitionPending() | functionDefinitionPending() | exprPending() | whileLoopPending() | ifStatementPending() | check("RETURN");}
