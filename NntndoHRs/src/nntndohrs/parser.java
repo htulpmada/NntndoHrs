@@ -72,6 +72,10 @@ static lexeme t;
             //f.left=null;
             return cons("DEFINITION", f, null);
         }
+        else if(idDefPending()){
+            lexeme f = idDef();
+            return f;
+        }
         return null;//idDef should be here
     }
     
@@ -525,6 +529,10 @@ static lexeme t;
             return cons("ELSESTATEMENT", e, cons("JOIN", i, null));
         }
         else return null;
+    }
+    
+    private lexeme functionCall() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     public lexeme k_lambda(){

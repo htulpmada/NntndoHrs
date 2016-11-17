@@ -48,7 +48,7 @@ public static lexeme lex() throws IOException{
        skipWhitSpace();
        chr=src.read();
        c=(char) c;
-       if(c=='\uffff'){return new lexeme("ENDOFINPUT",'\uffff');}
+       if(c=='\uffff'){return new lexeme("ENDOFINPUT","\uffff");}
        switch(c){
             case '(': return new lexeme("OPAREN","(");
             case ')': return new lexeme("CPAREN",")");
@@ -147,8 +147,8 @@ public static lexeme lex() throws IOException{
         else if(token.equals("return")||token.equals("gameOver")){return new lexeme("RETURN","return");}//return/gameOver
         else if (token.equals("func")){return new lexeme("FUNC", "func");}
         else if (token.equals("nil")){return new lexeme("NIL", "nil");}
-        else if (token.equals("true")){return new lexeme("BOOLEAN", true);}
-        else if (token.equals("false")){return new lexeme("BOOLEAN", false);}
+        else if (token.equals("true")){return new lexeme("BOOLEAN", "TRUE");}
+        else if (token.equals("false")){return new lexeme("BOOLEAN", "FALSE");}
         else if (token.equals("print")){return new lexeme("PRINT", "print");}
         else if (token.equals("append")){return new lexeme("APPEND", "append");}
         else if (token.equals("insert")){return new lexeme("INSERT", "insert");}
@@ -225,7 +225,7 @@ public static lexeme lex() throws IOException{
             }
             src.unread(c);
             if(real){return new lexeme("REAL",token);}
-            return new lexeme("INTEGER",Integer.parseInt(token));
+            return new lexeme("INTEGER",token);
         }
     }
 

@@ -50,8 +50,8 @@ public class evaluator {
             vars=car(table);
             vals=cdr(table);
             while(vars!=null){
-                if(var.equals(car(vars).type)){return car(vals);}
-                vars=cdr(vars);
+                if(var.equals(car(vars).string)){return car(vals);}
+                vars=car(vars);
                 vals=cdr(vals);
             }
             env=cdr(env);
@@ -85,12 +85,13 @@ public class evaluator {
     
     public lexeme insert(lexeme var, lexeme val,lexeme env){
         lexeme table=car(env);
-        setcar(table,cons("GLUE",var,car(table)));
-        setcdr(table,cons("GLUE",val,car(table)));
+        setcar(table,cons("JOIN",var,car(table)));
+        setcdr(table,cons("JOIN",val,car(table)));
         return val;
     }
     //----------helpers for function calls----//
     public lexeme getArgs(lexeme tree){
+        if(tree.right==null){return null;}
         return tree.right.right.left;
     }
     public lexeme getFunction(lexeme tree){
@@ -110,128 +111,68 @@ public class evaluator {
     
     //--------------------Eval f(x)'s-----------------------------//
     public lexeme evaluate(lexeme tree, lexeme env){
-    if(tree.type == "PARSE"){
-        return evalPARSE(tree, env);}
-    else if(tree.type == "PROGRAM"){
-        return evalPROGRAM(tree, env);}
-    else if(tree.type == "DEFINITION"){
-        return evalDEFINITION(tree, env);}
-    else if(tree.type == "VARDEF"){
-        return evalVARDEF(tree, env);}
-    else if(tree.type == "FUNCDEF"){
-        return evalFUNCDEF(tree, env);}
-    else if(tree.type == "IDDEF"){
-        return evalIDDEF(tree, env);}
-    else if(tree.type == "ARRAYACCESS"){
-        return evalARRAYACCESS(tree, env);}
-    else if(tree.type == "FUNCCALL"){
-        return evalFUNCCALL(tree, env);}
-    else if(tree.type == "OPTPARAMLIST"){
-        return evalOPTPARAMLIST(tree, env);}
-    else if(tree.type == "PARAMLIST"){
-        return evalPARAMLIST(tree, env);}
-    else if(tree.type == "OPTEXPRLIST"){
-        return evalOPTEXPRLIST(tree, env);}
-    else if(tree.type == "EXPRLIST"){
-        return evalEXPRLIST(tree, env);}
-    else if(tree.type == "EXPR"){
-        return evalEXPR(tree, env);}
-    else if(tree.type == "PRIMARY"){
-        return evalUNARY(tree, env);}
-    else if(tree.type == "OPERATOR"){
-        return evalOPERATOR(tree, env);}
-    else if(tree.type == "BLOCK"){
-        return evalBLOCK(tree, env);}
-    else if(tree.type == "OPTSTATEMENTLIST"){
-        return evalOPTSTATEMENTLIST(tree, env);}
-    else if(tree.type == "STATEMENTLIST"){
-        return evalSTATEMENTLIST(tree, env);}
-    else if(tree.type == "STATEMENT"){
-        return evalSTATEMENT(tree, env);}
-    else if(tree.type == "WHILELOOP"){
-        return evalWHILELOOP(tree, env);}
-    else if(tree.type == "IFSTATEMENT"){
-        return evalIFSTATEMENT(tree, env);}
-    else if(tree.type == "OPTELSESTATEMENT"){
-        return evalOPTELSESTATEMENT(tree, env);}
-    else if(tree.type == "ELSESTATEMENT"){
-        return evalELSESTATEMENT(tree, env);}
-    else if(tree.type == "LAMBDA"){
-        return evalLAMBDA(tree, env);}
-    else if(tree.type == "JOIN"){
-        return evalJOIN(tree, env);}
-    else if(tree.type == "STRING"){
-        return evalSTRING(tree, env);}
-    else if(tree.type == "INTEGER"){
-        return evalINTEGER(tree, env);}
-    else if(tree.type == "FUNCTION"){
-        return evalFUNCTION(tree, env);}
-    else if(tree.type == "VAR"){
-        return evalVAR(tree, env);}
-    else if(tree.type == "WHILE"){
-        return evalWHILE(tree, env);}
-    else if(tree.type == "IF"){
-        return evalIF(tree, env);}
-    else if(tree.type == "ELSE"){
-        return evalELSE(tree, env);}
-    else if(tree.type == "RETURN"){
-        return evalRETURN(tree, env);}
-    else if(tree.type == "INCLUDE"){
-        return evalINCLUDE(tree, env);}
-    else if(tree.type == "ID"){
-        return evalID(tree, env);}
-    else if(tree.type == "NIL"){
-        return evalNIL(tree, env);}
-    else if(tree.type == "BOOLEAN"){
-        return evalBOOLEAN(tree, env);}
-    else if(tree.type == "PRINT"){
-        return evalPRINT(tree, env);}
-    else if(tree.type == "CLOSURE"){
-        return evalCLOSURE(tree, env);}
-    else if(tree.type == "EQUAL"){//maybe needs to be evalASSIGN()
-        return evalEQUAL(tree, env);}
-    else if(tree.type == "NOTEQUAL"){
-        return evalNOTEQUAL(tree, env);}
-    else if(tree.type == "GREATER"){
-        return evalGREATER(tree, env);}
-    else if(tree.type == "LESS"){
-        return evalLESS(tree, env);}
-    else if(tree.type == "GREATEREQUAL"){
-        return evalGREATEREQUAL(tree, env);}
-    else if(tree.type == "LESSEQUAL"){
-        return evalLESSEQUAL(tree, env);}
-    else if(tree.type == "PLUS"){
-        return evalPLUS(tree, env);}
-    else if(tree.type == "MINUS"){
-        return evalMINUS(tree, env);}
-    else if(tree.type == "MULTIPLY"){
-        return evalMULTIPLY(tree, env);}
-    else if(tree.type == "DIVIDE"){
-        return evalDIVIDE(tree, env);}
-    else if(tree.type == "INTEGERDIVIDE"){
-        return evalINTEGERDIVIDE(tree, env);}
-    else if(tree.type == "POWER"){
-        return evalPOWER(tree, env);}
-    else if(tree.type == "AND"){
-        return evalAND(tree, env);}
-    else if(tree.type == "OR"){
-        return evalOR(tree, env);}
-    else if(tree.type == "ASSIGN"){
-        return evalASSIGN(tree, env);}
-    else if(tree.type == "DOUBLEEQUAL"){//maybe needs to be evalEQUAL()
-        return evalDOUBLEEQUAL(tree, env);}
-    else if(tree.type == "ARRAY"){
-        return evalARRAY(tree, env);}
-    else if(tree.type == "APPEND"){
-        return evalAPPEND(tree, env);}
-    else if(tree.type == "INSERT"){
-        return evalINSERT(tree, env);}
-    else if(tree.type == "REMOVE"){
-        return evalREMOVE(tree, env);}
-    else if(tree.type == "SET"){
-        return evalSET(tree, env);}
-    else if(tree.type == "LENGTH"){
-        return evalLENGTH(tree, env);}
+    if(tree==null){return new lexeme("NIL","NIL",null,null);}    
+    if(tree.type == "PARSE"){return evalPARSE(tree, env);}
+    else if(tree.type == "PROGRAM"){return evalPROGRAM(tree, env);}
+    else if(tree.type == "DEFINITION"){return evalDEFINITION(tree, env);}
+    else if(tree.type == "VARDEF"){return evalVARDEF(tree, env);}
+    else if(tree.type == "FUNCDEF"){return evalFUNCDEF(tree, env);}
+    else if(tree.type == "IDDEF"){return evalIDDEF(tree, env);}
+    else if(tree.type == "ARRAYACCESS"){return evalARRAYACCESS(tree, env);}
+    else if(tree.type == "FUNCCALL"){return evalFUNCCALL(tree, env);}
+    else if(tree.type == "OPTPARAMLIST"){return evalOPTPARAMLIST(tree, env);}
+    else if(tree.type == "PARAMLIST"){return evalPARAMLIST(tree, env);}
+    else if(tree.type == "OPTEXPRLIST"){return evalOPTEXPRLIST(tree, env);}
+    else if(tree.type == "EXPRLIST"){return evalEXPRLIST(tree, env);}
+    else if(tree.type == "EXPR"){return evalEXPR(tree, env);}
+    else if(tree.type == "PRIMARY"){return evalUNARY(tree, env);}
+    else if(tree.type == "OPERATOR"){return evalOPERATOR(tree, env);}
+    else if(tree.type == "BLOCK"){return evalBLOCK(tree, env);}
+    else if(tree.type == "OPTSTATEMENTLIST"){return evalOPTSTATEMENTLIST(tree, env);}
+    else if(tree.type == "STATEMENTLIST"){return evalSTATEMENTLIST(tree, env);}
+    else if(tree.type == "STATEMENT"){return evalSTATEMENT(tree, env);}
+    else if(tree.type == "WHILELOOP"){return evalWHILELOOP(tree, env);}
+    else if(tree.type == "IFSTATEMENT"){return evalIFSTATEMENT(tree, env);}
+    else if(tree.type == "OPTELSESTATEMENT"){return evalOPTELSESTATEMENT(tree, env);}
+    else if(tree.type == "ELSESTATEMENT"){return evalELSESTATEMENT(tree, env);}
+    else if(tree.type == "LAMBDA"){return evalLAMBDA(tree, env);}
+    //else if(tree.type == "JOIN"){return evalJOIN(tree, env);}
+    else if(tree.type == "STRING"){return evalSTRING(tree, env);}
+    else if(tree.type == "INTEGER"){return evalINTEGER(tree, env);}
+    //else if(tree.type == "FUNCTION"){return evalFUNCTION(tree, env);}
+    //else if(tree.type == "VAR"){return evalVAR(tree, env);}
+    //else if(tree.type == "WHILE"){return evalWHILE(tree, env);}
+    //else if(tree.type == "IF"){return evalIF(tree, env);}
+    //else if(tree.type == "ELSE"){return evalELSE(tree, env);}
+    else if(tree.type == "RETURN"){return evalRETURN(tree, env);}
+    //else if(tree.type == "INCLUDE"){return evalINCLUDE(tree, env);}
+    else if(tree.type == "ID"){return evalID(tree, env);}
+    else if(tree.type == "NIL"){return evalNIL(tree, env);}
+    else if(tree.type == "BOOLEAN"){return evalBOOLEAN(tree, env);}
+    else if(tree.type == "PRINT"){return evalPRINT(tree, env);}
+    //else if(tree.type == "CLOSURE"){return evalCLOSURE(tree, env);}
+    else if(tree.type == "EQUAL"){return evalEQUAL(tree, env);}//maybe needs to be evalASSIGN()
+    else if(tree.type == "NOTEQUAL"){return evalNOTEQUAL(tree, env);}
+    else if(tree.type == "GREATER"){return evalGREATER(tree, env);}
+    else if(tree.type == "LESS"){return evalLESS(tree, env);}
+    else if(tree.type == "GREATEREQUAL"){return evalGREATEREQUAL(tree, env);}
+    else if(tree.type == "LESSEQUAL"){return evalLESSEQUAL(tree, env);}
+    else if(tree.type == "PLUS"){return evalPLUS(tree, env);}
+    else if(tree.type == "MINUS"){return evalMINUS(tree, env);}
+    else if(tree.type == "MULTIPLY"){return evalMULTIPLY(tree, env);}
+    else if(tree.type == "DIVIDE"){return evalDIVIDE(tree, env);}
+    else if(tree.type == "INTEGERDIVIDE"){return evalINTEGERDIVIDE(tree, env);}
+    else if(tree.type == "POWER"){return evalPOWER(tree, env);}
+    else if(tree.type == "AND"){return evalAND(tree, env);}
+    else if(tree.type == "OR"){return evalOR(tree, env);}
+    //else if(tree.type == "ASSIGN"){return evalASSIGN(tree, env);}
+    else if(tree.type == "DOUBLEEQUAL"){return evalDOUBLEEQUAL(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "ARRAY"){return evalARRAY(tree, env);}
+    //else if(tree.type == "APPEND"){return evalAPPEND(tree, env);}
+    //else if(tree.type == "INSERT"){return evalINSERT(tree, env);}
+    //else if(tree.type == "REMOVE"){return evalREMOVE(tree, env);}
+    //else if(tree.type == "SET"){return evalSET(tree, env);}
+    //else if(tree.type == "LENGTH"){return evalLENGTH(tree, env);}
     else{
         fatal("ERROR: "+tree.type+" : "+tree.string);}
         return null;
@@ -246,10 +187,10 @@ public class evaluator {
             evaluate(tree.left, env);
             tree = tree.right.left;
          }
-            if(tree.right == null){
+            //if(tree.right == null){
                 return evaluate(tree.left, env);
-        }
-            return null;
+        //}
+            //return null;
     }
 
     private lexeme evalDEFINITION(lexeme tree, lexeme env) {
@@ -301,7 +242,7 @@ public class evaluator {
         lexeme eargs = evaluate(args, env);
         //lexeme eparams = makeParamList(params);
         //lexeme eeargs = makeArgList(eargs, env);
-        if(eargs.size() != params.size()){
+        if((eargs!=null||params!=null)&&(eargs.size() != params.size())){
             fatal("ERROR: Wrong number of arguments.");
         }
         lexeme xenv = extend(params, eargs, denv);
@@ -504,9 +445,7 @@ public class evaluator {
 
     }
 
-    private lexeme evalJOIN(lexeme tree, lexeme env) {
-       
-    }
+    //private lexeme evalJOIN(lexeme tree, lexeme env) {}
 
     private lexeme evalSTRING(lexeme tree, lexeme env) {
         return tree;
@@ -516,33 +455,21 @@ public class evaluator {
         return tree;
     }
 
-    private lexeme evalFUNCTION(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalFUNCTION(lexeme tree, lexeme env) {}
 
-    private lexeme evalVAR(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalVAR(lexeme tree, lexeme env) {}
 
-    private lexeme evalWHILE(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalWHILE(lexeme tree, lexeme env) {}
 
-    private lexeme evalIF(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalIF(lexeme tree, lexeme env) {}
 
-    private lexeme evalELSE(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalELSE(lexeme tree, lexeme env) {}
 
     private lexeme evalRETURN(lexeme tree, lexeme env) {
         return evaluate(tree,env);
     }
 
-    private lexeme evalINCLUDE(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalINCLUDE(lexeme tree, lexeme env) {}
 
     private lexeme evalID(lexeme tree, lexeme env) {
         return lookup(env, tree.string);
@@ -558,13 +485,11 @@ public class evaluator {
 
     private lexeme evalPRINT(lexeme tree, lexeme env) {
         lexeme eargs = evaluate(tree.right.right.left, env);
-        System.out.print(eargs.string);
+        System.out.print(eargs.string+"\n");
         return eargs;//might be wrong 
     }
 
-    private lexeme evalCLOSURE(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalCLOSURE(lexeme tree, lexeme env) {}
 
     private lexeme evalEQUAL(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
@@ -815,11 +740,16 @@ public class evaluator {
     private lexeme evalPLUS(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
+        int i=l.string.length();
+        int j=r.string.length();
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string))));
+            return new lexeme("INTEGER", "\""+Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string)))+"\"");
         }
         else if((l.type == "STRING") && (r.type == "STRING")){
-            return new lexeme("STRING", l.string+r.string);
+            return new lexeme("STRING", "\""+l.string.substring(1,i-1)+r.string+"\"");
+        }
+        else if((l.type == "STRING") && (r.type == "INTEGER")){
+            return new lexeme("STRING", "\""+l.string.substring(1,i-1)+r.string+"\"");
         }
         else{
             fatal("ERROR: Can't add: "+l.type+" and "+r.type);
@@ -921,9 +851,7 @@ public class evaluator {
 
     }
 
-    private lexeme evalASSIGN(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalASSIGN(lexeme tree, lexeme env) {}
 
     private lexeme evalDOUBLEEQUAL(lexeme tree, lexeme env) {
         return evalEQUAL(tree,env);
@@ -933,24 +861,14 @@ public class evaluator {
         return tree;
     }
 
-    private lexeme evalAPPEND(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalAPPEND(lexeme tree, lexeme env) {}
 
-    private lexeme evalINSERT(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalINSERT(lexeme tree, lexeme env) {}
 
-    private lexeme evalREMOVE(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalREMOVE(lexeme tree, lexeme env) {}
 
-    private lexeme evalSET(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalSET(lexeme tree, lexeme env) {}
 
-    private lexeme evalLENGTH(lexeme tree, lexeme env) {
-        
-    }
+    //private lexeme evalLENGTH(lexeme tree, lexeme env) {}
     
 }
