@@ -81,9 +81,6 @@ public static lexeme lex() throws IOException{
                 else if(c=='/'){
                     return lexDivide();
                 }
-                /*else if(c=='\''){
-                    return lexString();
-                }*/
                 else if(c=='\"'){
                     return lexString();
                 }
@@ -202,7 +199,6 @@ public static lexeme lex() throws IOException{
             chr=src.read();
             c=(char)chr;
             if(c=='.'){
-//                if(real){return new lexeme("REAL",token);}//check for second . example "12.5.1"
                 real=true;
                 token+=c;
                 chr=src.read();
@@ -225,7 +221,6 @@ public static lexeme lex() throws IOException{
                 token+=c;
                 c=(char) src.read();
                     if(c=='.'){
-//                    if(real){return new lexeme("REAL",token);}//check for second . example "12.5.1"
                     real=true;
                     token+=c;
                     chr=src.read();

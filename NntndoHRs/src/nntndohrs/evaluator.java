@@ -462,8 +462,6 @@ public class evaluator {
 
     }
 
-    //private lexeme evalJOIN(lexeme tree, lexeme env) {}
-
     private lexeme evalSTRING(lexeme tree, lexeme env) {
         return tree;
     }
@@ -641,7 +639,7 @@ public class evaluator {
         else if((l.type == "STRING") && (r.type == "INTEGER")){
             i=l.string.compareTo(r.string);
             v=(i<0)?"TRUE":"FALSE";
-            return new lexeme("BOOLEAN", v);
+            return new lexeme("BOOLEAN", v);//add fatal if r is not actually number
         }
         else if(l.type == "NIL"){
             if(r.type == "NIL"){

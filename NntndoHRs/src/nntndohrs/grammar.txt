@@ -13,7 +13,7 @@ idDef : ID
     |   ID OPAREN optExprList CPAREN
     |   ID OBRACKET expr CBRACKET
 
-operator : 
+op : 
       PLUS 
     | MINUS 
     | TIMES 
