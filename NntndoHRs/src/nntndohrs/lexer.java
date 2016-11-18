@@ -23,6 +23,7 @@ public class lexer {
     static lexeme l;
     static lexeme t;
     static lexeme n;
+    static int lineNum=1;
     /**
      * @param file
      * @param go boolean to print lex list or not
@@ -35,7 +36,7 @@ public lexer(String file,boolean go) throws IOException{
             Charset.forName("UTF-8")));
         while(chr!=65535){
             l=lex();
-            //System.out.println(l);
+            System.out.println(l);
             if(t==null){t=l;n=t;}
             else{n.left=l;n=n.left;}
         }
@@ -80,9 +81,9 @@ public static lexeme lex() throws IOException{
                 else if(c=='/'){
                     return lexDivide();
                 }
-                else if(c=='\''){
+                /*else if(c=='\''){
                     return lexString();
-                }
+                }*/
                 else if(c=='\"'){
                     return lexString();
                 }
@@ -122,9 +123,11 @@ public static lexeme lex() throws IOException{
     private static void skipWhitSpace() throws IOException {
         chr=src.read();
         c=(char) chr;
+        if(c=='\n'){lineNum++;}
         while(Character.isWhitespace(c)){
             chr=src.read();
             c=(char) chr;
+            if(c=='\n'){lineNum++;}
         }
        src.unread(c);
     }
@@ -137,9 +140,11 @@ public static lexeme lex() throws IOException{
     private static void skipComment() throws IOException{
         chr=src.read();
         c=(char) chr;
+        if(c=='\n'){lineNum++;}
         while(c!='\n'){
             chr=src.read();
             c=(char) chr;
+            if(c=='\n'){lineNum++;}
         }
     }
     
@@ -171,17 +176,6 @@ public static lexeme lex() throws IOException{
         else if (token.equals("set")){return new lexeme("SET", "set");}
         else if (token.equals("length")){return new lexeme("LENGTH", "length");}
         else if (token.equals("lambda")){return new lexeme("LAMBDA", "lambda");}
-        //else if(token.equals("for")||token.equals("yoshi")){return new lexeme("FOR","for");}//for/yoshi
-        //else if(token.equals("break")||token.equals("DK")){return new lexeme("BREAK","break");}//break/DK
-        //else if(token.equals("byte")||token.equals("pacman")){return new lexeme("BYTE","byte");}//byte/pacman
-        //else if(token.equals("case")||token.equals("ketchum")){return new lexeme("CASE","case");}//case/ketchum
-        //else if(token.equals("char")||token.equals("toadstool")){return new lexeme("CHAR","char");}//char/toadstool
-        //else if(token.equals("continue")||token.equals("ness")){return new lexeme("CONTINUE","continue");}//continue/ness
-        //else if(token.equals("default")||token.equals("pikachu")){return new lexeme("DEFAULT","default");}//default/pikachu
-        //else if(token.equals("new")||token.equals("startGame")){return new lexeme("NEW","new");}//new/startGame
-        //else if(token.equals("switch")||token.equals("turn")){return new lexeme("SWITCH","switch");}//switch/turn
-        //else if ("func".equals(token)){return new lexeme("FUNCTION", "func");}
-        //else if ("var".equals(token)){return new lexeme("VAR", "var");}
         else {return new lexeme("ID",token);}
         
     }

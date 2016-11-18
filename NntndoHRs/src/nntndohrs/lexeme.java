@@ -13,6 +13,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 //need to add: evalVariable() get/set
+//          : line numbers
 
 /**
  *
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 
     lexeme(String t) {
         type=t;
+        getline();
     }
 
     lexeme(String t, String value, lexeme l, lexeme r) {
@@ -38,15 +40,19 @@ import java.util.ArrayList;
         string=value;
         left=l;
         right=r;
+        getline();
     }
     lexeme(String t, String value) {
         type=t;
         string=value;
+        getline();
     }
+    public void getline(){line=lexer.lineNum;}
+    
     public String toString(){
         String s="";
         if(type!=null){s+=type+" ";}
-        if(string!=null){s+=string+" ";}
+        if(string!=null){s+=string+" "+"line #: "+line;}
         if(left!=null){s+="\nLeft: "+left.toString();}
         if(right!=null){s+="\nRight: "+right.toString();}
         //try{s+=integer+" ";}
@@ -56,9 +62,11 @@ import java.util.ArrayList;
         return s;
     }
     public int size(){
-    int i=0;
-    return size(i);
+        int i=0;
+        return size(i);
     }
-    public int size(int j){return right.size(j+1);}
+    public int size(int j){
+        return right.size(j+1);
+    }
 }
 

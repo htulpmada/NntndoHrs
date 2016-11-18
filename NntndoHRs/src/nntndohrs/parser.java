@@ -20,10 +20,10 @@ static lexeme t;
         t=lexer.t;
     }
     
-    //utility functions
+    //--------------utility functions---------------//
     public lexeme parse() {
         //advance();
-        lexeme root = program();
+        lexeme root = pro();
         lexeme eof = match("ENDOFINPUT");
         return cons("PARSE",root,eof);
     }
@@ -33,7 +33,9 @@ static lexeme t;
         System.exit(1);
     }
     
-    public Boolean check(String type){return t.type.equals(type);}
+    public Boolean check(String type){
+        return t.type.equals(type);
+    }
     
     public lexeme advance(){
         lexeme old = t;
@@ -45,32 +47,34 @@ static lexeme t;
     
     public lexeme match(String type){
         if(check(type)){return advance();}
-        fatal("Syntax Error. Expected "+type+" , Received "+t.type);
+        fatal("Syntax Expected "+type+" , Received "+t.type);//t.line
         return null;
     }
     
-    public lexeme cons(String value,lexeme l,lexeme r){return new lexeme(value, value, l, r);}
-
-    //grammar functions
-    public lexeme program(){
-        lexeme d= definition();
-            if(programPending()){
-                lexeme p=program();
-                return cons("PROGRAM",d,cons("JOIN",p,null));
-            }
-            return cons("PROGRAM",d,null);
+    public lexeme cons(String value,lexeme l,lexeme r){
+        return new lexeme(value, value, l, r);
     }
 
-    public lexeme definition(){
-        if(variableDefinitionPending()){
-            lexeme v = variableDefinition();
+    //------------------------grammar functions------------------------------//
+    public lexeme pro(){
+        lexeme d= def();
+            if(proPending()){
+                lexeme p=pro();
+                return cons("PRO",d,cons("JOIN",p,null));
+            }
+            return cons("PRO",d,null);
+    }
+
+    public lexeme def(){
+        if(vDefPending()){
+            lexeme v = varDef();
             //v.left=null;
-            return cons("DEFINITION", v, null);
+            return cons("DEF", v, null);
         }
-        else if(functionDefinitionPending()){
-            lexeme f = functionDefinition();
+        else if(fDefPending()){
+            lexeme f = fDef();
             //f.left=null;
-            return cons("DEFINITION", f, null);
+            return cons("DEF", f, null);
         }
         else if(idDefPending()){
             lexeme f = idDef();
@@ -79,7 +83,7 @@ static lexeme t;
         return null;//idDef should be here
     }
     
-    public lexeme variableDefinition() {
+    public lexeme varDef() {
         lexeme v = match("TYPE");
             //v.left=null;
         lexeme i = match("ID");
@@ -90,23 +94,23 @@ static lexeme t;
             //e.left=null;
         lexeme s = match("SEMI");
             //s.left=null;
-        return cons("VARDEF", v, cons("JOIN", i, cons("JOIN", eq, cons("JOIN", e, cons("JOIN", s, null)))));
+        return cons("VDEF", v, cons("JOIN", i, cons("JOIN", eq, cons("JOIN", e, cons("JOIN", s, null)))));
     }
 
-    public lexeme functionDefinition(){
+    public lexeme fDef(){
         lexeme f = match("FUNC");
             //f.left=null;
         lexeme e = match("ID");
             //e.left=null;
         lexeme o = match("OPAREN");
             //o.left=null;
-        lexeme op = optParamList();
+        lexeme op = optPList();
             //op.left=null;
         lexeme c = match("CPAREN");
             //c.left=null;
         lexeme b = block();
             //b.left=null;
-        return cons("FUNCDEF", f, cons("JOIN", e, cons("JOIN", o, cons("JOIN", op, cons("JOIN", c, cons("JOIN", b, null))))));
+        return cons("FDEF", f, cons("JOIN", e, cons("JOIN", o, cons("JOIN", op, cons("JOIN", c, cons("JOIN", b, null))))));
     }
     
     public lexeme idDef(){
@@ -119,7 +123,7 @@ static lexeme t;
             //e.left=null;
             lexeme c = match("CPAREN");
             //c.left=null;
-            return cons("FUNCCALL", i, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, null))));
+            return cons("FCALL", i, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, null))));
         }
         else if (check("OBRACKET")){
             lexeme o = match("OBRACKET");
@@ -135,26 +139,26 @@ static lexeme t;
         }
     }
     
-    public lexeme optParamList(){
+    public lexeme optPList(){
         if(pListPending()){
-            lexeme p = paramList();
+            lexeme p = pList();
             //p.left=null;
-            return cons("OPTPARAMLIST", p, null);
+            return cons("OPTPLIST", p, null);
         }
-        return cons("OPTPARAMLIST", null, null);
+        return cons("OPTPLIST", null, null);
     }
     
-    public lexeme paramList(){
+    public lexeme pList(){
         lexeme i = match("ID");
             //i.left=null;
         if (check("COMMA")){
             lexeme c = match("COMMA");
             //c.left=null;
-            lexeme p = paramList();
+            lexeme p = pList();
             //p.left=null;
-            return cons("PARAMLIST", i, cons("JOIN", c, cons("JOIN", p, null)));
+            return cons("PLIST", i, cons("JOIN", c, cons("JOIN", p, null)));
         }
-        return cons("PARAMLIST", i, null);
+        return cons("PLIST", i, null);
     }
     
     public lexeme optExprList(){
@@ -183,11 +187,11 @@ static lexeme t;
         lexeme p = unary();
             //p.left=null;
         if(opPending()){
-            lexeme o = operator();
+            lexeme o = op();
             //o.left=null;
             lexeme e = expr();
             //e.left=null;
-            return new lexeme("EXPR", "EXPR", new lexeme("OPERATOR", o.type, p, e),null);
+            return new lexeme("EXPR", "EXPR", new lexeme("OP", o.type, p, e),null);
         }     
     return cons("EXPR", p, null);
     }    
@@ -196,24 +200,24 @@ static lexeme t;
         if (idDefPending()){
             lexeme p = idDef();
             //p.left=null;
-            return cons("PRIMARY", p, null);
+            return cons("UNARY", p, null);
         }
         else if(check("STRING")){
             lexeme p = match("STRING");
             //p.left=null;
-            return cons("PRIMARY", p, null);
+            return cons("UNARY", p, null);
         }
         else if(check("INTEGER")){
             lexeme p = match("INTEGER");
             //p.left=null;
-            return cons("PRIMARY", p, null);
+            return cons("UNARY", p, null);
         }
         else if (check("NOT")){
             lexeme n = match("NOT");
             //n.left=null;
             lexeme p = unary();
             //p.left=null;
-            return cons("PRIMARY", n, cons("JOIN", p, null));
+            return cons("UNARY", n, cons("JOIN", p, null));
         }
         else if (check("OPAREN")){
             lexeme o = match("OPAREN");
@@ -222,17 +226,17 @@ static lexeme t;
             //e.left=null;
             lexeme c = match("CPAREN");
             //c.left=null;
-            return cons("PRIMARY", o, cons("JOIN", e, cons("JOIN", c, null)));
+            return cons("UNARY", o, cons("JOIN", e, cons("JOIN", c, null)));
         }
-        else if (k_lambdaPending()){
-            lexeme p = k_lambda();
+        else if (lambdaPending()){
+            lexeme p = lambda();
             //p.left=null;
-            return cons("PRIMARY", p, null);
+            return cons("UNARY", p, null);
         }
-        else if (functionDefinitionPending()){
-            lexeme p = functionDefinition();
+        else if (fDefPending()){
+            lexeme p = fDef();
             //p.left=null;
-            return cons("PRIMARY", p, null);
+            return cons("UNARY", p, null);
         }
         else if (check("OBRACKET")){
             lexeme o = match("OBRACKET");
@@ -241,17 +245,17 @@ static lexeme t;
             //e.left=null;
             lexeme c = match("CBRACKET");
             //c.left=null;
-            return cons("PRIMARY", o, cons("JOIN", e, cons("JOIN", c, null)));
+            return cons("UNARY", o, cons("JOIN", e, cons("JOIN", c, null)));
         }
         else if (check("NIL")){
             lexeme n = match("NIL");
             //n.left=null;
-            return cons("PRIMARY", n, null);
+            return cons("UNARY", n, null);
         }
         else if (check("BOOLEAN")){
             lexeme b = match("BOOLEAN");
             //b.left=null;
-            return cons("PRIMARY", b, null);
+            return cons("UNARY", b, null);
         }
         else if (check("PRINT")){
             lexeme f = match("PRINT");
@@ -322,7 +326,7 @@ static lexeme t;
         else return null;
     }
     
-    public lexeme operator(){
+    public lexeme op(){
         if(check("EQUAL")){
             lexeme op = match("EQUAL");
             //op.left=null;
@@ -373,10 +377,10 @@ static lexeme t;
             //op.left=null;
             return cons("DIVIDE", op, null);
         }
-        else if(check("INTEGERDIVIDE")){
-            lexeme op = match("INTEGERDIVIDE");
+        else if(check("INTDIVIDE")){
+            lexeme op = match("INTDIVIDE");
             //op.left=null;
-            return cons("INTEGERDIVIDE", op, null);
+            return cons("INTDIVIDE", op, null);
         }
         else if(check("POWER")){
             lexeme op = match("POWER");
@@ -409,60 +413,60 @@ static lexeme t;
      public lexeme block(){
         lexeme o = match("OCURLY");
             //o.left=null;
-        lexeme s = optStatementList();
+        lexeme s = optStateList();
             //s.left=null;
         lexeme c = match("CCURLY");
             //c.left=null;
         return cons("BLOCK", o, cons("JOIN", s, cons("JOIN", c, null)));
      }
     
-    public lexeme optStatementList(){
-        if (statementListPending()){
-            lexeme s = statementList();
+    public lexeme optStateList(){
+        if (stateListPending()){
+            lexeme s = stateList();
             //s.left=null;
-            return cons("OPTSTATEMENTLIST", s, null);
+            return cons("OPTSTATELIST", s, null);
         }
-    return cons("OPTSTATEMENTLIST", null, null);
+    return cons("OPTSTATELIST", null, null);
     }
      
-    public lexeme statementList(){
-        lexeme s= statement();
+    public lexeme stateList(){
+        lexeme s= state();
             //s.left=null;
-        if(statementListPending()){
-            lexeme sl = statementList();
+        if(stateListPending()){
+            lexeme sl = stateList();
             //sl.left=null;
-            return cons("STATEMENTLIST", s, cons("JOIN", sl, null));
+            return cons("STATELIST", s, cons("JOIN", sl, null));
         }
-    return cons("STATEMENTLIST", s, null);
+    return cons("STATELIST", s, null);
     }    
     
-    public lexeme statement(){
-        if(variableDefinitionPending()){
-            lexeme v = variableDefinition();
+    public lexeme state(){
+        if(vDefPending()){
+            lexeme v = varDef();
             //v.left=null;
-            return cons("STATEMENT", v, null);
+            return cons("STATE", v, null);
         }
-        else if(functionDefinitionPending()){
-            lexeme f = functionDefinition();
+        else if(fDefPending()){
+            lexeme f = fDef();
             //f.left=null;
-            return cons("STATEMENT", f, null);
+            return cons("STATE", f, null);
         }
         else if(exprPending()){
             lexeme e = expr();
             //e.left=null;
             lexeme s = match("SEMI");
             //s.left=null;
-            return cons("STATEMENT", e, cons("JOIN", s, null));
+            return cons("STATE", e, cons("JOIN", s, null));
         }
         else if(whileLoopPending()){
             lexeme w = whileLoop();
             //w.left=null;
-            return cons("STATEMENT", w, null);
+            return cons("STATE", w, null);
         }
-        else if(ifStatementPending()){
-            lexeme i = ifStatement();
+        else if(ifStatePending()){
+            lexeme i = ifState();
             //i.left=null;
-            return cons("STATEMENT", i, null);
+            return cons("STATE", i, null);
         }
         else if(check("RETURN")){
             lexeme r = match("RETURN");
@@ -471,7 +475,7 @@ static lexeme t;
             //e.left=null;
             lexeme s = match("SEMI");
             //s.left=null;
-        return cons("STATEMENT", r ,cons("JOIN", e, cons("JOIN", s, null)));
+        return cons("STATE", r ,cons("JOIN", e, cons("JOIN", s, null)));
         }
         else return null;
     }
@@ -490,7 +494,7 @@ static lexeme t;
         return cons("WHILELOOP", w ,cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, cons("JOIN", b, null)))));
     }
     
-    public lexeme ifStatement(){
+    public lexeme ifState(){
         lexeme i = match("IF");
             //i.left=null;
         lexeme o = match("OPAREN");
@@ -501,46 +505,42 @@ static lexeme t;
             //c.left=null;
         lexeme b = block();
             //b.left=null;
-        lexeme oe = optElseStatement();
+        lexeme oe = optElseState();
             //oe.left=null;
-        return cons("IFSTATEMENT", i ,cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, cons("JOIN", b, cons("JOIN", oe, null))))));
+        return cons("IFSTATE", i ,cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, cons("JOIN", b, cons("JOIN", oe, null))))));
     }
     
-    public lexeme optElseStatement(){
-        if (elseStatementPending()){
-            lexeme e = elseStatement();
+    public lexeme optElseState(){
+        if (elseStatePending()){
+            lexeme e = elseState();
             //e.left=null;
-            return cons("OPTELSESTATEMENT", e, null);
+            return cons("OPTELSESTATE", e, null);
         }
-        return cons("OPTELSESTATEMENT", null, null);
+        return cons("OPTELSESTATE", null, null);
     }
     
-    public lexeme elseStatement(){
+    public lexeme elseState(){
         lexeme e = match("ELSE");
             //e.left=null;
         if(blockPending()){
             lexeme b = block();
             //b.left=null;
-            return cons("ELSESTATEMENT", e, cons("JOIN", b, null));
+            return cons("ELSESTATE", e, cons("JOIN", b, null));
         }
-        else if(ifStatementPending()){
-            lexeme i = ifStatement();
+        else if(ifStatePending()){
+            lexeme i = ifState();
             //i.left=null;
-            return cons("ELSESTATEMENT", e, cons("JOIN", i, null));
+            return cons("ELSESTATE", e, cons("JOIN", i, null));
         }
         else return null;
     }
     
-    private lexeme functionCall() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    public lexeme k_lambda(){
+    public lexeme lambda(){
         lexeme l = match("LAMBDA");
             //l.left=null;
         lexeme o = match("OPAREN");
             //o.left=null;
-        lexeme op = optParamList();
+        lexeme op = optPList();
             //op.left=null;
         lexeme c = match("CPAREN");
             //c.left=null;
@@ -549,21 +549,21 @@ static lexeme t;
         return cons("LAMBDA", l ,cons("JOIN", o, cons("JOIN", op, cons("JOIN", c, cons("JOIN", b, null)))));
     }
     //pending functions
-    public boolean programPending(){return definitionPending();}
-    public boolean definitionPending(){return variableDefinitionPending() | functionDefinitionPending() | idDefPending();}
-    public boolean variableDefinitionPending(){return check("TYPE");}
-    public boolean functionDefinitionPending(){return check("FUNC");}
+    public boolean proPending(){return defPending();}
+    public boolean defPending(){return vDefPending() | fDefPending() | idDefPending();}
+    public boolean vDefPending(){return check("TYPE");}
+    public boolean fDefPending(){return check("FUNC");}
     public boolean idDefPending(){return check("ID");}
     public boolean pListPending(){return check("ID");}
     public boolean exprListPending(){return exprPending();}
     public boolean exprPending(){return unaryPending();}
-    public boolean unaryPending(){return idDefPending() | check("STRING") | check("INTEGER") | check("NOT") | check("OPAREN") | k_lambdaPending() | functionDefinitionPending() | check("OBRACKET") | check("NIL") | check("BOOLEAN") | check("PRINT") | check("APPEND") | check("INSERT") | check("REMOVE") | check("SET") | check("LENGTH");}
-    public boolean opPending(){return check("EQUAL") | check("NOTEQUAL") | check("GREATER") | check("LESS") | check("GREATEREQUAL") | check("LESSEQUAL") | check("PLUS") | check("MINUS") | check("TIMES") | check("DIVIDE") | check("INTEGERDIVIDE") | check("POWER") | check("AND") | check("OR") | check("ASSIGN") | check("DOUBLEEQUAL");}
+    public boolean unaryPending(){return idDefPending() | check("STRING") | check("INTEGER") | check("NOT") | check("OPAREN") | lambdaPending() | fDefPending() | check("OBRACKET") | check("NIL") | check("BOOLEAN") | check("PRINT") | check("APPEND") | check("INSERT") | check("REMOVE") | check("SET") | check("LENGTH");}
+    public boolean opPending(){return check("EQUAL") | check("NOTEQUAL") | check("GREATER") | check("LESS") | check("GREATEREQUAL") | check("LESSEQUAL") | check("PLUS") | check("MINUS") | check("TIMES") | check("DIVIDE") | check("INTDIVIDE") | check("POWER") | check("AND") | check("OR") | check("ASSIGN") | check("DOUBLEEQUAL");}
     public boolean blockPending(){return check("OCURLY");}
-    public boolean statementListPending(){return statementPending();}
-    public boolean statementPending(){return variableDefinitionPending() | functionDefinitionPending() | exprPending() | whileLoopPending() | ifStatementPending() | check("RETURN");}
+    public boolean stateListPending(){return statePending();}
+    public boolean statePending(){return vDefPending() | fDefPending() | exprPending() | whileLoopPending() | ifStatePending() | check("RETURN");}
     public boolean whileLoopPending(){return check("WHILE");}
-    public boolean ifStatementPending(){return check("IF");}
-    public boolean elseStatementPending(){return check("ELSE");}
-    public boolean k_lambdaPending(){return check("LAMBDA");}
+    public boolean ifStatePending(){return check("IF");}
+    public boolean elseStatePending(){return check("ELSE");}
+    public boolean lambdaPending(){return check("LAMBDA");}
 }

@@ -19,17 +19,41 @@ public class evaluator {
         E=create();
         evaluate(NntndoHRs.tree,E);
     }
-    //--------------------utility f(x)'s------------------------//
+//----------------------------------------utility f(x)'s--------------------------------------------------------------//
+    
     public lexeme cons(String type,lexeme l, lexeme r){return new lexeme(type,type,l,r);}
     public lexeme car(lexeme cell){return cell.left;}
     public lexeme cdr(lexeme cell){return cell.right;}
     public void setcar(lexeme cell,lexeme l){cell.left=l;}
     public void setcdr(lexeme cell,lexeme r){cell.right=r;}
     public String type(lexeme cell){return cell.type;}
-    
-    public void displayEnv(lexeme e){}
+    public void displayEnv(lexeme env){//need to test
+        lexeme table;
+        lexeme vars;
+        lexeme vals;
+        while(env!=null){
+            table=car(env);
+            vars=car(table);
+            vals=cdr(table);
+            while(vars!=null){
+                System.out.print(vars.type+": "+vals.type);
+                vars=car(vars);
+                vals=cdr(vals);
+            }
+            env=cdr(env);
+        }
+    }
 
-    public void displayLocalEnv(lexeme e){}
+    public void displayLocalEnv(lexeme env){//need to test
+        lexeme table=car(env);
+        lexeme vars=car(table);
+        lexeme vals=cdr(table);
+            while(vars!=null){
+                System.out.print(vars.type+": "+vals.type);
+                vars=car(vars);
+                vals=cdr(vals);
+            }
+    }
     
     public lexeme create(){return extend(null,null,null);}
     
@@ -89,7 +113,7 @@ public class evaluator {
         setcdr(table,cons("JOIN",val,car(table)));
         return val;
     }
-    //----------helpers for function calls----//
+//---------------------------helpers for function calls------------------------------------------------------//
     public lexeme getArgs(lexeme tree){
         if(tree.right==null){return null;}
         return tree.right.right.left;
@@ -109,48 +133,46 @@ public class evaluator {
     }
     
     
-    //--------------------Eval f(x)'s-----------------------------//
+//---------------------------------------Eval f(x)'s----------------------------------------------------------//
     public lexeme evaluate(lexeme tree, lexeme env){
     if(tree==null){return new lexeme("NIL","NIL",null,null);}    
     if(tree.type == "PARSE"){return evalPARSE(tree, env);}
-    else if(tree.type == "PROGRAM"){return evalPROGRAM(tree, env);}
-    else if(tree.type == "DEFINITION"){return evalDEFINITION(tree, env);}
-    else if(tree.type == "VARDEF"){return evalVARDEF(tree, env);}
-    else if(tree.type == "FUNCDEF"){return evalFUNCDEF(tree, env);}
+    else if(tree.type == "PRO"){return evalPRO(tree, env);}
+    else if(tree.type == "DEF"){return evalDEF(tree, env);}
+    else if(tree.type == "VDEF"){return evalVDEF(tree, env);}
+    else if(tree.type == "FDEF"){return evalFDEF(tree, env);}
+    else if(tree.type == "FCALL"){return evalFUNCCALL(tree, env);}
     else if(tree.type == "IDDEF"){return evalIDDEF(tree, env);}
-    else if(tree.type == "ARRAYACCESS"){return evalARRAYACCESS(tree, env);}
-    else if(tree.type == "FUNCCALL"){return evalFUNCCALL(tree, env);}
-    else if(tree.type == "OPTPARAMLIST"){return evalOPTPARAMLIST(tree, env);}
-    else if(tree.type == "PARAMLIST"){return evalPARAMLIST(tree, env);}
+    else if(tree.type == "OPTPLIST"){return evalOPTPLIST(tree, env);}
+    else if(tree.type == "PLIST"){return evalPLIST(tree, env);}
     else if(tree.type == "OPTEXPRLIST"){return evalOPTEXPRLIST(tree, env);}
     else if(tree.type == "EXPRLIST"){return evalEXPRLIST(tree, env);}
     else if(tree.type == "EXPR"){return evalEXPR(tree, env);}
-    else if(tree.type == "PRIMARY"){return evalUNARY(tree, env);}//need to change to unary
-    else if(tree.type == "OPERATOR"){return evalOPERATOR(tree, env);}
+    else if(tree.type == "OPTSTATELIST"){return evalOPTSTATELIST(tree, env);}
+    else if(tree.type == "STATELIST"){return evalSTATELIST(tree, env);}
+    else if(tree.type == "STATE"){return evalSTATE(tree, env);}
+    else if(tree.type == "UNARY"){return evalUNARY(tree, env);}//need to change to unary
+    else if(tree.type == "OP"){return evalOPERATOR(tree, env);}
     else if(tree.type == "BLOCK"){return evalBLOCK(tree, env);}
-    else if(tree.type == "OPTSTATEMENTLIST"){return evalOPTSTATEMENTLIST(tree, env);}
-    else if(tree.type == "STATEMENTLIST"){return evalSTATEMENTLIST(tree, env);}
-    else if(tree.type == "STATEMENT"){return evalSTATEMENT(tree, env);}
     else if(tree.type == "WHILELOOP"){return evalWHILELOOP(tree, env);}
-    else if(tree.type == "IFSTATEMENT"){return evalIFSTATEMENT(tree, env);}
-    else if(tree.type == "OPTELSESTATEMENT"){return evalOPTELSESTATEMENT(tree, env);}
-    else if(tree.type == "ELSESTATEMENT"){return evalELSESTATEMENT(tree, env);}
+    else if(tree.type == "IFSTATE"){return evalIFSTATE(tree, env);}
+    else if(tree.type == "OPTELSESTATE"){return evalOPTELSESTATE(tree, env);}
+    else if(tree.type == "ELSESTATE"){return evalELSESTATE(tree, env);}
     else if(tree.type == "LAMBDA"){return evalLAMBDA(tree, env);}
-    //else if(tree.type == "JOIN"){return evalJOIN(tree, env);}
+    else if(tree.type == "ARRAYACCESS"){return evalARRAYACCESS(tree, env);}
+    //else if(tree.type == "APPEND"){return evalAPPEND(tree, env);}
+    //else if(tree.type == "INSERT"){return evalINSERT(tree, env);}
+    //else if(tree.type == "REMOVE"){return evalREMOVE(tree, env);}
+    //else if(tree.type == "SET"){return evalSET(tree, env);}
+    //else if(tree.type == "LENGTH"){return evalLENGTH(tree, env);}
+//-----------^^^^^^these are from parser not lexer^^^^^^^-----------------//    
     else if(tree.type == "STRING"){return evalSTRING(tree, env);}
     else if(tree.type == "INTEGER"){return evalINTEGER(tree, env);}
-    //else if(tree.type == "FUNCTION"){return evalFUNCTION(tree, env);}
-    //else if(tree.type == "VAR"){return evalVAR(tree, env);}
-    //else if(tree.type == "WHILE"){return evalWHILE(tree, env);}
-    //else if(tree.type == "IF"){return evalIF(tree, env);}
-    //else if(tree.type == "ELSE"){return evalELSE(tree, env);}
     else if(tree.type == "RETURN"){return evalRETURN(tree, env);}
-    //else if(tree.type == "INCLUDE"){return evalINCLUDE(tree, env);}
     else if(tree.type == "ID"){return evalID(tree, env);}
     else if(tree.type == "NIL"){return evalNIL(tree, env);}
     else if(tree.type == "BOOLEAN"){return evalBOOLEAN(tree, env);}
     else if(tree.type == "PRINT"){return evalPRINT(tree, env);}
-    //else if(tree.type == "CLOSURE"){return evalCLOSURE(tree, env);}
     else if(tree.type == "EQUAL"){return evalASSIGN(tree, env);}//maybe needs to be evalASSIGN()
     else if(tree.type == "NOTEQUAL"){return evalNOTEQUAL(tree, env);}
     else if(tree.type == "GREATER"){return evalGREATER(tree, env);}
@@ -165,16 +187,11 @@ public class evaluator {
     else if(tree.type == "POWER"){return evalPOWER(tree, env);}
     else if(tree.type == "AND"){return evalAND(tree, env);}
     else if(tree.type == "OR"){return evalOR(tree, env);}
-    //else if(tree.type == "ASSIGN"){return evalASSIGN(tree, env);}
     else if(tree.type == "DOUBLEEQUAL"){return evalDOUBLEEQUAL(tree, env);}//maybe needs to be evalEQUAL()
     else if(tree.type == "ARRAY"){return evalARRAY(tree, env);}
-    //else if(tree.type == "APPEND"){return evalAPPEND(tree, env);}
-    //else if(tree.type == "INSERT"){return evalINSERT(tree, env);}
-    //else if(tree.type == "REMOVE"){return evalREMOVE(tree, env);}
-    //else if(tree.type == "SET"){return evalSET(tree, env);}
-    //else if(tree.type == "LENGTH"){return evalLENGTH(tree, env);}
+
     else{
-        fatal("ERROR: "+tree.type+" : "+tree.string);}
+        fatal(tree.type+" : "+tree.string+"line#: "+tree.line);}
         return null;
 }
 
@@ -182,7 +199,7 @@ public class evaluator {
         return evaluate(tree.left, env);
         }
 
-    private lexeme evalPROGRAM(lexeme tree, lexeme env) {
+    private lexeme evalPRO(lexeme tree, lexeme env) {
          while(tree.right != null){
             evaluate(tree.left, env);
             tree = tree.right.left;
@@ -193,18 +210,18 @@ public class evaluator {
             //return null;
     }
 
-    private lexeme evalDEFINITION(lexeme tree, lexeme env) {
+    private lexeme evalDEF(lexeme tree, lexeme env) {
         return evaluate(tree.left, env);
     }
 
-    private lexeme evalVARDEF(lexeme tree, lexeme env) {
+    private lexeme evalVDEF(lexeme tree, lexeme env) {
         lexeme variable = tree.right.left;
         lexeme value = evaluate(tree.right.right.right.left, env);
         lexeme ret = insert(variable, value, env);
         return ret;
     }
 
-    private lexeme evalFUNCDEF(lexeme tree, lexeme env) {
+    private lexeme evalFDEF(lexeme tree, lexeme env) {
         lexeme variable = tree.right.left;
         lexeme params = tree.right.right.right.left.left;
         lexeme body = tree.right.right.right.right.right.left;
@@ -231,10 +248,10 @@ public class evaluator {
         lexeme funcName = getFunction(tree);
         lexeme closure = evaluate(funcName, env);
         if(closure == null){
-            fatal("ERROR: Closure was None");
+            fatal("Closure was None");
         }
         else if(closure.type != "CLOSURE"){
-            fatal("ERROR: Tried to call "+closure.string+" as function.");
+            fatal("Tried to call "+closure.string+" as function.");
         }
         lexeme denv = getEnv(closure);
         lexeme body = getBody(closure);
@@ -243,7 +260,7 @@ public class evaluator {
         //lexeme eparams = makeParamList(params);
         //lexeme eeargs = makeArgList(eargs, env);
         if((eargs!=null||params!=null)&&(eargs.size() != params.size())){
-            fatal("ERROR: Wrong number of arguments.");
+            fatal("Wrong number of arguments.");
         }
         lexeme xenv = extend(params, eargs, denv);
         return evaluate(body, xenv);
@@ -286,7 +303,7 @@ public class evaluator {
 */
 
 
-    private lexeme evalPARAMLIST(lexeme tree, lexeme env) {
+    private lexeme evalPLIST(lexeme tree, lexeme env) {
         lexeme r = null;
         lexeme n = null;
         if(tree.right == null){
@@ -299,7 +316,7 @@ public class evaluator {
         return n;
     }
 
-    private lexeme evalOPTPARAMLIST(lexeme tree, lexeme env) {
+    private lexeme evalOPTPLIST(lexeme tree, lexeme env) {
             if(tree.left != null){
                 return evaluate(tree.left, env);
             }
@@ -363,14 +380,14 @@ public class evaluator {
         return evaluate(tree.right.left, env);
     }
 
-    private lexeme evalOPTSTATEMENTLIST(lexeme tree, lexeme env) {
+    private lexeme evalOPTSTATELIST(lexeme tree, lexeme env) {
         if(tree.left != null){
             return evaluate(tree.left, env);
         }
     return null;
     }
 
-    private lexeme evalSTATEMENTLIST(lexeme tree, lexeme env) {
+    private lexeme evalSTATELIST(lexeme tree, lexeme env) {
         lexeme result=null;
         while(tree!=null){
             result = evaluate(tree.left, env);
@@ -384,7 +401,7 @@ public class evaluator {
         return result;
     }
 
-    private lexeme evalSTATEMENT(lexeme tree, lexeme env) {
+    private lexeme evalSTATE(lexeme tree, lexeme env) {
         if(tree.right == null){
             return evaluate(tree.left, env);
         }
@@ -398,7 +415,7 @@ public class evaluator {
             return evaluate(tree.left, env);
         }
         else{
-            fatal("ERROR: BAD STATEMENT");
+            fatal("BAD STATEMENT");
         }
         return null;
     }
@@ -413,7 +430,7 @@ public class evaluator {
         return x;
     }
 
-    private lexeme evalIFSTATEMENT(lexeme tree, lexeme env) {
+    private lexeme evalIFSTATE(lexeme tree, lexeme env) {
         lexeme conditional = tree.right.right.left;
         lexeme block = tree.right.right.right.right.left;
         lexeme optElse = tree.right.right.right.right.right.left;
@@ -425,14 +442,14 @@ public class evaluator {
         }
     }
 
-    private lexeme evalOPTELSESTATEMENT(lexeme tree, lexeme env) {
+    private lexeme evalOPTELSESTATE(lexeme tree, lexeme env) {
         if(tree.left != null){
             return evaluate(tree.left, env);
         }
         return null;
     }
 
-    private lexeme evalELSESTATEMENT(lexeme tree, lexeme env) {
+    private lexeme evalELSESTATE(lexeme tree, lexeme env) {
         return evaluate(tree.right.left, env);
     }
 
@@ -454,16 +471,6 @@ public class evaluator {
     private lexeme evalINTEGER(lexeme tree, lexeme env) {
         return tree;
     }
-
-    //private lexeme evalFUNCTION(lexeme tree, lexeme env) {}
-
-    //private lexeme evalVAR(lexeme tree, lexeme env) {}
-
-    //private lexeme evalWHILE(lexeme tree, lexeme env) {}
-
-    //private lexeme evalIF(lexeme tree, lexeme env) {}
-
-    //private lexeme evalELSE(lexeme tree, lexeme env) {}
 
     private lexeme evalRETURN(lexeme tree, lexeme env) {
         return evaluate(tree,env);
@@ -488,8 +495,6 @@ public class evaluator {
         System.out.print(eargs.string+"\n");
         return eargs;//might be wrong 
     }
-
-    //private lexeme evalCLOSURE(lexeme tree, lexeme env) {}
 
     private lexeme evalEQUAL(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
@@ -527,7 +532,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            fatal("Can't equate: "+l.string+" and "+r.string);
             return null;
         }
     }
@@ -732,7 +737,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            fatal("Can't equate: "+l.string+" and "+r.string);
             return null;
         }
     }
@@ -854,9 +859,7 @@ public class evaluator {
     private lexeme evalASSIGN(lexeme tree, lexeme env) {
         lexeme var = tree.left.left.left;
         lexeme val = evaluate(tree.right.left, env);
-        lexeme ret = insert(var, val, env);//problem here
-        //lexeme l=lookup(env, var.string);
-        //if(l==null){insert(var, val, env);}
+        lexeme ret = insert(var, val, env);
         return ret;
     }
 
