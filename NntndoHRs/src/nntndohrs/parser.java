@@ -39,7 +39,7 @@ static lexeme t;
         lexeme old = t;
         t=t.left;
         old.left=null;//not sure if this will cause problems
-        System.out.println(old.type+" "+old.integer+" "+old.string);
+        System.out.println(old.type+" "+old.string);
         return old;
     }
     

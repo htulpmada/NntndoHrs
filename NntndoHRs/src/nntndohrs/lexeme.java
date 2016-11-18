@@ -12,7 +12,7 @@ package nntndohrs;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-
+//need to add: evalVariable() get/set
 
 /**
  *
@@ -23,7 +23,7 @@ import java.util.ArrayList;
         String type=null;
         String string=null;
         boolean bool;
-        int integer=0;
+        int line=0;
         double real=0;
         lexeme right=null;
         lexeme left=null;
@@ -33,15 +33,6 @@ import java.util.ArrayList;
         type=t;
     }
 
-    /*lexeme(String t, int value) {
-        type=t;
-        integer=value;
-    }*/
-    
-/*    lexeme(String t, boolean value) {
-        type=t;
-        bool=value;
-    }*/
     lexeme(String t, String value, lexeme l, lexeme r) {
         type=t;
         string=value;

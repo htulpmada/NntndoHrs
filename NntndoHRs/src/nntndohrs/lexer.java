@@ -89,6 +89,7 @@ public static lexeme lex() throws IOException{
                 else if(c=='<'|c=='>'|c=='='|c=='='|c=='!'){
                     return lexOperator();
                 }
+                else if(c=='@'){skipComment(); return lex();}
                 else{//needs to be last
                     return new lexeme("unknown");
                 }
@@ -126,6 +127,20 @@ public static lexeme lex() throws IOException{
             c=(char) chr;
         }
        src.unread(c);
+    }
+    
+    /**
+     *  skips all chars after '@' on current line
+     * '@'=comment
+     * @throws IOException 
+     */
+    private static void skipComment() throws IOException{
+        chr=src.read();
+        c=(char) chr;
+        while(c!='\n'){
+            chr=src.read();
+            c=(char) chr;
+        }
     }
     
     private static lexeme lexVariableorKeyword() throws IOException{

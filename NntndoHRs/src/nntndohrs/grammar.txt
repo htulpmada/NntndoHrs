@@ -1,18 +1,20 @@
-prog:       definition 
-    |       definition prog
+pro:  def 
+    | def pro
 
-definition : varDef
-    | funcDef
+def : vDef
+    | fDef
+    | idDef
 
-varDef : ID EQUALS expr SEMI
+vDef : TYPE ID EQUALS expr SEMI
 
-funcDef : ID OPAREN optPList CPAREN block
+fDef : ID OPAREN optPList CPAREN block
 
 idDef : ID
-    | ID OPAREN optExprList CPAREN
-    | ID OBRACKET expr CBRACKET
+    |   ID OPAREN optExprList CPAREN
+    |   ID OBRACKET expr CBRACKET
 
-operator :  PLUS 
+operator : 
+      PLUS 
     | MINUS 
     | TIMES 
     | DIVIDE
@@ -28,16 +30,14 @@ operator :  PLUS
     | OR
     | DOUBLEEQUAL
 
-expression : unary 
-        |   unary op expr
-
 unary : INTEGER
     | STRING
+    | REAL
     | idDef
     | NOT unary
     | OPAREN expr CPAREN
-    | k_lambda
-    | funcDef
+    | lambda
+    | fDef
     | OBRACKET optExprList CBRACKET
     | NIL
     | BOOLEAN
@@ -51,16 +51,16 @@ unary : INTEGER
 optExprList:  exprList | EMPTY
 
 exprList: expr
-    |   expr COMMA exprList
+        |   expr COMMA exprList
+
+expr : unary 
+    |  unary op expr
 
 optPList : EMPTY
     | pList
 
 pList : ID
     | ID COMMA pList
-
-expr : unary
-    | unary op expr
 
 block : OCURLY optSList CCURLY
 
@@ -70,8 +70,8 @@ optSList : EMPTY
 sList : state
     | state sList
 
-state : varDef
-    | funcDef
+state : vDef
+    | fDef
     | expr SEMI
     | whileLoop
     | ifState
