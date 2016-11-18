@@ -30,7 +30,7 @@ static evaluator eval_er;
     public static void main(String[] args) throws FileNotFoundException, IOException {
         try{String file = args[0]; n=new lexer(file,true);}
         catch(ArrayIndexOutOfBoundsException e){n=new lexer("file.txt",true);}
-        try{String file = args[0]; p=new parser();}
+        try{String file = args[0]; p=new parser();} 
         catch(ArrayIndexOutOfBoundsException e){p=new parser();}
         tree=p.parse();
         System.out.println(tree);

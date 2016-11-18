@@ -36,8 +36,8 @@ public class evaluator {
             vars=car(table);
             vals=cdr(table);
             while(vars!=null){
-                System.out.print(vars.type+": "+vals.type);
-                vars=car(vars);
+                System.out.print(car(vars).string+" : "+car(vals).string+"\n");
+                vars=cdr(vars);
                 vals=cdr(vals);
             }
             env=cdr(env);
@@ -49,8 +49,8 @@ public class evaluator {
         lexeme vars=car(table);
         lexeme vals=cdr(table);
             while(vars!=null){
-                System.out.print(vars.type+": "+vals.type);
-                vars=car(vars);
+                System.out.print(car(vars).string+" : "+car(vals).string+"\n");
+                vars=cdr(vars);
                 vals=cdr(vals);
             }
     }
@@ -69,13 +69,14 @@ public class evaluator {
         lexeme table;
         lexeme vars;
         lexeme vals;
+        displayEnv(env);
         while(env!=null){
             table=car(env);
             vars=car(table);
             vals=cdr(table);
             while(vars!=null){
                 if(var.equals(car(vars).string)){return car(vals);}
-                vars=car(vars);
+                vars=cdr(vars);
                 vals=cdr(vals);
             }
             env=cdr(env);
@@ -84,7 +85,7 @@ public class evaluator {
         return null;
     }
     
-    public void update(lexeme env,String var, String val){
+    public lexeme update(lexeme env,String var, String val){
         lexeme table;
         lexeme vars;
         lexeme vals;
@@ -96,7 +97,7 @@ public class evaluator {
                 if(var.equals(car(vars).string)){//maybe an issue not sure yett
                     setcar(vals,new lexeme(val,val,null,null));
                     setcar(vars,new lexeme(var,var,null,null));
-                    return;
+                    return car(vals);
                 }
                 vars=cdr(vars);
                 vals=cdr(vals);
@@ -104,7 +105,7 @@ public class evaluator {
             env=cdr(env);
         }
         fatal("variable "+ var + " is undefined");
-        return;
+        return null;
     }
     
     public lexeme insert(lexeme var, lexeme val,lexeme env){
@@ -571,7 +572,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            fatal("Can't equate: "+l.string+" and "+r.string);
             return null;
         }
     }
@@ -612,7 +613,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            fatal("Can't equate: "+l.string+" and "+r.string);
             return null;
         }
     }
@@ -857,7 +858,7 @@ public class evaluator {
     private lexeme evalASSIGN(lexeme tree, lexeme env) {
         lexeme var = tree.left.left.left;
         lexeme val = evaluate(tree.right.left, env);
-        lexeme ret = insert(var, val, env);
+        lexeme ret = update(env, var.string, val.string);
         return ret;
     }
 

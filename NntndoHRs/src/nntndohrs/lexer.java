@@ -205,7 +205,7 @@ public static lexeme lex() throws IOException{
                 c=(char)chr;
             }
         }
-        src.unread(chr);
+        src.unread(c);
         if(real){return new lexeme("REAL",token);}
         return new lexeme("INTEGER",token);
     }

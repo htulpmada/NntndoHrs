@@ -55,10 +55,6 @@ import java.util.ArrayList;
         if(string!=null){s+=string+" "+"line #: "+line;}
         if(left!=null){s+="\nLeft: "+left.toString();}
         if(right!=null){s+="\nRight: "+right.toString();}
-        //try{s+=integer+" ";}
-        //catch(Exception e){}
-        //try{s+=real+" ";}
-        //catch(Exception e){}
         return s;
     }
     public int size(){

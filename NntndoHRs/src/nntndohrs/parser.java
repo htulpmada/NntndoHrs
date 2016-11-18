@@ -46,7 +46,7 @@ static lexeme t;
     
     public lexeme match(String type){
         if(check(type)){return advance();}
-        fatal("Syntax Expected "+type+" , Received "+t.type);//t.line
+        fatal("Syntax Expected "+type+" , Received "+t.type+ "line: "+(t.line-1));//t.line
         return null;
     }
     

@@ -1,13 +1,11 @@
 func main(){
-    int alpha = 10; 
-
+    int alpha=10;
+	string b=" ";
     while (alpha > 0) 
           { 
-	   print("alpha is " + alpha); 
-           alpha = alpha - 1; 
-	   if(((alpha*2)==4)){print(alpha);}
-	@else{print("not 2");}
+          print("alpha is " + alpha + b); 
+          alpha = alpha - 1; 
+	  b=2;
           }
-	if(alpha==0){print(alpha);}
 }
 main()
