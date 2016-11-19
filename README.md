@@ -1,5 +1,7 @@
 Nintend oh Heros  (copyright infringe?)
 
+file Ext: .NtdHrs
+
 Designer language made by Adam Pluth for cs 403 Dr. J. University of Alabama
 
 Intro:

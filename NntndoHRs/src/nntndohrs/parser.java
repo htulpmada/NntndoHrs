@@ -40,13 +40,13 @@ static lexeme t;
         lexeme old = t;
         t=t.left;
         old.left=null;//not sure if this will cause problems
-        System.out.println(old.type+" "+old.string);
+        //System.out.println(old.type+" "+old.string);
         return old;
     }
     
     public lexeme match(String type){
         if(check(type)){return advance();}
-        fatal("Syntax Expected "+type+" , Received "+t.type+ "line: "+(t.line-1));//t.line
+        fatal("Syntax Expected "+type+", Received "+t.type+ " line: "+(t.line-1));//t.line
         return null;
     }
     

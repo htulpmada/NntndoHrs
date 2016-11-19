@@ -36,7 +36,7 @@ public lexer(String file,boolean go) throws IOException{
             Charset.forName("UTF-8")));
         while(chr!=65535){
             l=lex();
-            System.out.println(l);
+            //System.out.println(l);
             if(t==null){t=l;n=t;}
             else{n.left=l;n=n.left;}
         }
@@ -181,13 +181,14 @@ public static lexeme lex() throws IOException{
         token="";
         chr=src.read();
         c=(char)chr;
-        token+=c;
+//        token+=c;
         while(c!='\"'){
+            token+=c;
             chr=src.read();
             c=(char)chr;
-            if (c == '\\'){c = (char) src.read();}
-            token+=c;
+            //if (c == '\\'){c = (char) src.read();}
         }
+//        token=token.substring(0,token.length());
         return new lexeme("STRING",token);
     }
 

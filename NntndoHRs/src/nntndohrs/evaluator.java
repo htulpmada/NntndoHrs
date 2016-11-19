@@ -750,16 +750,18 @@ public class evaluator {
         int i=l.string.length();
         int j=r.string.length();
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
-            return new lexeme("INTEGER", "\""+Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string)))+"\"");
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string))));
         }
         else if((l.type == "STRING") && (r.type == "STRING")){
-            lexeme temp=new lexeme("STRING", l.string.substring(0,i-1)+r.string.substring(0,j-1));
+            lexeme temp=new lexeme("STRING", l.string/*.substring(0,i)*/+r.string/*.substring(0,j)*/);
             return temp;
         }
         else if((l.type == "STRING") && (r.type == "INTEGER")){
-            return new lexeme("STRING", "\""+l.string.substring(0,i-1)+r.string+"\"");
+            return new lexeme("STRING", l.string/*.substring(0,i)*/+r.string);
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string))));
+        /*
             try{
                 String s1=l.string.substring(0,i);
                 int leftval=Integer.parseInt(s1);
@@ -770,6 +772,7 @@ public class evaluator {
                 return temp;
             }
             catch(NumberFormatException n){fatal("Can't add string in this format");return null;}
+            */
         }
         else{
             fatal("ERROR: Can't add: "+l.type+" and "+r.type);

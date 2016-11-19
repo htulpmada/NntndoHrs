@@ -27,14 +27,27 @@ static parser p;
 static lexeme tree;
 String file="";
 static evaluator eval_er;
+
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        try{String file = args[0]; n=new lexer(file,true);}
-        catch(ArrayIndexOutOfBoundsException e){n=new lexer("file.txt",true);}
+        StartGame();                                       //true to print tree
+        try{String file = args[0]; n=new lexer(file,false);}
+        catch(ArrayIndexOutOfBoundsException e){n=new lexer("file.txt",false);}
         try{String file = args[0]; p=new parser();} 
         catch(ArrayIndexOutOfBoundsException e){p=new parser();}
         tree=p.parse();
-        System.out.println(tree);
+        //System.out.println(tree);
         eval_er=new evaluator();
-        
+        endOfGame();    
+    }
+    
+    public static void endOfGame(){
+        System.out.print("\n <^^^^^^^^^^^^^^^^^^^^^^^^^^^>"
+                       + "\n < Congragulations you win!! >"
+                       + "\n <vvvvvvvvvvvvvvvvvvvvvvvvvvv>\n\n");
+    }
+    public static void StartGame(){
+        System.out.print("\n <^^^^^^^^^^^^^^^^^^^^^^^^^^^>"
+                       + "\n < Ready..  Set....     Go!! >"
+                       + "\n <vvvvvvvvvvvvvvvvvvvvvvvvvvv>\n\n");
     }
 }
