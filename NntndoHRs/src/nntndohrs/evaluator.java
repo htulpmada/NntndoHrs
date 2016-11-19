@@ -28,6 +28,7 @@ public class evaluator {
     public void setcdr(lexeme cell,lexeme r){cell.right=r;}
     public String type(lexeme cell){return cell.type;}
     public void displayEnv(lexeme env){//need to test
+        System.out.print("Printing envronments:\n");
         lexeme table;
         lexeme vars;
         lexeme vals;
@@ -40,6 +41,7 @@ public class evaluator {
                 vars=cdr(vars);
                 vals=cdr(vals);
             }
+            System.out.print("-----------------------\n");
             env=cdr(env);
         }
     }
@@ -69,7 +71,7 @@ public class evaluator {
         lexeme table;
         lexeme vars;
         lexeme vals;
-        displayEnv(env);
+        //displayEnv(env);
         while(env!=null){
             table=car(env);
             vars=car(table);
@@ -81,11 +83,11 @@ public class evaluator {
             }
             env=cdr(env);
         }
-        parser.fatal("variable "+ var + " is undefined");
+        parser.fatal("variable "+ var + " is undefined" );
         return null;
     }
     
-    public lexeme update(lexeme env,String var, String val){
+    public lexeme update(lexeme env,String var, lexeme val){
         lexeme table;
         lexeme vars;
         lexeme vals;
@@ -95,7 +97,7 @@ public class evaluator {
             vals=cdr(table);
             while(vars!=null){
                 if(var.equals(car(vars).string)){//maybe an issue not sure yett
-                    setcar(vals,new lexeme(val,val,null,null));
+                    setcar(vals,new lexeme(val.type,val.string,null,null));
                     setcar(vars,new lexeme(var,var,null,null));
                     return car(vals);
                 }
@@ -111,7 +113,7 @@ public class evaluator {
     public lexeme insert(lexeme var, lexeme val,lexeme env){
         lexeme table=car(env);
         setcar(table,cons("JOIN",var,car(table)));
-        setcdr(table,cons("JOIN",val,car(table)));
+        setcdr(table,cons("JOIN",val,cdr(table)));
         return val;
     }
 //---------------------------helpers for function calls------------------------------------------------------//
@@ -201,15 +203,12 @@ public class evaluator {
         }
 
     private lexeme evalPRO(lexeme tree, lexeme env) {
-         while(tree.right != null){
+        while(tree.right != null){
             evaluate(tree.left, env);
             tree = tree.right.left;
-         }
-            //if(tree.right == null){
-                return evaluate(tree.left, env);
-        //}
-            //return null;
-    }
+        }
+        return evaluate(tree.left, env);
+   }
 
     private lexeme evalDEF(lexeme tree, lexeme env) {
         return evaluate(tree.left, env);
@@ -219,15 +218,15 @@ public class evaluator {
         lexeme variable = tree.right.left;
         lexeme value = evaluate(tree.right.right.right.left, env);
         lexeme ret = insert(variable, value, env);
-        return ret;
+        return ret;//returning environment here
     }
 
     private lexeme evalFDEF(lexeme tree, lexeme env) {
         lexeme variable = tree.right.left;
         lexeme params = tree.right.right.right.left.left;
         lexeme body = tree.right.right.right.right.right.left;
-        lexeme right = new lexeme("JOIN", "JOIN", body, env);
-        lexeme close = new lexeme("CLOSURE", "CLOSURE", params, right);
+        lexeme right = cons("JOIN", body, env);
+        lexeme close = cons("CLOSURE", params, right);
         lexeme ret = insert(variable, close, env);
         return ret;
     }
@@ -237,17 +236,16 @@ public class evaluator {
     }
 
     private lexeme evalARRAYACCESS(lexeme tree, lexeme env) {
-        int p;
         lexeme arr = lookup(env,tree.left.string);
         lexeme place = evaluate(tree.right.right.left, env);
-        p = Integer.parseInt(place.string);
+        int p = Integer.parseInt(place.string);
         return arr.strings.get(p);
     }
 
     private lexeme evalFUNCCALL(lexeme tree, lexeme env) {
         lexeme args = getArgs(tree);
         lexeme funcName = getFunction(tree);
-        lexeme closure = evaluate(funcName, env);
+        lexeme closure = evaluate(funcName, env);//might be .left?? not sure
         if(closure == null){
             fatal("Closure was None");
         }
@@ -303,6 +301,13 @@ public class evaluator {
     return argArr
 */
 
+    private lexeme evalOPTPLIST(lexeme tree, lexeme env) {
+            if(tree.left != null){
+                return evaluate(tree.left, env);
+            }
+        return null;
+
+    }
 
     private lexeme evalPLIST(lexeme tree, lexeme env) {
         lexeme r = null;
@@ -315,14 +320,6 @@ public class evaluator {
             n = new lexeme("JOIN", "JOIN", evaluate(tree.left, env), r);
         }
         return n;
-    }
-
-    private lexeme evalOPTPLIST(lexeme tree, lexeme env) {
-            if(tree.left != null){
-                return evaluate(tree.left, env);
-            }
-        return null;
-
     }
 
     private lexeme evalOPTEXPRLIST(lexeme tree, lexeme env) {
@@ -346,14 +343,19 @@ public class evaluator {
     }
 
     private lexeme evalEXPR(lexeme tree, lexeme env) {
-        if(tree.right == null){
+        //if(tree.right == null){
             return evaluate(tree.left, env);
-        }
-        else{
-            return evaluate(tree.right, env);
-        }
+        //}
+        //else{
+            //return evaluate(tree.right, env);
+        //}
     }
-
+    private lexeme not(lexeme l){
+        if(l.type=="BOOLEAN"){l.string=Boolean.toString(!Boolean.parseBoolean(l.string));return l;}//probably wrong
+        //else if(l.type=="INTEGER"){l.string=Integer.toString(!Integer.parseInt(l.string));return l;}
+        else{fatal("Can't Not type:"+l.type);}
+        return null;
+    }
     private lexeme evalUNARY(lexeme tree, lexeme env) {
         lexeme elements = null;
         if(tree.right == null){
@@ -366,6 +368,9 @@ public class evaluator {
             elements = evaluate(tree.right.left, env);
             //arr = makeArgList(elements, env);
         }
+        else if(tree.left.type == "NOT"){
+            return not(evaluate(tree.left, env));
+        }
         return evaluate(new lexeme("ARRAY", "ARRAY", elements, null), env);//not sure about that
     }
 
@@ -374,7 +379,7 @@ public class evaluator {
         lexeme r = tree.right;
         String op = tree.string;
         lexeme n = new lexeme(op, op, l, r);
-        return evaluate(n, env);
+        return evaluate(n, env);//i think is an issue not sure
     }
 
     private lexeme evalBLOCK(lexeme tree, lexeme env) {
@@ -395,9 +400,7 @@ public class evaluator {
             if(tree.right!=null){
                 tree = tree.right.left;
             }
-            else{
-                break;
-            }
+            else{break;}//try with out
         }
         return result;
     }
@@ -412,11 +415,11 @@ public class evaluator {
         else if(tree.left.type == "RETURN"){
             return evaluate(tree.right.left, env);
         }
-        else if(tree.left.type == "PRINT"){
+        else if(tree.left.type == "PRINT"){//not sure if this is used
             return evaluate(tree.left, env);
         }
         else{
-            fatal("BAD STATEMENT");
+            fatal("BAD STATEMENT line: "+tree.line);
         }
         return null;
     }
@@ -451,7 +454,7 @@ public class evaluator {
     }
 
     private lexeme evalELSESTATE(lexeme tree, lexeme env) {
-        return evaluate(tree.right.left, env);
+        return evaluate(tree.right.left, env);//maybe problem?
     }
 
     private lexeme evalLAMBDA(lexeme tree, lexeme env) {
@@ -471,7 +474,7 @@ public class evaluator {
         return tree;
     }
 
-    private lexeme evalRETURN(lexeme tree, lexeme env) {
+    private lexeme evalRETURN(lexeme tree, lexeme env) {//not sure if its used
         return evaluate(tree,env);
     }
 
@@ -572,7 +575,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("Can't equate: "+l.string+" and "+r.string);
+            fatal("Can't not equate: "+l.string+" and "+r.string);
             return null;
         }
     }
@@ -613,7 +616,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("Can't equate: "+l.string+" and "+r.string);
+            fatal("Can't compare greater: "+l.type+" :"+l.string+" and "+r.type+" :"+r.string);
             return null;
         }
     }
@@ -750,10 +753,23 @@ public class evaluator {
             return new lexeme("INTEGER", "\""+Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string)))+"\"");
         }
         else if((l.type == "STRING") && (r.type == "STRING")){
-            return new lexeme("STRING", "\""+l.string.substring(1,i-1)+r.string+"\"");
+            lexeme temp=new lexeme("STRING", l.string.substring(0,i-1)+r.string.substring(0,j-1));
+            return temp;
         }
         else if((l.type == "STRING") && (r.type == "INTEGER")){
-            return new lexeme("STRING", "\""+l.string.substring(1,i-1)+r.string+"\"");
+            return new lexeme("STRING", "\""+l.string.substring(0,i-1)+r.string+"\"");
+        }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            try{
+                String s1=l.string.substring(0,i);
+                int leftval=Integer.parseInt(s1);
+                String s2=r.string.substring(0,j-1);
+                int rightval=Integer.parseInt(s2);
+                s1=s1+s2;
+                lexeme temp=new lexeme("INTEGER", s1+s2);
+                return temp;
+            }
+            catch(NumberFormatException n){fatal("Can't add string in this format");return null;}
         }
         else{
             fatal("ERROR: Can't add: "+l.type+" and "+r.type);
@@ -858,7 +874,7 @@ public class evaluator {
     private lexeme evalASSIGN(lexeme tree, lexeme env) {
         lexeme var = tree.left.left.left;
         lexeme val = evaluate(tree.right.left, env);
-        lexeme ret = update(env, var.string, val.string);
+        lexeme ret = update(env, var.string, val);
         return ret;
     }
 

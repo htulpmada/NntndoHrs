@@ -178,7 +178,7 @@ public static lexeme lex() throws IOException{
     }
 
     private static lexeme lexString() throws IOException {
-        token="\"";
+        token="";
         chr=src.read();
         c=(char)chr;
         token+=c;

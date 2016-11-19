@@ -75,9 +75,9 @@ static lexeme t;
         }
         else if(idDefPending()){
             lexeme f = idDef();
-            return f;
+            return cons("DEF", f, null);//was f;
         }
-        return null;//idDef should be here
+        return null;
     }
     
     public lexeme varDef() {
@@ -155,13 +155,13 @@ static lexeme t;
     }
 
      public lexeme expr(){
-        lexeme p = unary();
+        lexeme u = unary();
         if(opPending()){
             lexeme o = op();
             lexeme e = expr();
-            return new lexeme("EXPR", "EXPR", new lexeme("OP", o.type, p, e),null);
+            return cons("EXPR", new lexeme("OP", o.type, u, e),null);
         }     
-    return cons("EXPR", p, null);
+    return cons("EXPR", u, null);
     }    
     
     public lexeme unary(){
@@ -196,7 +196,7 @@ static lexeme t;
             lexeme p = fDef();
             return cons("UNARY", p, null);
         }
-        else if (check("OBRACKET")){
+        else if (check("OBRACKET")){//array access
             lexeme o = match("OBRACKET");
             lexeme e = optExprList();
             lexeme c = match("CBRACKET");
@@ -260,6 +260,10 @@ static lexeme t;
             lexeme op = match("EQUAL");
             return cons("EQUAL", op, null);
         }
+        else if(check("DOUBLEEQUAL")){
+            lexeme op = match("DOUBLEEQUAL");
+            return cons("DOUBLEEQUAL", op, null);
+        }
         else if(check("NOTEQUAL")){
             lexeme op = match("NOTEQUAL");
             return cons("NOTEQUAL", op, null);
@@ -311,14 +315,6 @@ static lexeme t;
         else if(check("OR")){
             lexeme op = match("OR");
             return cons("OR", op, null);
-        }
-        else if(check("EQUAL")){
-            lexeme op = match("EQUAL");
-            return cons("EQUAL", op, null);
-        }
-        else if(check("DOUBLEEQUAL")){
-            lexeme op = match("DOUBLEEQUAL");
-            return cons("DOUBLEEQUAL", op, null);
         }
         else return null;
     }
@@ -435,8 +431,6 @@ static lexeme t;
     public boolean pListPending(){return check("ID");}
     public boolean exprListPending(){return exprPending();}
     public boolean exprPending(){return unaryPending();}
-    public boolean unaryPending(){return idDefPending() | check("STRING") | check("INTEGER") | check("NOT") | check("OPAREN") | lambdaPending() | fDefPending() | check("OBRACKET") | check("NIL") | check("BOOLEAN") | check("PRINT") | check("APPEND") | check("INSERT") | check("REMOVE") | check("SET") | check("LENGTH");}
-    public boolean opPending(){return check("EQUAL") | check("NOTEQUAL") | check("GREATER") | check("LESS") | check("GREATEREQUAL") | check("LESSEQUAL") | check("PLUS") | check("MINUS") | check("TIMES") | check("DIVIDE") | check("INTDIVIDE") | check("POWER") | check("AND") | check("OR") | check("ASSIGN") | check("DOUBLEEQUAL");}
     public boolean blockPending(){return check("OCURLY");}
     public boolean stateListPending(){return statePending();}
     public boolean statePending(){return vDefPending() | fDefPending() | exprPending() | whileLoopPending() | ifStatePending() | check("RETURN");}
@@ -444,4 +438,47 @@ static lexeme t;
     public boolean ifStatePending(){return check("IF");}
     public boolean elseStatePending(){return check("ELSE");}
     public boolean lambdaPending(){return check("LAMBDA");}
+    public boolean unaryPending(){
+        return idDefPending() 
+                | check("STRING") 
+                | check("INTEGER") 
+                | check("NOT") 
+                | check("OPAREN") 
+                | lambdaPending() 
+                | fDefPending() 
+                | check("OBRACKET") 
+                | check("NIL") 
+                | check("BOOLEAN") 
+                | check("PRINT") 
+                | check("APPEND") 
+                | check("INSERT") 
+                | check("REMOVE") 
+                | check("SET") 
+                | check("LENGTH");
+    }
+    public boolean opPending(){
+        return check("EQUAL") 
+                | check("NOTEQUAL") 
+                | check("GREATER") 
+                | check("LESS") 
+                | check("GREATEREQUAL") 
+                | check("LESSEQUAL") 
+                | check("PLUS") 
+                | check("MINUS") 
+                | check("TIMES") 
+                | check("DIVIDE") 
+                | check("INTDIVIDE") 
+                | check("POWER") 
+                | check("AND") 
+                | check("OR") 
+                | check("ASSIGN") 
+                | check("DOUBLEEQUAL");
+    }
+   
+    public boolean builtInPending() {
+        return check("print");
+        //| check();
+    }// | check() all builut in functions
+
+
 }
