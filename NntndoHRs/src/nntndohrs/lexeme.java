@@ -33,6 +33,7 @@ import java.util.ArrayList;
     lexeme(String t) {
         type=t;
         getline();
+        makeArr();
     }
 
     lexeme(String t, String value, lexeme l, lexeme r) {
@@ -41,14 +42,18 @@ import java.util.ArrayList;
         left=l;
         right=r;
         getline();
+        makeArr();
     }
     lexeme(String t, String value) {
         type=t;
         string=value;
         getline();
+        makeArr();
     }
     public void getline(){line=lexer.lineNum;}
-    
+
+    public void makeArr(){if(type.equals("ARRAY")){strings=new ArrayList();}}
+
     public String toString(){
         String s="";
         if(type!=null){s+=type+" ";}

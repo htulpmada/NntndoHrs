@@ -50,4 +50,9 @@ static evaluator eval_er;
                        + "\n < Ready..  Set....     Go!! >"
                        + "\n <vvvvvvvvvvvvvvvvvvvvvvvvvvv>\n\n");
     }
+    public static void gameOver(){
+        System.out.print("\n <^^^^^^^^^^^^^^^^^^^^^^^^^^^>"
+                       + "\n <        GAME OVER          >"
+                       + "\n <vvvvvvvvvvvvvvvvvvvvvvvvvvv>\n\n");
+    }
 }

@@ -1,0 +1,394 @@
+@---------------------------------------------- array test
+@-------- 3 ways to initialize
+@---------same basic array behavior as java
+
+func main(){
+
+@--------initialize test
+
+	print("");
+	print("------set test-----");
+	print("");
+
+	print("array a = [1,2,3,4];");
+	array a = [1,2,3,4];@<--------given initial value;
+@	print("a = " + a);@-------error: cant put array in with operators
+	print("a = ");
+	print(a);
+	print("a[0] = "+ a[0]);
+	print("a[1] = "+ a[1]);
+	print("a[2] = "+ a[2]);
+	print("a[3] = "+ a[3]);
+
+
+@-----------set built in test
+
+	print("");
+	print("------set test-----");
+	print("");
+
+	print("set(a,0,0);");
+	print("set(a,1,10);");
+	print("set(a,2,20);");
+	print("set(a,3,30);");
+	print("");
+	print("if you set out of bounds it appends to array ");
+	print("");
+	print("set(a,4,40);");
+
+	set(a,0,0);
+	set(a,1,10);
+	set(a,2,20);
+	set(a,3,30);
+	set(a,4,40);@-------if set out of bounds it appends to arr instead of error
+	print("");
+
+	print("a = ");
+	print("a[0] = "+ a[0]);
+	print("a[1] = "+ a[1]);
+	print("a[2] = "+ a[2]);
+	print("a[3] = "+ a[3]);
+	print("a[4] = "+ a[4]);
+	print("");
+
+
+	print("single item array must have second arg of nothing");
+	print("");
+	print("Why because i said so");
+	print("");
+	print("ex..");
+	print("");
+	array a = [1,];@<------single item array must have second arg of nothing
+	print("array a = [1,]");
+	print("a[0]");
+	print(a[0]);
+
+	print("");
+
+@	print(a[1]);@<------error: array of size 1
+
+
+	array a = [];@<--------can be empty need test insert, set, remove, on each initializer
+	print("array a = [] ");
+@	print("a = " + a);@-------error: cant put array in with operators
+@	print(a[0]);@-------error: array is null
+	print("print(a[0]) throws error");
+
+@-------------------insert test------
+
+	print("");
+	print("------insert test-----");
+	print("");
+
+	print("insert on multi item initialize");
+	print("");
+
+	array i = [1,2,4,5,6];
+	print("i = [1,2,4,5,6] ");
+	print("i[0] = " + i[0]);
+	print("i[1] = " + i[1]);
+	print("i[2] = " + i[2]);
+	print("i[3] = " + i[3]);
+	print("i[4] = " + i[4]);
+	print("");
+
+	print("insert(array,index,value)");
+	print("");
+
+	print("insert(i,2,3)");
+	print("");
+
+	print("i  should [1,2,3,4,5,6] ");
+	print("i[0] = " + i[0]);
+	print("i[1] = " + i[1]);
+	print("i[2] = " + i[2]);
+	print("i[3] = " + i[3]);
+	print("i[4] = " + i[4]);
+@	print("i[5] = " + i[5]);
+	print("");
+
+	print("insert on single item initialize");
+	print("");
+
+	array i = [1,];
+	print("i = [1,] ");
+
+	print("i[0] = " + i[0]);
+
+	print("");
+	print("insert(i,1,2)");
+	print("");
+	
+	insert(i,1,2);
+
+	print("i should be [1,2] ");
+	print("i[0] = " + i[0]);
+	print("i[1] = " + i[1]);
+
+	print("");
+
+
+	print("insert on empty initialize");
+
+	array i = [];
+	print("");
+	print("insert(i,0,1)");
+	
+	insert(i,0,1);
+
+	print("insert(i,1,2)");
+	print("");
+	
+	insert(i,1,2);
+
+	print("i should be [1,2] ");
+	print("i[0] = " + i[0]);
+	print("i[1] = " + i[1]);
+
+@-------if set out of bounds it appends to arr instead of error
+	print("");
+
+	print("insert(i,5,3)");
+	
+	insert(i,5,3);
+
+	print("");
+	print("i should be [1,2,3] ");
+	print("i[0] = " + i[0]);
+	print("i[1] = " + i[1]);
+	print("i[2] = " + i[2]);
+	print("");
+
+
+@-------------------append test------
+
+	print("");
+	print("------append test-----");
+	print("");
+
+	print("append on multi item initialize");
+	print("");
+
+	array a = [1,2,3,4,5];
+	print("a = [1,2,3,4,5] ");
+	print("a[0] = " + a[0]);
+	print("a[1] = " + a[1]);
+	print("a[2] = " + a[2]);
+	print("a[3] = " + a[3]);
+	print("a[4] = " + a[4]);
+	print("");
+
+	print("append(array,value)");
+	print("");
+
+	print("append(a,6)");
+	append(a,6);
+	print("");
+
+	print("a should be [1,2,3,4,5,6] ");
+	print("a[0] = " + a[0]);
+	print("a[1] = " + a[1]);
+	print("a[2] = " + a[2]);
+	print("a[3] = " + a[3]);
+	print("a[4] = " + a[4]);
+	print("a[5] = " + a[5]);
+	print("");
+
+	print("append on single item initialize");
+	print("");
+
+	array a = [1,];
+	print("a = [1,] ");
+
+	print("a[0] = " + a[0]);
+
+	print("");
+	print("append(a,2)");
+	print("");
+	
+	append(a,2);
+
+	print("a should be [1,2] ");
+	print("a[0] = " + a[0]);
+	print("a[1] = " + a[1]);
+
+	print("");
+
+
+	print("append on empty initialize");
+	print("");
+	
+	array a = [];
+	print("array a =[]");
+	print("");
+	print("append(a,1)");
+	
+	append(a,1);
+
+	print("append(a,2)");
+	print("");
+	
+	append(a,2);
+
+	print("a should be [1,2] ");
+	print("a[0] = " + a[0]);
+	print("a[1] = " + a[1]);
+	print("");
+
+
+@-------------------remove test------
+
+	print("");
+	print("------remove test-----");
+	print("");
+
+
+	array r =[1,2,3,4,5];
+	print("remove on multi item initialize");
+	print("");
+
+	array r = [1,2,3,4,5];
+	print("r = [1,2,3,4,5] ");
+	print("r[0] = " + r[0]);
+	print("r[1] = " + r[1]);
+	print("r[2] = " + r[2]);
+	print("r[3] = " + r[3]);
+	print("r[4] = " + r[4]);
+	print("");
+
+	print("remove(array,index)");
+	print("");
+
+	print("remove(r,0) ");
+	print("");
+
+	remove(r,0);
+
+	print("r  should [2,3,4,5,6] ");
+	print("r[0] = " + r[0]);
+	print("r[1] = " + r[1]);
+	print("r[2] = " + r[2]);
+	print("r[3] = " + r[3]);
+@	print("r[4] = " + r[4]);@------out of bounds now
+	print("");
+
+	print("remove on single item initialize");
+	print("");
+
+	array r = [1,];
+	print("r = [1,] ");
+
+	print("r[0] = " + r[0]);
+
+	print("");
+	print("remove(r,0)");
+	print("");
+	
+	remove(r,0);
+
+	print("r should be [] ");
+@	print("r[0] == null " + r[0]);
+
+	print("");
+
+
+	print("remove on empty initialize throws error");
+
+	array r =[];
+	print("");
+@	print("remove(r,0) ");
+@	remove(r,0);
+	print("");
+	
+
+	print("remove item from middle of array");
+	print("");
+
+	array r =[1,2,3,4,5];
+	print("r = [1,2,3,4,5] ");
+	print("r[0] = " + r[0]);
+	print("r[1] = " + r[1]);
+	print("r[2] = " + r[2]);
+	print("r[3] = " + r[3]);
+	print("r[4] = " + r[4]);
+	print("");
+
+	print("remove(r,2)");
+	print("");
+
+	remove(r,2);
+
+	print("r should be [1,2,4,5] ");
+	print("r[0] = " + r[0]);
+	print("r[1] = " + r[1]);
+	print("r[2] = " + r[2]);
+	print("r[3] = " + r[3]);
+	print("");
+
+
+
+
+	print("remove out of bounds does NOT throw error instead removes last item");
+	print("");
+
+	array r =[1,2,3,4,5];
+	print("r = [1,2,3,4,5] ");
+	print("r[0] = " + r[0]);
+	print("r[1] = " + r[1]);
+	print("r[2] = " + r[2]);
+	print("r[3] = " + r[3]);
+	print("r[4] = " + r[4]);
+	print("");
+
+	print("remove(r,20)");
+	print("");
+
+	print("r should be [1,2,3,4] ");
+	print("r[0] = " + r[0]);
+	print("r[1] = " + r[1]);
+	print("r[2] = " + r[2]);
+	print("r[3] = " + r[3]);
+	print("");
+
+
+@-------------------length test------
+
+	print("");
+	print("------length test-----");
+	print("");
+
+
+	print("array l = [1,2,3,4,5];");
+	print("");
+
+	array l = [1,2,3,4,5];
+
+	print("length(Aray)");
+	print("");
+	print("length(l)");
+	print(length(l));
+	print("");
+	
+	array l =[1,];
+
+	print("array l = [1,];");
+	print("");
+	print("length(l)");
+	print(length(l));
+	print("");
+
+
+	array l =[];
+
+	print("array l = [];");
+	print("");
+	print("length(l)");
+	print(length(l));
+	print("");
+
+
+
+
+
+}
+main()

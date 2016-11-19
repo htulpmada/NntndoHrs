@@ -167,6 +167,7 @@ public static lexeme lex() throws IOException{
         else if (token.equals("true")){return new lexeme("BOOLEAN", "TRUE");}
         else if (token.equals("false")){return new lexeme("BOOLEAN", "FALSE");}
         else if (token.equals("print")){return new lexeme("PRINT", "print");}
+        else if (token.equals("array")){return new lexeme("TYPE", "array");}
         else if (token.equals("append")){return new lexeme("APPEND", "append");}
         else if (token.equals("insert")){return new lexeme("INSERT", "insert");}
         else if (token.equals("remove")){return new lexeme("REMOVE", "remove");}

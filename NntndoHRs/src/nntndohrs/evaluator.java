@@ -111,10 +111,22 @@ public class evaluator {
     }
     
     public lexeme insert(lexeme var, lexeme val,lexeme env){
+        if(val.type=="ARRAY"){val=makeArray(val);}
         lexeme table=car(env);
         setcar(table,cons("JOIN",var,car(table)));
         setcdr(table,cons("JOIN",val,cdr(table)));
         return val;
+    }
+    public lexeme makeArray(lexeme l){//need to test single and empty initializer
+        lexeme list=l.left;
+        if (list==null){return l;}
+        while(list.type=="JOIN"){
+            l.strings.add(list.left);
+            list=list.right;
+            if(list.type=="INTEGER"){l.strings.add(list);}
+        }
+        //l.strings.add(list.left);
+        return l;
     }
 //---------------------------helpers for function calls------------------------------------------------------//
     public lexeme getArgs(lexeme tree){
@@ -163,11 +175,11 @@ public class evaluator {
     else if(tree.type == "ELSESTATE"){return evalELSESTATE(tree, env);}
     else if(tree.type == "LAMBDA"){return evalLAMBDA(tree, env);}
     else if(tree.type == "ARRAYACCESS"){return evalARRAYACCESS(tree, env);}
-    //else if(tree.type == "APPEND"){return evalAPPEND(tree, env);}
-    //else if(tree.type == "INSERT"){return evalINSERT(tree, env);}
-    //else if(tree.type == "REMOVE"){return evalREMOVE(tree, env);}
-    //else if(tree.type == "SET"){return evalSET(tree, env);}
-    //else if(tree.type == "LENGTH"){return evalLENGTH(tree, env);}
+    else if(tree.type == "APPEND"){return evalAPPEND(tree, env);}
+    else if(tree.type == "INSERT"){return evalINSERT(tree, env);}
+    else if(tree.type == "REMOVE"){return evalREMOVE(tree, env);}
+    else if(tree.type == "SET"){return evalSET(tree, env);}
+    else if(tree.type == "LENGTH"){return evalLENGTH(tree, env);}
 //-----------^^^^^^these are from parser not lexer^^^^^^^-----------------//    
     else if(tree.type == "STRING"){return evalSTRING(tree, env);}
     else if(tree.type == "INTEGER"){return evalINTEGER(tree, env);}
@@ -239,7 +251,11 @@ public class evaluator {
         lexeme arr = lookup(env,tree.left.string);
         lexeme place = evaluate(tree.right.right.left, env);
         int p = Integer.parseInt(place.string);
-        return arr.strings.get(p);
+        try{return arr.strings.get(p);}
+        catch(IndexOutOfBoundsException i){
+            int len=arr.strings.size();
+            fatal("Woops: array[max index] is "+len+" and you asked for "+p);
+        return null;}
     }
 
     private lexeme evalFUNCCALL(lexeme tree, lexeme env) {
@@ -494,7 +510,10 @@ public class evaluator {
 
     private lexeme evalPRINT(lexeme tree, lexeme env) {
         lexeme eargs = evaluate(tree.right.right.left, env);
-        System.out.print(eargs.string+"\n");
+        try{
+            System.out.print(eargs.string+"\n");
+        }
+        catch(NullPointerException n){fatal("null pointer line: "+tree.line);}
         return eargs;//might be wrong 
     }
 
@@ -889,14 +908,68 @@ public class evaluator {
         return tree;
     }
 
-    //private lexeme evalAPPEND(lexeme tree, lexeme env) {}
+    private lexeme evalAPPEND(lexeme tree, lexeme env) {
+        lexeme eargs = evaluate(tree.right.right.left, env);
+        lexeme arr = eargs.left;
+        lexeme value = eargs.right;
+        arr.strings.add(value);
+        return value;
+    }
 
-    //private lexeme evalINSERT(lexeme tree, lexeme env) {}
+    private lexeme evalINSERT(lexeme tree, lexeme env) {
+        lexeme eargs = evaluate(tree.right.right.left, env);
+        lexeme arr = eargs.left;
+        lexeme in = eargs.right.left;
+        lexeme value = eargs.right.right;
+        int index = Integer.parseInt((evaluate(in,env)).string);//problems?
+        try{
+            arr.strings.add(index,value);
+            return value;
+        }
+        catch(IndexOutOfBoundsException i){
+           // return arr.strings.add(value);
+        }
+        arr.strings.add(value);
+        return value;
+    }
+    
+    private lexeme evalREMOVE(lexeme tree, lexeme env) {
+        lexeme eargs = evaluate(tree.right.right.left, env);
+        lexeme arr = eargs.left;
+        lexeme in = eargs.right;
+        int index = Integer.parseInt((evaluate(in,env)).string);//problems?
+        try{
+            return arr.strings.remove(index);
+            //return value;
+        }
+        catch(IndexOutOfBoundsException i){
+           try{return arr.strings.remove(0);}
+                   catch(IndexOutOfBoundsException ie){
+                           fatal("Can't remove from empty Array ");
+                            return null;
+                   }
+        }
+    }
 
-    //private lexeme evalREMOVE(lexeme tree, lexeme env) {}
+    private lexeme evalSET(lexeme tree, lexeme env) {
+        lexeme eargs = evaluate(tree.right.right.left, env);
+        lexeme arr = eargs.left;
+        lexeme in = eargs.right.left;
+        lexeme value = eargs.right.right;
+        int index = Integer.parseInt((evaluate(in,env)).string);//problems?
+        try{
+            return arr.strings.set(index,value);
+        }
+        catch(IndexOutOfBoundsException i){
+           // return arr.strings.add(value);
+        }
+        arr.strings.add(value);
+        return value;
+    }
 
-    //private lexeme evalSET(lexeme tree, lexeme env) {}
-
-    //private lexeme evalLENGTH(lexeme tree, lexeme env) {}
+    private lexeme evalLENGTH(lexeme tree, lexeme env) {
+        lexeme eargs = evaluate(tree.right.right.left, env);
+        return new lexeme("INTGER",Integer.toString(eargs.strings.size()),null,null);
+    }
     
 }

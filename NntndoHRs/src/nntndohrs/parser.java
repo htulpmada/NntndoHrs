@@ -7,6 +7,7 @@ package nntndohrs;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import static nntndohrs.NntndoHRs.gameOver;
 
 /**
  *
@@ -29,6 +30,7 @@ static lexeme t;
     
     public static void fatal(String problem){
         System.out.println("\nERROR; "+problem);
+        gameOver();
         System.exit(1);
     }
     
@@ -196,7 +198,7 @@ static lexeme t;
             lexeme p = fDef();
             return cons("UNARY", p, null);
         }
-        else if (check("OBRACKET")){//array access
+        else if (check("OBRACKET")){//array initializer
             lexeme o = match("OBRACKET");
             lexeme e = optExprList();
             lexeme c = match("CBRACKET");
@@ -335,7 +337,7 @@ static lexeme t;
     }
      
     public lexeme stateList(){
-        lexeme s= state();
+        lexeme s = state();
         if(stateListPending()){
             lexeme sl = stateList();
             return cons("STATELIST", s, cons("JOIN", sl, null));
