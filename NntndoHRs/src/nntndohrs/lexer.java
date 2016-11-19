@@ -100,7 +100,7 @@ public static lexeme lex() throws IOException{
         switch(b){
             case '<':
                 if(c=='='){return new lexeme("LESSEQUAL","<=");}
-                else{src.unread(c);return new lexeme("LESSTHAN","<");}
+                else{src.unread(c);return new lexeme("LESS","<");}
             case '>':
                 if(c=='='){return new lexeme("GREATEREQUAL",">=");}
                 else{src.unread(c);return new lexeme("GREATER",">");}
@@ -238,7 +238,7 @@ public static lexeme lex() throws IOException{
     private static lexeme lexDivide() throws IOException {
         token="";
         c=(char)src.read();
-        if(c=='/'){return new lexeme("INTDIV","//");}
+        if(c=='/'){return new lexeme("INTDIVDE","//");}
         else{src.unread(c);return new lexeme("DIVIDE","/");}
     }
     

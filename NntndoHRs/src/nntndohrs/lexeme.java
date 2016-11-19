@@ -63,10 +63,11 @@ import java.util.ArrayList;
         return s;
     }
     public int size(){
-        int i=0;
+        int i=1;
         return size(i);
     }
     public int size(int j){
+        if(right==null){return j;}
         return right.size(j+1);
     }
 }

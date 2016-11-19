@@ -1,6 +1,16 @@
-@---------------------------------------------- operator test
+@------------ recursion  test
 
 func main(){
 
 }
+
+
+func Opening(){
+
+	print("print something here");
+	print("");
+
+}
+
+Opening()
 main()

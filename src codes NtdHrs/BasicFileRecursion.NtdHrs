@@ -1,0 +1,41 @@
+@------------ recursion  test
+
+func main( k ){
+	
+
+
+	if(k>0){
+
+		print(k);
+
+		k = k - 1 ;
+
+		main(k);
+
+	}
+
+	else{
+
+		print(k);
+
+		}
+
+	
+
+}
+
+
+func Opening(){
+
+	print("recursively count down to zero ");
+	print("");
+
+}
+
+
+
+Opening()
+
+main( 5 )
+
+

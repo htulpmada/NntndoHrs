@@ -76,6 +76,8 @@ Rules:
 
 		while: while ( boolean expr ) { block }
 	
+	Operations:
 
+		see AllCombosOfOps.NtdHrs
 		
 (attempting javaDocs for this project)

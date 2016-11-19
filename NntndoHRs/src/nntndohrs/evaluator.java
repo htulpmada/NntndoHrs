@@ -59,7 +59,7 @@ public class evaluator {
     
     public lexeme create(){return extend(null,null,null);}
     
-    public lexeme extend(lexeme env, lexeme vars, lexeme vals){
+    public lexeme extend(lexeme vars, lexeme vals, lexeme env){
         return cons("ENV",makeTable(vars,vals),env);
     }
     
@@ -71,13 +71,15 @@ public class evaluator {
         lexeme table;
         lexeme vars;
         lexeme vals;
-        //displayEnv(env);
+//        displayEnv(env);
         while(env!=null){
             table=car(env);
             vars=car(table);
             vals=cdr(table);
             while(vars!=null){
-                if(var.equals(car(vars).string)){return car(vals);}
+                if(vars.left!=null){
+                    if(var.equals(car(vars).string)){return car(vals);}
+                }
                 vars=cdr(vars);
                 vals=cdr(vals);
             }
@@ -175,6 +177,7 @@ public class evaluator {
     else if(tree.type == "ELSESTATE"){return evalELSESTATE(tree, env);}
     else if(tree.type == "LAMBDA"){return evalLAMBDA(tree, env);}
     else if(tree.type == "ARRAYACCESS"){return evalARRAYACCESS(tree, env);}
+    else if(tree.type == "ARRAY"){return evalARRAY(tree, env);}
     else if(tree.type == "APPEND"){return evalAPPEND(tree, env);}
     else if(tree.type == "INSERT"){return evalINSERT(tree, env);}
     else if(tree.type == "REMOVE"){return evalREMOVE(tree, env);}
@@ -188,8 +191,10 @@ public class evaluator {
     else if(tree.type == "NIL"){return evalNIL(tree, env);}
     else if(tree.type == "BOOLEAN"){return evalBOOLEAN(tree, env);}
     else if(tree.type == "PRINT"){return evalPRINT(tree, env);}
+    //-----------operators-------------vvvvvvvvvv-------//
     else if(tree.type == "EQUAL"){return evalASSIGN(tree, env);}//maybe needs to be evalASSIGN()
     else if(tree.type == "NOTEQUAL"){return evalNOTEQUAL(tree, env);}
+    else if(tree.type == "NOT"){return evalUNARY(tree, env);}
     else if(tree.type == "GREATER"){return evalGREATER(tree, env);}
     else if(tree.type == "LESS"){return evalLESS(tree, env);}
     else if(tree.type == "GREATEREQUAL"){return evalGREATEREQUAL(tree, env);}
@@ -203,7 +208,6 @@ public class evaluator {
     else if(tree.type == "AND"){return evalAND(tree, env);}
     else if(tree.type == "OR"){return evalOR(tree, env);}
     else if(tree.type == "DOUBLEEQUAL"){return evalDOUBLEEQUAL(tree, env);}//maybe needs to be evalEQUAL()
-    else if(tree.type == "ARRAY"){return evalARRAY(tree, env);}
 
     else{
         fatal(tree.type+" : "+tree.string+"line#: "+tree.line);}
@@ -272,9 +276,10 @@ public class evaluator {
         lexeme body = getBody(closure);
         lexeme params = getParams(closure);
         lexeme eargs = evaluate(args, env);
+        if(eargs !=null && eargs.size()==1){eargs=cons("JOIN",eargs,null);}//size==1
         //lexeme eparams = makeParamList(params);
         //lexeme eeargs = makeArgList(eargs, env);
-        if((eargs!=null||params!=null)&&(eargs.size() != params.size())){
+        if((eargs!=null||params!=null) && (eargs.size() != params.size())){
             fatal("Wrong number of arguments.");
         }
         lexeme xenv = extend(params, eargs, denv);
@@ -384,7 +389,7 @@ public class evaluator {
             elements = evaluate(tree.right.left, env);
             //arr = makeArgList(elements, env);
         }
-        else if(tree.left.type == "NOT"){
+        else if(tree.left.type == "NOT"){//maybe issue here
             return not(evaluate(tree.left, env));
         }
         return evaluate(new lexeme("ARRAY", "ARRAY", elements, null), env);//not sure about that
@@ -531,6 +536,11 @@ public class evaluator {
             v=(i==0)?"TRUE":"FALSE";
             return new lexeme("BOOLEAN", v);
         }
+        else if((l.type == "BOOLEAN") && (r.type == "BOOLEAN")){
+            i=l.string.compareTo(r.string);
+            v=(i==0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             i=l.string.compareTo(r.string);
             v=(i==0)?"TRUE":"FALSE";
@@ -594,7 +604,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("Can't not equate: "+l.string+" and "+r.string);
+            fatal("Can't NOT equate: "+l.string+" and "+r.string);
             return null;
         }
     }
@@ -676,7 +686,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            fatal("ERROR: Can't compare less: "+l.string+" and "+r.string);
             return null;
         }
     }
@@ -717,7 +727,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("ERROR: Can't equate: "+l.string+" and "+r.string);
+            fatal("ERROR: Can't compare greater equal: "+l.string+" and "+r.string);
             return null;
         }
     }
@@ -758,7 +768,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("Can't equate: "+l.string+" and "+r.string);
+            fatal("Can't compare less equal: "+l.string+" and "+r.string);
             return null;
         }
     }
@@ -766,32 +776,26 @@ public class evaluator {
     private lexeme evalPLUS(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
-        int i=l.string.length();
-        int j=r.string.length();
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string))));
         }
-        else if((l.type == "STRING") && (r.type == "STRING")){
-            lexeme temp=new lexeme("STRING", l.string/*.substring(0,i)*/+r.string/*.substring(0,j)*/);
-            return temp;
-        }
-        else if((l.type == "STRING") && (r.type == "INTEGER")){
-            return new lexeme("STRING", l.string/*.substring(0,i)*/+r.string);
-        }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string))));
-        /*
-            try{
-                String s1=l.string.substring(0,i);
-                int leftval=Integer.parseInt(s1);
-                String s2=r.string.substring(0,j-1);
-                int rightval=Integer.parseInt(s2);
-                s1=s1+s2;
-                lexeme temp=new lexeme("INTEGER", s1+s2);
-                return temp;
-            }
-            catch(NumberFormatException n){fatal("Can't add string in this format");return null;}
-            */
+        }
+        else if((l.type == "STRING") && (r.type == "INTEGER")){
+            return new lexeme("STRING", l.string+r.string);
+        }
+        else if((l.type == "STRING") && (r.type == "STRING")){
+            lexeme temp=new lexeme("STRING", l.string+r.string);
+            return temp;
+        }
+        else if((l.type == "STRING") && (r.type == "BOOLEAN")){
+            lexeme temp=new lexeme("STRING", l.string+r.string);
+            return temp;
+        }
+        else if((l.type == "BOOLEAN") && (r.type == "STRING")){
+            lexeme temp=new lexeme("STRING", l.string+r.string);
+            return temp;
         }
         else{
             fatal("ERROR: Can't add: "+l.type+" and "+r.type);
@@ -803,6 +807,18 @@ public class evaluator {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) - Integer.parseInt(r.string))));
+        }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) - Integer.parseInt(r.string))));
+        }//parse real<-------vvvvvv
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) - Integer.parseInt(r.string))));
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) - Integer.parseInt(r.string))));
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) - Integer.parseInt(r.string))));
         }
         else{
@@ -817,6 +833,18 @@ public class evaluator {
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) * Integer.parseInt(r.string))));
         }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) * Integer.parseInt(r.string))));
+        }//parse real<-------vvvvvv
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) * Integer.parseInt(r.string))));
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) * Integer.parseInt(r.string))));
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) * Integer.parseInt(r.string))));
+        }
         else{
             fatal("ERROR: Can't multiply: "+l.type+" and "+r.type);
             return null;
@@ -828,7 +856,21 @@ public class evaluator {
         lexeme r = evaluate(tree.right, env);
         if(r.string=="0"){fatal("EEROR: divide by zero Paradox???????");return null;}
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string))));
+           try{ return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+           }
+           catch(ArithmeticException a){fatal("EEROR: divide by zero Paradox???????");return null;}
+        }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+        }//parse real<-------vvvvvv
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){// parses as integer needs to fix
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }
         else{
             fatal("ERROR: Can't divide: "+l.type+" and "+r.type);
@@ -843,6 +885,18 @@ public class evaluator {
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+        }//parse real<-------vvvvvv
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+        }
         else{
             fatal("ERROR: Can't divide: "+l.type+" and "+r.type);
             return null;
@@ -855,8 +909,20 @@ public class evaluator {
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
         }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
+        }//parse real<-------vvvvvv
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
+            return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
+        }
         else{
-            fatal("ERROR: Can't add: "+l.type+" and "+r.type);
+            fatal("ERROR: Can't raise: "+l.type+" to "+r.type+" power ");
             return null;
         }
     }
@@ -867,11 +933,23 @@ public class evaluator {
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) & Integer.parseInt(r.string)));
         }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) & Integer.parseInt(r.string)));
+        }//parse real<-------vvvvvv
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) & Integer.parseInt(r.string)));
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) & Integer.parseInt(r.string)));
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){// parses as integer needs to fix
+            return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) & Integer.parseInt(r.string)));
+        }
         else if((l.type == "BOOLEAN") && (r.type == "BOOLEAN")){
             return new lexeme("BOOLEAN", Boolean.toString(Boolean.parseBoolean(l.string) & Boolean.parseBoolean(r.string)));
         }
         else{
-            fatal("ERROR: Can't and: "+l.type+" and "+r.type);
+            fatal("ERROR: Can't AND: "+l.type+" and "+r.type);
             return null;
         }
 
@@ -883,11 +961,23 @@ public class evaluator {
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) | Integer.parseInt(r.string)));
         }
+        else if((l.type == "INTEGER") && (r.type == "STRING")){
+            return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) | Integer.parseInt(r.string)));
+        }//parse real<-------vvvvvv
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) | Integer.parseInt(r.string)));
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) | Integer.parseInt(r.string)));
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){// parses as integer needs to fix
+            return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) | Integer.parseInt(r.string)));
+        }
         else if((l.type == "BOOLEAN") && (r.type == "BOOLEAN")){
             return new lexeme("BOOLEAN", Boolean.toString(Boolean.parseBoolean(l.string) | Boolean.parseBoolean(r.string)));
         }
         else{
-            fatal("ERROR: Can't and: "+l.type+" and "+r.type);
+            fatal("ERROR: Can't OR: "+l.type+" and "+r.type);
             return null;
         }
 
