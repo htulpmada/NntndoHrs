@@ -176,6 +176,7 @@ public class evaluator {
     else if(tree.type == "OPTELSESTATE"){return evalOPTELSESTATE(tree, env);}
     else if(tree.type == "ELSESTATE"){return evalELSESTATE(tree, env);}
     else if(tree.type == "LAMBDA"){return evalLAMBDA(tree, env);}
+    else if(tree.type == "BREAK"){return evalBREAK(tree, env);}
     else if(tree.type == "ARRAYACCESS"){return evalARRAYACCESS(tree, env);}
     else if(tree.type == "ARRAY"){return evalARRAY(tree, env);}
     else if(tree.type == "APPEND"){return evalAPPEND(tree, env);}
@@ -451,6 +452,7 @@ public class evaluator {
         lexeme x = null;
         while((evaluate(conditional, env)).string == "TRUE"){
             x = evaluate(block, env);
+            //if(){}// if(x contains lexeme BREAK){ break; }
         }
         return x;
     }
@@ -1060,6 +1062,11 @@ public class evaluator {
     private lexeme evalLENGTH(lexeme tree, lexeme env) {
         lexeme eargs = evaluate(tree.right.right.left, env);
         return new lexeme("INTGER",Integer.toString(eargs.strings.size()),null,null);
+    }
+    
+    private lexeme evalBREAK(lexeme tree, lexeme env){
+        //displayEnv(env);
+        return tree;
     }
     
 }

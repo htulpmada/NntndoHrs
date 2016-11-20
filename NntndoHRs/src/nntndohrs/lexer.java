@@ -173,6 +173,7 @@ public static lexeme lex() throws IOException{
         else if (token.equals("remove")){return new lexeme("REMOVE", "remove");}
         else if (token.equals("set")){return new lexeme("SET", "set");}
         else if (token.equals("length")){return new lexeme("LENGTH", "length");}
+        else if (token.equals("break")){return new lexeme("BREAK", "break");}
         else if (token.equals("lambda")){return new lexeme("LAMBDA", "lambda");}
         else {return new lexeme("ID",token);}
         

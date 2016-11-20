@@ -219,6 +219,11 @@ static lexeme t;
             lexeme c = match("CPAREN");
             return cons("PRINT", f, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, null))));
         }
+        else if (check("BREAK")){
+            lexeme b = match("BREAK");
+            //lexeme s = match("SEMI");
+            return b;//cons("BREAK", b, s);
+        }
         else if (check("APPEND")){
             lexeme f = match("APPEND");
             lexeme o = match("OPAREN");
@@ -435,7 +440,7 @@ static lexeme t;
     public boolean exprPending(){return unaryPending();}
     public boolean blockPending(){return check("OCURLY");}
     public boolean stateListPending(){return statePending();}
-    public boolean statePending(){return vDefPending() | fDefPending() | exprPending() | whileLoopPending() | ifStatePending() | check("RETURN");}
+    public boolean statePending(){return vDefPending() | fDefPending() | exprPending() | whileLoopPending() | ifStatePending() | check("RETURN");}//| check("BREAK");}
     public boolean whileLoopPending(){return check("WHILE");}
     public boolean ifStatePending(){return check("IF");}
     public boolean elseStatePending(){return check("ELSE");}
@@ -456,7 +461,9 @@ static lexeme t;
                 | check("INSERT") 
                 | check("REMOVE") 
                 | check("SET") 
+                | check("BREAK") 
                 | check("LENGTH");
+        //^^^^^^^^^^^BUILT-INS go here^^^^^^//
     }
     public boolean opPending(){
         return check("EQUAL") 

@@ -2,15 +2,16 @@
 
 func main(){
 
+
+	int i=5;
+	
+	while(i>0){
+	
+		if(i==2){break;}@doesn't work
+		print( i );
+		i = i - 1;@<----must have space for minus
+
+	}
 }
 
-
-func Opening(){
-
-	print("print something here");
-	print("");
-
-}
-
-Opening()
 main()
