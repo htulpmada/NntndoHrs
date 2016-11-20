@@ -1,20 +1,21 @@
-Nintend oh Heros  (copyright infringe?)
+	Nintend oh Heros  (copyright infringe?)
 
-Designer language made by Adam Pluth for cs 403 Dr. J. University of Alabama
+	Designer language made by Adam Pluth for cs 403 Dr. J. University of Alabama
 
-file Ext: .NtdHrs
+	file Ext: .NtdHrs
 
-Intro:
-
-
-
-Types: 	string and ints for now
-	must be declared,
-	does not support empty assignment
+	Intro:
 
 
-Rules:
-	COMMENT: 	(single line only) symbol = @
+
+	Types: 	string and ints for now
+		must be declared,
+		does not support empty assignment
+
+
+	Rules:
+
+	Comment: 	(single line only) symbol = @
 
 	Program: 	consists of multiple definitions
 
@@ -80,4 +81,5 @@ Rules:
 
 		see AllCombosOfOps.NtdHrs
 		
-(attempting javaDocs for this project)
+
+	(attempting javaDocs for this project)
