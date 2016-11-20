@@ -27,19 +27,36 @@ static parser p;
 static lexeme tree;
 String file="";
 static evaluator eval_er;
+static lexeme e=evaluator.create();
+
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        StartGame();                                       //true to print tree
-        try{String file = args[0]; n=new lexer(file,false);}
+        StartGame();
+        loadSavedGame();//<---load built-ins
+        //true to print tree
+        try{
+            String file = args[0]; 
+            boolean b =checkFileExtension(file);
+            if(!b){parser.fatal("Bad File Extension: must be  .NtdHrs ");}
+            n=new lexer(file,false);
+        }
         catch(ArrayIndexOutOfBoundsException e){n=new lexer("file.txt",false);}
-        try{String file = args[0]; p=new parser();} 
-        catch(ArrayIndexOutOfBoundsException e){p=new parser();}
+        p=new parser();
         tree=p.parse();
         //System.out.println(tree);
-        eval_er=new evaluator();
+        eval_er=new evaluator(e);
         endOfGame();    
     }
     
+    public static void loadSavedGame(){}
+
+    private static boolean checkFileExtension(String s) {
+        boolean b=false;
+        if(s.endsWith(".NtdHrs")){
+            b=true;
+        }
+        return b;
+    }    
     public static void endOfGame(){
         System.out.print("\n <^^^^^^^^^^^^^^^^^^^^^^^^^^^>"
                        + "\n < Congragulations you win!! >"

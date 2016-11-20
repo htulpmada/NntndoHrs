@@ -15,13 +15,13 @@ import static nntndohrs.parser.fatal;
 public class evaluator {
     static lexeme E;
     
-    public evaluator(){
+    public evaluator(lexeme e){
         E=create();
         evaluate(NntndoHRs.tree,E);
     }
 //----------------------------------------utility f(x)'s--------------------------------------------------------------//
     
-    public lexeme cons(String type,lexeme l, lexeme r){return new lexeme(type,type,l,r);}
+    public static lexeme cons(String type,lexeme l, lexeme r){return new lexeme(type,type,l,r);}
     public lexeme car(lexeme cell){return cell.left;}
     public lexeme cdr(lexeme cell){return cell.right;}
     public void setcar(lexeme cell,lexeme l){cell.left=l;}
@@ -57,13 +57,13 @@ public class evaluator {
             }
     }
     
-    public lexeme create(){return extend(null,null,null);}
+    public static lexeme create(){return extend(null,null,null);}
     
-    public lexeme extend(lexeme vars, lexeme vals, lexeme env){
+    public static lexeme extend(lexeme vars, lexeme vals, lexeme env){
         return cons("ENV",makeTable(vars,vals),env);
     }
     
-    public lexeme makeTable(lexeme vars,lexeme vals){
+    public static lexeme makeTable(lexeme vars,lexeme vals){
         return cons("TABLE",vars,vals);
     }
     

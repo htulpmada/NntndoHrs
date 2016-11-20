@@ -68,21 +68,6 @@ func main(){
 
 	print("x + y = " + x + y);
 
-@---------string - string 
-@---------string - int 
-@---------int - string 
-@---------int - int 
+}
 
-@---------string * string 
-@---------string * int 
-@---------int * string 
-@---------int * int 
-
-@---------string / string 
-@---------string / int 
-@---------int / string 
-@---------int / int 
-
-
-        }
 main()
