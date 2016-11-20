@@ -264,64 +264,68 @@ public class evaluator {
     }
 
     private lexeme evalFUNCCALL(lexeme tree, lexeme env) {
-        lexeme args = getArgs(tree);
+        lexeme args = getArgs(tree);//check
         lexeme funcName = getFunction(tree);
-        lexeme closure = evaluate(funcName, env);//might be .left?? not sure
+        lexeme closure = evaluate(funcName, env);//check
         if(closure == null){
             fatal("Closure was None");
         }
         else if(closure.type != "CLOSURE"){
             fatal("Tried to call "+closure.string+" as function.");
         }
-        lexeme denv = getEnv(closure);
-        lexeme body = getBody(closure);
-        lexeme params = getParams(closure);
+        lexeme denv = getEnv(closure);//check
+        lexeme body = getBody(closure);//check
+        lexeme params = getParams(closure);//check
         lexeme eargs = evaluate(args, env);
         if(eargs !=null && eargs.size()==1){eargs=cons("JOIN",eargs,null);}//size==1
-        //lexeme eparams = makeParamList(params);
-        //lexeme eeargs = makeArgList(eargs, env);
-        if((eargs!=null||params!=null) && (eargs.size() != params.size())){
-            fatal("Wrong number of arguments.");
+//        params = makeParamList(params,env);
+//        eargs = makeArgList(eargs, env);
+        if((eargs!=null&&params!=null) && (eargs.size() != params.size())){
+            fatal("Wrong number of arguments. line: "+ funcName.line);
         }
         lexeme xenv = extend(params, eargs, denv);
         return evaluate(body, xenv);
     }
 
-   /* public lexeme makeParamList(lexeme params){
-        ArrayList<lexeme> pArr=null;
-        while(params!=null){
-            if(params.type == "PARAMLIST"){
-                pArr.add(params.left);
-                if(params.right!=null){
-                    params = params.right.right.left;
-                }
-                else{
-                    params = params.right;
-                }
-            }
+    public lexeme makeParamList(lexeme tree, lexeme env){
+        if(tree==null){return null;}
+        lexeme r = null;
+        lexeme n = null;
+        if(tree.right == null){
+            return evaluate(tree.left, env);
         }
-        return listTolex(pArr);
-    }*/
+        if(tree.right.right.left != null){
+            r = evaluate(tree.right.right.left, env);
+            n = new lexeme("JOIN", "JOIN", evaluate(tree.left, env), r);
+        }
+        return n;
+    }
 
-    /*public lexeme makeArgList(lexeme args,lexeme env){
-    ArrayList<lexeme> argArr = null;
-    while(args!=null){
-        if(args.type=="LIST")){
-            for(lexeme x:args){
-                argArr.add(x);
-            }
-            break;
-        else if(args.type == "CLOSURE"){
-            argArr.append(args)
-            break
-        else if(args.type != "JOIN"):
-            argArr.append(args)
-            args = args.right
-        else{
-            argArr.append(args.left)
-            args = args.right
-    return argArr
-*/
+    public lexeme makeArgList(lexeme tree,lexeme env){
+        /*lexeme l=null;
+        lexeme r=null;
+        while(tree!=null){
+            if(tree==null|tree.left==null){return l;}
+            l=evaluate(tree.left,env);
+            
+        }
+        return l;
+        */
+
+
+        if(tree==null){return null;}
+        lexeme r = null;
+        lexeme n = null;
+        if(tree.right == null){
+            return evaluate(tree.left, env);
+        }
+        if(tree.right.right.left != null){
+            r = evaluate(tree.right.right.left, env);
+            n = new lexeme("JOIN", "JOIN", evaluate(tree.left, env), r);
+        }
+        return n;
+    
+    }
 
     private lexeme evalOPTPLIST(lexeme tree, lexeme env) {
             if(tree.left != null){

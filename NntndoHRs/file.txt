@@ -2,16 +2,26 @@
 
 func main(){
 
+	int a = 2;
 
-	int i=5;
-	
-	while(i>0){
-	
-		if(i==2){break;}@doesn't work
-		print( i );
-		i = i - 1;@<----must have space for minus
+	string s = print("hi");
 
-	}
+
+	add(1);	
+
+
+	@int x = print(i);
+
+
+
 }
+
+
+func add(a){
+
+	print("a = "+a);
+
+}
+
 
 main()
