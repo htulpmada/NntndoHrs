@@ -522,7 +522,12 @@ public class evaluator {
     private lexeme evalPRINT(lexeme tree, lexeme env) {
         lexeme eargs = evaluate(tree.right.right.left, env);
         try{
-            System.out.print(eargs.string+"\n");
+            if(eargs.type=="ARRAY"){
+                System.out.print("[ ");
+                for(lexeme l : eargs.strings){System.out.print(l.string+", ");}
+                System.out.print("] \n");
+            }
+            else{System.out.print(eargs.string+"\n");}
         }
         catch(NullPointerException n){fatal("null pointer line: "+tree.line);}
         return eargs;//might be wrong 
@@ -1065,7 +1070,7 @@ public class evaluator {
 
     private lexeme evalLENGTH(lexeme tree, lexeme env) {
         lexeme eargs = evaluate(tree.right.right.left, env);
-        return new lexeme("INTGER",Integer.toString(eargs.strings.size()),null,null);
+        return new lexeme("INTEGER",Integer.toString(eargs.strings.size()),null,null);
     }
     
     private lexeme evalBREAK(lexeme tree, lexeme env){

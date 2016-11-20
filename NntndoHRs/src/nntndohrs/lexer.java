@@ -154,25 +154,25 @@ public static lexeme lex() throws IOException{
         }
         src.unread(chr);
         //read for keywords
-        if(token.equals("if")||token.equals("mario")){return new lexeme("IF","if");}//if/mario
-        else if(token.equals("else")||token.equals("luigi")){return new lexeme("ELSE","else");}//else/luigi
-        else if(token.equals("boolean")||token.equals("p1")){return new lexeme("TYPE","boolean");}//boolean/p1
-        else if(token.equals("int")||token.equals("pit")){return new lexeme("TYPE","int");}//int/pit
-        else if(token.equals("string")||token.equals("diddy")){return new lexeme("TYPE","string");}//int/pit
-        else if(token.equals("real")||token.equals("link")){return new lexeme("TYPE","real");}//int/pit
-        else if(token.equals("while")||token.equals("kirby")){return new lexeme("WHILE","while");}//while/kirby
+        if(token.equals("if")||token.equals("doubleDragon")){return new lexeme("IF","if");}//if/mario
+        else if(token.equals("else")||token.equals("battleToads")){return new lexeme("ELSE","else");}//else/luigi
+        else if(token.equals("boolean")||token.equals("player")){return new lexeme("TYPE","boolean");}//boolean/p1
+        else if(token.equals("int")||token.equals("mario")){return new lexeme("TYPE","int");}//int/pit
+        else if(token.equals("string")||token.equals("luigi")){return new lexeme("TYPE","string");}//int/pit
+        //else if(token.equals("real")||token.equals("link")){return new lexeme("TYPE","real");}//int/pit
+        else if(token.equals("while")||token.equals("game")){return new lexeme("WHILE","while");}//while/kirby
         else if(token.equals("return")||token.equals("gameOver")){return new lexeme("RETURN","return");}//return/gameOver
-        else if (token.equals("func")){return new lexeme("FUNC", "func");}
+        else if (token.equals("func")||token.equals("yoshi")){return new lexeme("FUNC", "func");}
         else if (token.equals("nil")){return new lexeme("NIL", "nil");}
-        else if (token.equals("true")){return new lexeme("BOOLEAN", "TRUE");}
-        else if (token.equals("false")){return new lexeme("BOOLEAN", "FALSE");}
-        else if (token.equals("print")){return new lexeme("PRINT", "print");}
-        else if (token.equals("array")){return new lexeme("TYPE", "array");}
-        else if (token.equals("append")){return new lexeme("APPEND", "append");}
-        else if (token.equals("insert")){return new lexeme("INSERT", "insert");}
-        else if (token.equals("remove")){return new lexeme("REMOVE", "remove");}
-        else if (token.equals("set")){return new lexeme("SET", "set");}
-        else if (token.equals("length")){return new lexeme("LENGTH", "length");}
+        else if (token.equals("true")||token.equals("bubble")){return new lexeme("BOOLEAN", "TRUE");}
+        else if (token.equals("false")||token.equals("bobble")){return new lexeme("BOOLEAN", "FALSE");}
+        else if (token.equals("print")||token.equals("pit")){return new lexeme("PRINT", "print");}
+        else if (token.equals("array")||token.equals("triforce")){return new lexeme("TYPE", "array");}
+        else if (token.equals("append")||token.equals("link")){return new lexeme("APPEND", "append");}
+        else if (token.equals("insert")||token.equals("zelda")){return new lexeme("INSERT", "insert");}
+        else if (token.equals("remove")||token.equals("gannon")){return new lexeme("REMOVE", "remove");}
+        else if (token.equals("set")||token.equals("sheik")){return new lexeme("SET", "set");}
+        else if (token.equals("length")||token.equals("quest")){return new lexeme("LENGTH", "length");}
         else if (token.equals("break")){return new lexeme("BREAK", "break");}
         else if (token.equals("lambda")){return new lexeme("LAMBDA", "lambda");}
         else {return new lexeme("ID",token);}
