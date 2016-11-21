@@ -75,8 +75,12 @@ static lexeme t;
             lexeme f = fDef();
             return cons("DEF", f, null);
         }
-        else if(idDefPending()){
-            lexeme f = idDef();
+        else if(fDefPending()){
+            lexeme f = fDef();
+            return cons("DEF", f, null);
+        }
+        else if(exprPending()){
+            lexeme f = expr();
             return cons("DEF", f, null);//was f;
         }
         return null;
@@ -177,6 +181,10 @@ static lexeme t;
         }
         else if(check("INTEGER")){
             lexeme p = match("INTEGER");
+            return cons("UNARY", p, null);
+        }
+        else if(check("REAL")){
+            lexeme p = match("REAL");
             return cons("UNARY", p, null);
         }
         else if (check("NOT")){

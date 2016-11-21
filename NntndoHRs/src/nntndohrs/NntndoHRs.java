@@ -9,13 +9,9 @@
 
 package nntndohrs;
 
-import java.io.FileInputStream;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PushbackReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 
 /**
  *
@@ -41,6 +37,7 @@ static lexeme e=evaluator.create();
             n=new lexer(file,false);
         }
         catch(ArrayIndexOutOfBoundsException e){n=new lexer("file.txt",false);}
+        catch(FileNotFoundException e){parser.fatal("Disc error game not found!!!!!");}
         p=new parser();
         tree=p.parse();
         //System.out.println(tree);
@@ -52,14 +49,14 @@ static lexeme e=evaluator.create();
 
     private static boolean checkFileExtension(String s) {
         boolean b=false;
-        if(s.endsWith(".NtdHrs")){
+        if(s.endsWith(".NtdHrs")||s.endsWith(".nes")){
             b=true;
         }
         return b;
     }    
     public static void endOfGame(){
         System.out.print("\n <^^^^^^^^^^^^^^^^^^^^^^^^^^^>"
-                       + "\n < Congragulations you win!! >"
+                       + "\n < Congratulations you win!! >"
                        + "\n <vvvvvvvvvvvvvvvvvvvvvvvvvvv>\n\n");
     }
     public static void StartGame(){

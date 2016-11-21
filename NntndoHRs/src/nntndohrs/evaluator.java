@@ -187,6 +187,7 @@ public class evaluator {
 //-----------^^^^^^these are from parser not lexer^^^^^^^-----------------//    
     else if(tree.type == "STRING"){return evalSTRING(tree, env);}
     else if(tree.type == "INTEGER"){return evalINTEGER(tree, env);}
+    else if(tree.type == "REAL"){return evalREAL(tree, env);}
     else if(tree.type == "RETURN"){return evalRETURN(tree, env);}
     else if(tree.type == "ID"){return evalID(tree, env);}
     else if(tree.type == "NIL"){return evalNIL(tree, env);}
@@ -500,6 +501,10 @@ public class evaluator {
     private lexeme evalINTEGER(lexeme tree, lexeme env) {
         return tree;
     }
+    
+    private lexeme evalREAL(lexeme tree, lexeme env) {
+        return tree;
+    }
 
     private lexeme evalRETURN(lexeme tree, lexeme env) {//not sure if its used
         return evaluate(tree,env);
@@ -787,6 +792,7 @@ public class evaluator {
     private lexeme evalPLUS(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
+      try{
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) + Integer.parseInt(r.string))));
         }
@@ -808,15 +814,28 @@ public class evaluator {
             lexeme temp=new lexeme("STRING", l.string+r.string);
             return temp;
         }
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) + Float.parseFloat(r.string))));
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) + Float.parseFloat(r.string))));
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
+             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) + Float.parseFloat(r.string))));
+        }
         else{
             fatal("ERROR: Can't add: "+l.type+" and "+r.type);
             return null;
         }
+      }
+      catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+
     }
 
     private lexeme evalMINUS(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
+      try{
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) - Integer.parseInt(r.string))));
         }
@@ -824,23 +843,27 @@ public class evaluator {
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) - Integer.parseInt(r.string))));
         }//parse real<-------vvvvvv
         else if((l.type == "REAL") && (r.type == "INTEGER")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) - Integer.parseInt(r.string))));
+             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) - Float.parseFloat(r.string))));
         }
         else if((l.type == "INTEGER") && (r.type == "REAL")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) - Integer.parseInt(r.string))));
+             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) - Float.parseFloat(r.string))));
         }
         else if((l.type == "REAL") && (r.type == "REAL")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) - Integer.parseInt(r.string))));
+             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) - Float.parseFloat(r.string))));
         }
         else{
             fatal("ERROR: Can't subtract: "+l.type+" and "+r.type);
             return null;
         }
+      }
+      catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+
     }
 
     private lexeme evalMULTIPLY(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
+     try{
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) * Integer.parseInt(r.string))));
         }
@@ -848,23 +871,27 @@ public class evaluator {
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) * Integer.parseInt(r.string))));
         }//parse real<-------vvvvvv
         else if((l.type == "REAL") && (r.type == "INTEGER")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) * Integer.parseInt(r.string))));
+             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) * Float.parseFloat(r.string))));
         }
         else if((l.type == "INTEGER") && (r.type == "REAL")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) * Integer.parseInt(r.string))));
+             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) * Float.parseFloat(r.string))));
         }
         else if((l.type == "REAL") && (r.type == "REAL")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) * Integer.parseInt(r.string))));
+             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) * Float.parseFloat(r.string))));
         }
         else{
             fatal("ERROR: Can't multiply: "+l.type+" and "+r.type);
             return null;
         }
+     }
+     catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+
     }
 
     private lexeme evalDIVIDE(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
+     try{   
         if(r.string=="0"){fatal("EEROR: divide by zero Paradox???????");return null;}
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
            try{ return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
@@ -875,23 +902,27 @@ public class evaluator {
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }//parse real<-------vvvvvv
         else if((l.type == "REAL") && (r.type == "INTEGER")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+            return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else if((l.type == "INTEGER") && (r.type == "REAL")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else if((l.type == "REAL") && (r.type == "REAL")){// parses as integer needs to fix
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+            return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else{
             fatal("ERROR: Can't divide: "+l.type+" and "+r.type);
             return null;
         }
+     }
+     catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+
     }
 
     private lexeme evalINTEGERDIVIDE(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
+     try{
         if(r.string=="0"){fatal("EEROR: divide by zero Paradox???????");return null;}
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
@@ -900,23 +931,27 @@ public class evaluator {
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }//parse real<-------vvvvvv
         else if((l.type == "REAL") && (r.type == "INTEGER")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+           return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else if((l.type == "INTEGER") && (r.type == "REAL")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else if((l.type == "REAL") && (r.type == "REAL")){
-            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
+            return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else{
             fatal("ERROR: Can't divide: "+l.type+" and "+r.type);
             return null;
         }
+     }
+     catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+
     }
 
     private lexeme evalPOWER(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
+     try{   
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
         }
@@ -924,23 +959,27 @@ public class evaluator {
             return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
         }//parse real<-------vvvvvv
         else if((l.type == "REAL") && (r.type == "INTEGER")){
-            return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
+            return new lexeme("REAL", Float.toString((int) Math.pow(Float.parseFloat(l.string) , Float.parseFloat(r.string))));
         }
         else if((l.type == "INTEGER") && (r.type == "REAL")){
-            return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
+            return new lexeme("REAL", Float.toString((int) Math.pow(Float.parseFloat(l.string) , Float.parseFloat(r.string))));
         }
         else if((l.type == "REAL") && (r.type == "REAL")){
-            return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
+            return new lexeme("REAL",  Float.toString((int) Math.pow(Float.parseFloat(l.string) , Float.parseFloat(r.string))));
         }
         else{
             fatal("ERROR: Can't raise: "+l.type+" to "+r.type+" power ");
             return null;
         }
+     }
+     catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+
     }
 
     private lexeme evalAND(lexeme tree, lexeme env) {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
+     try{   
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) & Integer.parseInt(r.string)));
         }
@@ -963,6 +1002,8 @@ public class evaluator {
             fatal("ERROR: Can't AND: "+l.type+" and "+r.type);
             return null;
         }
+     }
+     catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
 
     }
 

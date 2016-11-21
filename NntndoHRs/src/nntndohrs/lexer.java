@@ -156,14 +156,14 @@ public static lexeme lex() throws IOException{
         //read for keywords
         if(token.equals("if")||token.equals("doubleDragon")){return new lexeme("IF","if");}//if/mario
         else if(token.equals("else")||token.equals("battleToads")){return new lexeme("ELSE","else");}//else/luigi
-        else if(token.equals("boolean")||token.equals("player")){return new lexeme("TYPE","boolean");}//boolean/p1
-        else if(token.equals("int")||token.equals("mario")){return new lexeme("TYPE","int");}//int/pit
-        else if(token.equals("string")||token.equals("luigi")){return new lexeme("TYPE","string");}//int/pit
-        //else if(token.equals("real")||token.equals("link")){return new lexeme("TYPE","real");}//int/pit
+        else if(token.equals("boolean")||token.equals("bool")||token.equals("player")){return new lexeme("TYPE","boolean");}//boolean/p1
+        else if(token.equals("integer")||token.equals("int")||token.equals("mario")){return new lexeme("TYPE","int");}//int/pit
+        else if(token.equals("string")||token.equals("str")||token.equals("luigi")){return new lexeme("TYPE","string");}//int/pit
+        else if(token.equals("real")||token.equals("kirby")){return new lexeme("TYPE","real");}//int/pit
         else if(token.equals("while")||token.equals("game")){return new lexeme("WHILE","while");}//while/kirby
         else if(token.equals("return")||token.equals("gameOver")){return new lexeme("RETURN","return");}//return/gameOver
         else if (token.equals("func")||token.equals("yoshi")){return new lexeme("FUNC", "func");}
-        else if (token.equals("nil")){return new lexeme("NIL", "nil");}
+        else if (token.equals("nil")||token.equals("null")||token.equals("dk")){return new lexeme("NIL", "nil");}
         else if (token.equals("true")||token.equals("bubble")){return new lexeme("BOOLEAN", "TRUE");}
         else if (token.equals("false")||token.equals("bobble")){return new lexeme("BOOLEAN", "FALSE");}
         else if (token.equals("print")||token.equals("pit")){return new lexeme("PRINT", "print");}

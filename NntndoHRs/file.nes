@@ -12,6 +12,8 @@ yoshi main(){
 @/////vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\\\\\
 @
 
+
+@------string s
 	mario i = 2;
 
 	luigi s = "hi";
@@ -33,7 +35,7 @@ yoshi main(){
 	pit("");
 
 	game(i>=0){
-		pit(i);
+		@  pit(i);
 
 @@@@@@@@@@@@	if(i==2){
 

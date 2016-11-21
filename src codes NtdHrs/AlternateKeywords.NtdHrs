@@ -12,15 +12,24 @@ yoshi main(){
 @/////vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\\\\\
 @
 
+
+
 	mario i = 2;
 
 	luigi s = "hi";
+
+	kirby k = 1.5;
 
 	pit(i);
 	pit("");
 
 	pit(s);
 	pit("");
+
+	pit(k);
+	pit(k+k);
+	pit("");
+
 
 	player t = bubble;
 
