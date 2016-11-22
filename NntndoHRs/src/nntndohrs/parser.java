@@ -137,7 +137,7 @@ static lexeme t;
         if (check("COMMA")){
             lexeme c = match("COMMA");
             lexeme p = pList();
-            return cons("PLIST", i, cons("JOIN", c, cons("JOIN", p, null)));
+            return cons("PLIST", i,p);
         }
         return cons("PLIST", i, null);
     }
@@ -155,7 +155,7 @@ static lexeme t;
         if (check("COMMA")){
             lexeme c = match("COMMA");
             lexeme ex = exprList();
-            return cons("EXPRLIST", e, cons("JOIN", c, cons("JOIN", ex, null)));
+            return cons("EXPRLIST", e, ex);
         }
         return cons("EXPRLIST", e, null);
     }
@@ -225,7 +225,7 @@ static lexeme t;
             lexeme o = match("OPAREN");
             lexeme e = exprList();
             lexeme c = match("CPAREN");
-            return cons("PRINT", f, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, null))));
+            return cons("PRINT", f, cons("JOIN", e, null));
         }
         else if (check("BREAK")){
             lexeme b = match("BREAK");
@@ -237,35 +237,35 @@ static lexeme t;
             lexeme o = match("OPAREN");
             lexeme e = exprList();
             lexeme c = match("CPAREN");
-            return cons("APPEND", f, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, null))));
+            return cons("APPEND", f,cons("JOIN", e, null));
         }
         else if (check("INSERT")){
             lexeme f = match("INSERT");
             lexeme o = match("OPAREN");
             lexeme e = exprList();
             lexeme c = match("CPAREN");
-            return cons("INSERT", f, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, null))));
+            return cons("INSERT", f, cons("JOIN", e, null));
         }
         else if (check("REMOVE")){
             lexeme f = match("REMOVE");
             lexeme o = match("OPAREN");
             lexeme e = exprList();
             lexeme c = match("CPAREN");
-            return cons("REMOVE", f, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, null))));
+            return cons("REMOVE", f, cons("JOIN", e, null));
         }
         else if (check("SET")){
             lexeme f = match("SET");
             lexeme o = match("OPAREN");
             lexeme e = exprList();
             lexeme c = match("CPAREN");
-            return cons("SET", f, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, null))));
+            return cons("SET", f, cons("JOIN", e, null));
         }
         else if (check("LENGTH")){
             lexeme f = match("LENGTH");
             lexeme o = match("OPAREN");
             lexeme e = exprList();
             lexeme c = match("CPAREN");
-            return cons("LENGTH", f, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, null))));
+            return cons("LENGTH", f, cons("JOIN", e,null));
         }
         else return null;
     }

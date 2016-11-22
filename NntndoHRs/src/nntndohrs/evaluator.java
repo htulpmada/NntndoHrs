@@ -265,6 +265,8 @@ public class evaluator {
     }
 
     private lexeme evalFUNCCALL(lexeme tree, lexeme env) {
+        int i;
+        int j;
         lexeme args = getArgs(tree);//check
         lexeme funcName = getFunction(tree);
         lexeme closure = evaluate(funcName, env);//check
@@ -278,54 +280,18 @@ public class evaluator {
         lexeme body = getBody(closure);//check
         lexeme params = getParams(closure);//check
         lexeme eargs = evaluate(args, env);
-        if(eargs !=null && eargs.size()==1){eargs=cons("JOIN",eargs,null);}//size==1
-//        params = makeParamList(params,env);
-//        eargs = makeArgList(eargs, env);
-        if((eargs!=null&&params!=null) && (eargs.size() != params.size())){
+        if(eargs!=null&&params!=null){
+        j=params.size();
+        i=eargs.size();
+        System.out.println("# of params: "+j);
+        System.out.println("# of args: "+i);
+        }
+        //if(eargs !=null && eargs.size()==1){eargs=cons("JOIN",eargs,null);}//size==1
+       if((eargs!=null&&params!=null) && (eargs.size() != params.size())){
             fatal("Wrong number of arguments. line: "+ funcName.line);
         }
         lexeme xenv = extend(params, eargs, denv);
         return evaluate(body, xenv);
-    }
-
-    public lexeme makeParamList(lexeme tree, lexeme env){
-        if(tree==null){return null;}
-        lexeme r = null;
-        lexeme n = null;
-        if(tree.right == null){
-            return evaluate(tree.left, env);
-        }
-        if(tree.right.right.left != null){
-            r = evaluate(tree.right.right.left, env);
-            n = new lexeme("JOIN", "JOIN", evaluate(tree.left, env), r);
-        }
-        return n;
-    }
-
-    public lexeme makeArgList(lexeme tree,lexeme env){
-        /*lexeme l=null;
-        lexeme r=null;
-        while(tree!=null){
-            if(tree==null|tree.left==null){return l;}
-            l=evaluate(tree.left,env);
-            
-        }
-        return l;
-        */
-
-
-        if(tree==null){return null;}
-        lexeme r = null;
-        lexeme n = null;
-        if(tree.right == null){
-            return evaluate(tree.left, env);
-        }
-        if(tree.right.right.left != null){
-            r = evaluate(tree.right.right.left, env);
-            n = new lexeme("JOIN", "JOIN", evaluate(tree.left, env), r);
-        }
-        return n;
-    
     }
 
     private lexeme evalOPTPLIST(lexeme tree, lexeme env) {
@@ -340,11 +306,11 @@ public class evaluator {
         lexeme r = null;
         lexeme n = null;
         if(tree.right == null){
-            return evaluate(tree.left, env);
+            return tree.left;
         }
-        if(tree.right.right.left != null){
-            r = evaluate(tree.right.right.left, env);
-            n = new lexeme("JOIN", "JOIN", evaluate(tree.left, env), r);
+        if(tree.right.left != null){
+            r = evaluate(tree.right,env);
+            n = new lexeme("JOIN", "JOIN", tree.left, cons("JOIN",r, null));
         }
         return n;
     }
@@ -360,10 +326,10 @@ public class evaluator {
         lexeme r = null;
         lexeme n = null;
         if(tree.right == null){
-            return evaluate(tree.left, env);
+            return cons("JOIN",evaluate(tree.left, env),null);
         }
-        if(tree.right.right.left != null){
-            r = evaluate(tree.right.right.left, env);
+        if(tree.right.left != null){
+            r = evaluate(tree.right, env);
             n = new lexeme("JOIN", "JOIN", evaluate(tree.left, env), r);
         }
         return n;
@@ -525,8 +491,9 @@ public class evaluator {
     }
 
     private lexeme evalPRINT(lexeme tree, lexeme env) {
-        lexeme eargs = evaluate(tree.right.right.left, env);
+        lexeme eargs = evaluate(tree.right.left, env);
         try{
+            if(eargs.type=="JOIN"){System.out.print(eargs.left.string+"\n");return eargs;}
             if(eargs.type=="ARRAY"){
                 System.out.print("[ ");
                 for(lexeme l : eargs.strings){System.out.print(l.string+", ");}
@@ -1051,7 +1018,7 @@ public class evaluator {
     }
 
     private lexeme evalAPPEND(lexeme tree, lexeme env) {
-        lexeme eargs = evaluate(tree.right.right.left, env);
+        lexeme eargs = evaluate(tree.right.left, env);
         lexeme arr = eargs.left;
         lexeme value = eargs.right;
         arr.strings.add(value);
@@ -1059,7 +1026,7 @@ public class evaluator {
     }
 
     private lexeme evalINSERT(lexeme tree, lexeme env) {
-        lexeme eargs = evaluate(tree.right.right.left, env);
+        lexeme eargs = evaluate(tree.right.left, env);
         lexeme arr = eargs.left;
         lexeme in = eargs.right.left;
         lexeme value = eargs.right.right;
@@ -1076,7 +1043,7 @@ public class evaluator {
     }
     
     private lexeme evalREMOVE(lexeme tree, lexeme env) {
-        lexeme eargs = evaluate(tree.right.right.left, env);
+        lexeme eargs = evaluate(tree.right.left, env);
         lexeme arr = eargs.left;
         lexeme in = eargs.right;
         int index = Integer.parseInt((evaluate(in,env)).string);//problems?
@@ -1094,7 +1061,7 @@ public class evaluator {
     }
 
     private lexeme evalSET(lexeme tree, lexeme env) {
-        lexeme eargs = evaluate(tree.right.right.left, env);
+        lexeme eargs = evaluate(tree.right.left, env);
         lexeme arr = eargs.left;
         lexeme in = eargs.right.left;
         lexeme value = eargs.right.right;
@@ -1110,7 +1077,7 @@ public class evaluator {
     }
 
     private lexeme evalLENGTH(lexeme tree, lexeme env) {
-        lexeme eargs = evaluate(tree.right.right.left, env);
+        lexeme eargs = evaluate(tree.right.left, env);
         return new lexeme("INTEGER",Integer.toString(eargs.strings.size()),null,null);
     }
     

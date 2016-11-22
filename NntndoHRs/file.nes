@@ -1,116 +1,16 @@
 @------------ secret code  test
-
 yoshi main(){
 
 
 
-@
-@\\\\\^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^/////
-@<<<<<					>>>>>
-@-----follow along with lexer rules----->>>>>
-@<<<<<					>>>>>
-@/////vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\\\\\
-@
-
-
-@------string s
-	mario i = 2;
-
-	luigi s = "hi";
-
-	pit(i);
-	pit("");
-
-	pit(s);
-	pit("");
-
-	player t = bubble;
-
-	player f = bobble;
-	
-	pit(t);
-	pit("");
-
-	pit(f);
-	pit("");
-
-	game(i>=0){
-		@  pit(i);
-
-@@@@@@@@@@@@	if(i==2){
-
-
-		doubleDragon(i==2){
-			pit(2);
-			pit("");
-		}
-
-
-@@@@@@@@@@@@	else if(i==1){
-
-
-		battleToads doubleDragon(i==1){
-			pit(1);
-			pit("");
-		}
-
-
-@@@@@@@@@@@@	else{
-		battleToads{
-			pit("not 1 or 2");
-			pit("");
-		}
-
-
-		i = i - 1;
+	yoshi x2( i, j, x, y, z, a){
+		
+		int k = z+a;
 
 	}
-@@@@@   ^^ game over   <--end of while statement
 
 
-@@@@@@@@@@@ array is triforce
-
-	triforce tri = [];
-	
-@@@@@@@@@@@ append is link
-
-	link(tri,1);
-	link(tri,2);
-	link(tri,3);
-
-	pit(tri);	@  can pit(print) whole triforce(array)
-	pit("");
-
-
-@@@@@@@@@@ insert is zelda
-
-
-	pit(zelda(tri,0,0));	@ returns inserted value
-	pit(tri);
-
-
-@@@@@@@@@@ set is sheik
-
-
-	pit(sheik(tri,100,4));		@ returns set value
-	pit(tri);
-
-
-@@@@@@@@@@ remove is gannon  <-- get it, bad guy name, remove 
-
-
-	pit(gannon(tri,5));		@ returns removed value
-	pit(tri);
-
-	pit(gannon(tri,5));		@out of bounds
-	pit(tri);			@ returns removed value
-
-
-@@@@@@@@@@ quest is length 
-
-
-	pit("length = "+quest(tri));		@ returns integer
-	pit(tri);
+	pit(x2(1,2,3,4,5,6));
 
 
 
