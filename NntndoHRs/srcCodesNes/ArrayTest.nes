@@ -15,11 +15,7 @@ func main(){
 @	print("a = " + a);@-------error: cant put array in with operators
 	print("a = ");
 	print(a);
-	print("a[0] = "+ a[0]);
-	print("a[1] = "+ a[1]);
-	print("a[2] = "+ a[2]);
-	print("a[3] = "+ a[3]);
-
+	
 
 @-----------set built in test
 
@@ -44,11 +40,7 @@ func main(){
 	print("");
 
 	print("a = ");
-	print("a[0] = "+ a[0]);
-	print("a[1] = "+ a[1]);
-	print("a[2] = "+ a[2]);
-	print("a[3] = "+ a[3]);
-	print("a[4] = "+ a[4]);
+	print(a);
 	print("");
 
 
@@ -61,17 +53,19 @@ func main(){
 	array a = [1,];@<------single item array must have second arg of nothing
 	print("array a = [1,]");
 	print("a[0]");
-	print(a[0]);
+	print(a);
 
 	print("");
 
-@	print(a[1]);@<------error: array of size 1
+@	print(a[1]);     @<------error: array of size 1
 
 
-	array a = [];@<--------can be empty need test insert, set, remove, on each initializer
+	array a = [];  @<--------can be empty need test insert, set, remove, on each initializer
 	print("array a = [] ");
 @	print("a = " + a);@-------error: cant put array in with operators
+
 @	print(a[0]);@-------error: array is null
+
 	print("print(a[0]) throws error");
 
 @-------------------insert test------
@@ -85,11 +79,7 @@ func main(){
 
 	array i = [1,2,4,5,6];
 	print("i = [1,2,4,5,6] ");
-	print("i[0] = " + i[0]);
-	print("i[1] = " + i[1]);
-	print("i[2] = " + i[2]);
-	print("i[3] = " + i[3]);
-	print("i[4] = " + i[4]);
+	print(i);
 	print("");
 
 	print("insert(array,index,value)");
@@ -99,12 +89,7 @@ func main(){
 	print("");
 
 	print("i  should [1,2,3,4,5,6] ");
-	print("i[0] = " + i[0]);
-	print("i[1] = " + i[1]);
-	print("i[2] = " + i[2]);
-	print("i[3] = " + i[3]);
-	print("i[4] = " + i[4]);
-@	print("i[5] = " + i[5]);
+	print(i);
 	print("");
 
 	print("insert on single item initialize");
@@ -122,8 +107,7 @@ func main(){
 	insert(i,1,2);
 
 	print("i should be [1,2] ");
-	print("i[0] = " + i[0]);
-	print("i[1] = " + i[1]);
+	print(i);
 
 	print("");
 
@@ -142,8 +126,8 @@ func main(){
 	insert(i,1,2);
 
 	print("i should be [1,2] ");
-	print("i[0] = " + i[0]);
-	print("i[1] = " + i[1]);
+	print(i);
+
 
 @-------if set out of bounds it appends to arr instead of error
 	print("");
@@ -154,9 +138,7 @@ func main(){
 
 	print("");
 	print("i should be [1,2,3] ");
-	print("i[0] = " + i[0]);
-	print("i[1] = " + i[1]);
-	print("i[2] = " + i[2]);
+	print(i);
 	print("");
 
 
@@ -171,11 +153,7 @@ func main(){
 
 	array a = [1,2,3,4,5];
 	print("a = [1,2,3,4,5] ");
-	print("a[0] = " + a[0]);
-	print("a[1] = " + a[1]);
-	print("a[2] = " + a[2]);
-	print("a[3] = " + a[3]);
-	print("a[4] = " + a[4]);
+	print(a);
 	print("");
 
 	print("append(array,value)");
@@ -186,12 +164,7 @@ func main(){
 	print("");
 
 	print("a should be [1,2,3,4,5,6] ");
-	print("a[0] = " + a[0]);
-	print("a[1] = " + a[1]);
-	print("a[2] = " + a[2]);
-	print("a[3] = " + a[3]);
-	print("a[4] = " + a[4]);
-	print("a[5] = " + a[5]);
+	print(a);
 	print("");
 
 	print("append on single item initialize");
@@ -200,7 +173,7 @@ func main(){
 	array a = [1,];
 	print("a = [1,] ");
 
-	print("a[0] = " + a[0]);
+	print(a);
 
 	print("");
 	print("append(a,2)");
@@ -209,8 +182,7 @@ func main(){
 	append(a,2);
 
 	print("a should be [1,2] ");
-	print("a[0] = " + a[0]);
-	print("a[1] = " + a[1]);
+	print(a);
 
 	print("");
 
@@ -231,8 +203,7 @@ func main(){
 	append(a,2);
 
 	print("a should be [1,2] ");
-	print("a[0] = " + a[0]);
-	print("a[1] = " + a[1]);
+	print(a);
 	print("");
 
 
@@ -249,11 +220,7 @@ func main(){
 
 	array r = [1,2,3,4,5];
 	print("r = [1,2,3,4,5] ");
-	print("r[0] = " + r[0]);
-	print("r[1] = " + r[1]);
-	print("r[2] = " + r[2]);
-	print("r[3] = " + r[3]);
-	print("r[4] = " + r[4]);
+	print(r);
 	print("");
 
 	print("remove(array,index)");
@@ -265,11 +232,7 @@ func main(){
 	remove(r,0);
 
 	print("r  should [2,3,4,5,6] ");
-	print("r[0] = " + r[0]);
-	print("r[1] = " + r[1]);
-	print("r[2] = " + r[2]);
-	print("r[3] = " + r[3]);
-@	print("r[4] = " + r[4]);@------out of bounds now
+	print(r);
 	print("");
 
 	print("remove on single item initialize");
@@ -278,7 +241,7 @@ func main(){
 	array r = [1,];
 	print("r = [1,] ");
 
-	print("r[0] = " + r[0]);
+	print(r);
 
 	print("");
 	print("remove(r,0)");
@@ -306,11 +269,7 @@ func main(){
 
 	array r =[1,2,3,4,5];
 	print("r = [1,2,3,4,5] ");
-	print("r[0] = " + r[0]);
-	print("r[1] = " + r[1]);
-	print("r[2] = " + r[2]);
-	print("r[3] = " + r[3]);
-	print("r[4] = " + r[4]);
+	print(r);
 	print("");
 
 	print("remove(r,2)");
@@ -319,10 +278,7 @@ func main(){
 	remove(r,2);
 
 	print("r should be [1,2,4,5] ");
-	print("r[0] = " + r[0]);
-	print("r[1] = " + r[1]);
-	print("r[2] = " + r[2]);
-	print("r[3] = " + r[3]);
+	print(r);
 	print("");
 
 
@@ -333,21 +289,14 @@ func main(){
 
 	array r =[1,2,3,4,5];
 	print("r = [1,2,3,4,5] ");
-	print("r[0] = " + r[0]);
-	print("r[1] = " + r[1]);
-	print("r[2] = " + r[2]);
-	print("r[3] = " + r[3]);
-	print("r[4] = " + r[4]);
+	print(r);
 	print("");
 
 	print("remove(r,20)");
 	print("");
 
 	print("r should be [1,2,3,4] ");
-	print("r[0] = " + r[0]);
-	print("r[1] = " + r[1]);
-	print("r[2] = " + r[2]);
-	print("r[3] = " + r[3]);
+	print(r);
 	print("");
 
 
@@ -385,8 +334,6 @@ func main(){
 	print("length(l)");
 	print(length(l));
 	print("");
-
-
 
 
 

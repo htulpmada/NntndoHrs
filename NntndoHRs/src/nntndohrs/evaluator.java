@@ -284,8 +284,8 @@ public class evaluator {
         if(eargs!=null&&params!=null){
         j=params.size();
         i=eargs.size();
-        System.out.println("# of params: "+j);
-        System.out.println("# of args: "+i);
+        //System.out.println("# of params: "+j);
+        //System.out.println("# of args: "+i);
         }
         //if(eargs !=null && eargs.size()==1){eargs=cons("JOIN",eargs,null);}//size==1
        if((eargs!=null&&params!=null) && (eargs.size() != params.size())){

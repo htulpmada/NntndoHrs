@@ -50,10 +50,11 @@ import java.util.ArrayList;
         getline();
         makeArr();
     }
-    public void getline(){line=lexer.lineNum;}
+    private void getline(){line=lexer.lineNum;}
 
-    public void makeArr(){if(type.equals("ARRAY")){strings=new ArrayList();}}
+    private void makeArr(){if(type.equals("ARRAY")){strings=new ArrayList<>();}}
 
+        @Override
     public String toString(){
         String s="";
         if(type!=null){s+=type+" ";}

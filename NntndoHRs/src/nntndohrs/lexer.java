@@ -1,8 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//#!/bin/bash
+//java NntndoHRS.class $*
+
+        
 package nntndohrs;
 
 import java.io.FileInputStream;
@@ -48,7 +47,7 @@ public static lexeme lex() throws IOException{
         
        skipWhitSpace();
        chr=src.read();
-       c=(char) c;
+       c=(char) chr;
        if(c=='\uffff'){return new lexeme("ENDOFINPUT","\uffff");}
        switch(c){
             case '(': return new lexeme("OPAREN","(");
