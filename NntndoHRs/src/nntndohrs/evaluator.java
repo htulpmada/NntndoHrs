@@ -452,7 +452,7 @@ public class evaluator {
     }
 
     private lexeme evalLAMBDA(lexeme tree, lexeme env) {
-        lexeme params = tree.right.right.left;
+        lexeme params = evaluate(tree.right.right.left,env);
         lexeme body = tree.right.right.right.right.left;
         lexeme right = new lexeme("JOIN", "JOIN", body, env);
         lexeme close = new lexeme("CLOSURE", "CLOSURE", params, right);

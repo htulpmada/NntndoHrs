@@ -42,7 +42,7 @@ static lexeme t;
         lexeme old = t;
         t=t.left;
         old.left=null;//not sure if this will cause problems
-        //System.out.println(old.type+" "+old.string);
+        System.out.println(old.type+" "+old.string);
         return old;
     }
     
@@ -98,11 +98,23 @@ static lexeme t;
     public lexeme fDef(){
         lexeme f = match("FUNC");
         lexeme e = match("ID");
-        lexeme o = match("OPAREN");
-        lexeme op = optPList();
-        lexeme c = match("CPAREN");
-        lexeme b = block();
-        return cons("FDEF", f, cons("JOIN", e, cons("JOIN", o, cons("JOIN", op, cons("JOIN", c, cons("JOIN", b, null))))));
+        if(check("EQUAL")){//lambdas here<-------
+            lexeme eq = match("EQUAL");
+            lexeme l = lambda();
+            lexeme s = match("SEMI");
+            lexeme o = null;
+            lexeme op = l.right.right.left;
+            lexeme c = null;
+            lexeme b = l.right.right.right.right.left;
+            return cons("FDEF", f, cons("JOIN", e, cons("JOIN", o, cons("JOIN", op, cons("JOIN", c, cons("JOIN", b, null))))));
+        }
+        else{
+            lexeme o = match("OPAREN");
+            lexeme op = optPList();
+            lexeme c = match("CPAREN");
+            lexeme b = block();
+            return cons("FDEF", f, cons("JOIN", e, cons("JOIN", o, cons("JOIN", op, cons("JOIN", c, cons("JOIN", b, null))))));
+        }
     }
     
     public lexeme idDef(){
