@@ -279,7 +279,8 @@ public class evaluator {
         lexeme denv = getEnv(closure);//check
         lexeme body = getBody(closure);//check
         lexeme params = getParams(closure);//check
-        lexeme eargs = evaluate(args, env);
+        if(args.left!=null){args=args.left;}
+        lexeme eargs = makeArgs(args, env);
         if(eargs!=null&&params!=null){
         j=params.size();
         i=eargs.size();
@@ -294,6 +295,19 @@ public class evaluator {
         return evaluate(body, xenv);
     }
 
+    private lexeme makeArgs(lexeme tree, lexeme env) {
+        lexeme r = null;
+        lexeme n = null;
+        if(tree.right == null){
+            return cons("JOIN",evaluate(tree.left, env),null);
+        }
+        if(tree.right.left != null){
+            r = makeArgs(tree.right, env);
+            n = new lexeme("JOIN", "JOIN", evaluate(tree.left, env), r);
+        }
+        return n;
+    }
+    
     private lexeme evalOPTPLIST(lexeme tree, lexeme env) {
             if(tree.left != null){
                 return evaluate(tree.left, env);
@@ -326,7 +340,7 @@ public class evaluator {
         lexeme r = null;
         lexeme n = null;
         if(tree.right == null){
-            return cons("JOIN",evaluate(tree.left, env),null);
+            return evaluate(tree.left,env);
         }
         if(tree.right.left != null){
             r = evaluate(tree.right, env);

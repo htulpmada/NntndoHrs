@@ -1,0 +1,20 @@
+@------------ secret code  test
+yoshi main(){
+
+
+
+	yoshi x2( i, j, x, y, z, a){
+		
+		int k = z+a;
+
+	}
+
+
+	pit(x2(1,2,3,4,5,6));
+
+
+
+
+}
+
+main()
