@@ -1,8 +1,6 @@
 @------------ recursion  test
 
 func main( k ){
-	
-
 
 	if(k>0){
 
@@ -20,10 +18,7 @@ func main( k ){
 
 		}
 
-	
-
 }
-
 
 func Opening(){
 
@@ -32,10 +27,6 @@ func Opening(){
 
 }
 
-
-
 Opening()
 
 main( 5 )
-
-

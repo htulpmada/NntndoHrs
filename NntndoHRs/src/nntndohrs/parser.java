@@ -31,7 +31,13 @@ static lexeme t;
     public static void fatal(String problem){
         System.out.println("\nERROR; "+problem);
         gameOver();
-        System.exit(1);
+        System.exit(0);
+    }
+    
+    public static void fatal(String problem, int i){
+        System.out.println("\nERROR; "+problem +" line: "+ i);
+        gameOver();
+        System.exit(0);
     }
     
     public Boolean check(String type){
@@ -48,7 +54,7 @@ static lexeme t;
     
     public lexeme match(String type){
         if(check(type)){return advance();}
-        fatal("Syntax Expected "+type+", Received "+t.type+ " line: "+(t.line-1));//t.line
+        fatal("Syntax Expected "+type+", Received "+t.type+ " line: "+t.line);//t.line
         return null;
     }
     
@@ -100,13 +106,20 @@ static lexeme t;
         lexeme e = match("ID");
         if(check("EQUAL")){//lambdas here<-------
             lexeme eq = match("EQUAL");
-            lexeme l = lambda();
-            lexeme s = match("SEMI");
-            lexeme o = null;
-            lexeme op = l.right.right.left;
-            lexeme c = null;
-            lexeme b = l.right.right.right.right.left;
-            return cons("FDEF", f, cons("JOIN", e, cons("JOIN", o, cons("JOIN", op, cons("JOIN", c, cons("JOIN", b, null))))));
+            if(check("ID")){
+                lexeme i = match("ID");
+                lexeme s = match("SEMI");//lex.r.r.r.r=semi
+                return cons("FDEF", f, cons("JOIN", e, cons("JOIN", eq, cons("JOIN", i, cons("JOIN", s, null)))));
+            }
+            else{
+                lexeme l = lambda();
+                lexeme s = match("SEMI");
+                lexeme o = null;
+                lexeme op = l.right.right.left;
+                lexeme c = null;
+                lexeme b = l.right.right.right.right.left;
+                return cons("FDEF", f, cons("JOIN", e, cons("JOIN", o, cons("JOIN", op, cons("JOIN", c, cons("JOIN", b, null))))));
+            }
         }
         else{
             lexeme o = match("OPAREN");

@@ -67,7 +67,7 @@ public class evaluator {
         return cons("TABLE",vars,vals);
     }
     
-    public lexeme lookup(lexeme env,String var){
+    public lexeme lookup(lexeme env,String var,int l){
         lexeme table;
         lexeme vars;
         lexeme vals;
@@ -85,11 +85,11 @@ public class evaluator {
             }
             env=cdr(env);
         }
-        parser.fatal("variable "+ var + " is undefined" );
+        parser.fatal("variable "+ var + " is undefined" ,l);
         return null;
     }
     
-    public lexeme update(lexeme env,String var, lexeme val){
+    public lexeme update(lexeme env,String var, lexeme val,int l){
         lexeme table;
         lexeme vars;
         lexeme vals;
@@ -108,7 +108,7 @@ public class evaluator {
             }
             env=cdr(env);
         }
-        fatal("variable "+ var + " is undefined");
+        fatal("variable "+ var + " is undefined",l);
         return null;
     }
     
@@ -240,6 +240,17 @@ public class evaluator {
     }
 
     private lexeme evalFDEF(lexeme tree, lexeme env) {
+        if(tree.right.right.right.right.left!=null&&tree.right.right.right.right.left.type=="SEMI"){
+        //passing a function from one var to another
+            lexeme variable = tree.right.left;
+            lexeme close = evaluate(tree.right.right.right.left,env);//maybe lookUp instead 
+            //lexeme params = tree.right.right.right.left.left;
+            //lexeme body = tree.right.right.right.right.right.left;
+            //lexeme right = cons("JOIN", body, env);
+            //lexeme close = cons("CLOSURE", params, right);
+            lexeme ret = insert(variable, close, env);
+            return ret;
+        }
         lexeme variable = tree.right.left;
         lexeme params = tree.right.right.right.left.left;
         lexeme body = tree.right.right.right.right.right.left;
@@ -254,13 +265,13 @@ public class evaluator {
     }
 
     private lexeme evalARRAYACCESS(lexeme tree, lexeme env) {
-        lexeme arr = lookup(env,tree.left.string);
+        lexeme arr = lookup(env,tree.left.string,tree.left.line);
         lexeme place = evaluate(tree.right.right.left, env);
         int p = Integer.parseInt(place.string);
         try{return arr.strings.get(p);}
         catch(IndexOutOfBoundsException i){
             int len=arr.strings.size();
-            fatal("Woops: array[max index] is "+len+" and you asked for "+p);
+            fatal("Woops: array[max index] is "+len+" and you asked for "+p,place.line);
         return null;}
     }
 
@@ -271,10 +282,10 @@ public class evaluator {
         lexeme funcName = getFunction(tree);
         lexeme closure = evaluate(funcName, env);//check
         if(closure == null){
-            fatal("Closure was None");
+            fatal("Closure was None",funcName.line);
         }
         else if(closure.type != "CLOSURE"){
-            fatal("Tried to call "+closure.string+" as function.");
+            fatal("Tried to call "+closure.string+" as function.",funcName.line);
         }
         lexeme denv = getEnv(closure);//check
         lexeme body = getBody(closure);//check
@@ -287,9 +298,12 @@ public class evaluator {
         //System.out.println("# of params: "+j);
         //System.out.println("# of args: "+i);
         }
+        if((eargs==null&&params!=null)||(eargs!=null&&params==null)){
+            fatal("Wrong number of arguments",funcName.line);
+        }
         //if(eargs !=null && eargs.size()==1){eargs=cons("JOIN",eargs,null);}//size==1
-       if((eargs!=null&&params!=null) && (eargs.size() != params.size())){
-            fatal("Wrong number of arguments. line: "+ funcName.line);
+        if((eargs!=null&&params!=null) && (eargs.size() != params.size())){
+            fatal("Wrong number of arguments",funcName.line);
         }
         lexeme xenv = extend(params, eargs, denv);
         return evaluate(body, xenv);
@@ -360,7 +374,7 @@ public class evaluator {
     private lexeme not(lexeme l){
         if(l.type=="BOOLEAN"){l.string=Boolean.toString(!Boolean.parseBoolean(l.string));return l;}//probably wrong
         //else if(l.type=="INTEGER"){l.string=Integer.toString(!Integer.parseInt(l.string));return l;}
-        else{fatal("Can't Not type:"+l.type);}
+        else{fatal("Can't Not type:"+l.type,l.line);}
         return null;
     }
     private lexeme evalUNARY(lexeme tree, lexeme env) {
@@ -426,7 +440,7 @@ public class evaluator {
             return evaluate(tree.left, env);
         }
         else{
-            fatal("BAD STATEMENT line: "+tree.line);
+            fatal("BAD STATEMENT ",tree.line);
         }
         return null;
     }
@@ -493,7 +507,7 @@ public class evaluator {
     //private lexeme evalINCLUDE(lexeme tree, lexeme env) {}
 
     private lexeme evalID(lexeme tree, lexeme env) {
-        return lookup(env, tree.string);
+        return lookup(env, tree.string,tree.line);
     }
 
     private lexeme evalNIL(lexeme tree, lexeme env) {
@@ -515,7 +529,7 @@ public class evaluator {
             }
             else{System.out.print(eargs.string+"\n");}
         }
-        catch(NullPointerException n){fatal("null pointer line: "+tree.line);}
+        catch(NullPointerException n){fatal("null pointer ",tree.line);}//should rename error message
         return eargs;//might be wrong 
     }
 
@@ -560,7 +574,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("Can't equate: "+l.string+" and "+r.string);
+            fatal("Can't equate: "+l.string+" and "+r.string,l.line);
             return null;
         }
     }
@@ -601,7 +615,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("Can't NOT equate: "+l.string+" and "+r.string);
+            fatal("Can't NOT equate: "+l.string+" and "+r.string,l.line);
             return null;
         }
     }
@@ -642,7 +656,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("Can't compare greater: "+l.type+" :"+l.string+" and "+r.type+" :"+r.string);
+            fatal("Can't compare greater: "+l.type+" :"+l.string+" and "+r.type+" :"+r.string,l.line);
             return null;
         }
     }
@@ -683,7 +697,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("ERROR: Can't compare less: "+l.string+" and "+r.string);
+            fatal("ERROR: Can't compare less: "+l.string+" and "+r.string,l.line);
             return null;
         }
     }
@@ -724,7 +738,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("ERROR: Can't compare greater equal: "+l.string+" and "+r.string);
+            fatal("ERROR: Can't compare greater equal: "+l.string+" and "+r.string,l.line);
             return null;
         }
     }
@@ -765,7 +779,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("Can't compare less equal: "+l.string+" and "+r.string);
+            fatal("Can't compare less equal: "+l.string+" and "+r.string,l.line);
             return null;
         }
     }
@@ -805,11 +819,11 @@ public class evaluator {
              return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) + Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't add: "+l.type+" and "+r.type);
+            fatal("ERROR: Can't add: "+l.type+" and "+r.type,l.line);
             return null;
         }
       }
-      catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+      catch(NumberFormatException n){fatal("oops thats not a number ",l.line);return null;}
 
     }
 
@@ -833,11 +847,11 @@ public class evaluator {
              return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) - Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't subtract: "+l.type+" and "+r.type);
+            fatal("ERROR: Can't subtract: "+l.type+" and "+r.type,l.line);
             return null;
         }
       }
-      catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+      catch(NumberFormatException n){fatal("oops thats not a number ",l.line);return null;}
 
     }
 
@@ -861,11 +875,11 @@ public class evaluator {
              return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) * Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't multiply: "+l.type+" and "+r.type);
+            fatal("ERROR: Can't multiply: "+l.type+" and "+r.type,l.line);
             return null;
         }
      }
-     catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+     catch(NumberFormatException n){fatal("oops thats not a number ",l.line);return null;}
 
     }
 
@@ -873,11 +887,11 @@ public class evaluator {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
      try{   
-        if(r.string=="0"){fatal("EEROR: divide by zero Paradox???????");return null;}
+        if(r.string=="0"){fatal("EEROR: divide by zero Paradox???????",l.line);return null;}
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
            try{ return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
            }
-           catch(ArithmeticException a){fatal("EEROR: divide by zero Paradox???????");return null;}
+           catch(ArithmeticException a){fatal("EEROR: divide by zero Paradox???????",l.line);return null;}
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
@@ -892,11 +906,11 @@ public class evaluator {
             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't divide: "+l.type+" and "+r.type);
+            fatal("ERROR: Can't divide: "+l.type+" and "+r.type,l.line);
             return null;
         }
      }
-     catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+     catch(NumberFormatException n){fatal("oops thats not a number ",l.line);return null;}
 
     }
 
@@ -904,7 +918,7 @@ public class evaluator {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
      try{
-        if(r.string=="0"){fatal("EEROR: divide by zero Paradox???????");return null;}
+        if(r.string=="0"){fatal("EEROR: divide by zero Paradox???????",l.line);return null;}
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }
@@ -921,11 +935,11 @@ public class evaluator {
             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't divide: "+l.type+" and "+r.type);
+            fatal("ERROR: Can't divide: "+l.type+" and "+r.type,l.line);
             return null;
         }
      }
-     catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+     catch(NumberFormatException n){fatal("oops thats not a number ",l.line);return null;}
 
     }
 
@@ -949,11 +963,11 @@ public class evaluator {
             return new lexeme("REAL",  Float.toString((int) Math.pow(Float.parseFloat(l.string) , Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't raise: "+l.type+" to "+r.type+" power ");
+            fatal("ERROR: Can't raise: "+l.type+" to "+r.type+" power ",l.line);
             return null;
         }
      }
-     catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+     catch(NumberFormatException n){fatal("oops thats not a number ",l.line);return null;}
 
     }
 
@@ -980,11 +994,11 @@ public class evaluator {
             return new lexeme("BOOLEAN", Boolean.toString(Boolean.parseBoolean(l.string) & Boolean.parseBoolean(r.string)));
         }
         else{
-            fatal("ERROR: Can't AND: "+l.type+" and "+r.type);
+            fatal("ERROR: Can't AND: "+l.type+" and "+r.type,l.line);
             return null;
         }
      }
-     catch(NumberFormatException n){fatal("oops thats not a number ");return null;}
+     catch(NumberFormatException n){fatal("oops thats not a number ",l.line);return null;}
 
     }
 
@@ -1010,7 +1024,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", Boolean.toString(Boolean.parseBoolean(l.string) | Boolean.parseBoolean(r.string)));
         }
         else{
-            fatal("ERROR: Can't OR: "+l.type+" and "+r.type);
+            fatal("ERROR: Can't OR: "+l.type+" and "+r.type,l.line);
             return null;
         }
 
@@ -1019,7 +1033,7 @@ public class evaluator {
     private lexeme evalASSIGN(lexeme tree, lexeme env) {
         lexeme var = tree.left.left.left;
         lexeme val = evaluate(tree.right.left, env);
-        lexeme ret = update(env, var.string, val);
+        lexeme ret = update(env, var.string, val,var.line);
         return ret;
     }
 
@@ -1068,7 +1082,7 @@ public class evaluator {
         catch(IndexOutOfBoundsException i){
            try{return arr.strings.remove(0);}
                    catch(IndexOutOfBoundsException ie){
-                           fatal("Can't remove from empty Array ");
+                           fatal("Can't remove from empty Array ",eargs.right.line);
                             return null;
                    }
         }

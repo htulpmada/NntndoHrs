@@ -1,0 +1,8 @@
+@-------undefined variable error
+yoshi main(){
+	pit(i);
+}
+
+main()
+
+
