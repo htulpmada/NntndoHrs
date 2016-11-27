@@ -1,0 +1,14 @@
+@------Subtraction error
+yoshi main(){
+
+        str m = "string";
+
+        str h = "ing";
+	
+        pit(m*h);
+
+}
+
+main()
+
+

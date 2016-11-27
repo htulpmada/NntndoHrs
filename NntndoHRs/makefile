@@ -25,12 +25,26 @@ error1x: compile
 	java -classpath classfiles nntndohrs.NntndoHRs srcCodesNes/Errors/ArgumentError.nes
 
 error2:
+	cat srcCodesNes/Errors/OperatorError1.nes
+	cat srcCodesNes/Errors/OperatorError2.nes
+	cat srcCodesNes/Errors/OperatorError3.nes
+	cat srcCodesNes/Errors/OperatorError4.nes
 
 error2x: compile
+	java -classpath classfiles nntndohrs.NntndoHRs srcCodesNes/Errors/OperatorError1.nes
+	java -classpath classfiles nntndohrs.NntndoHRs srcCodesNes/Errors/OperatorError2.nes
+	java -classpath classfiles nntndohrs.NntndoHRs srcCodesNes/Errors/OperatorError3.nes
+	java -classpath classfiles nntndohrs.NntndoHRs srcCodesNes/Errors/OperatorError4.nes
 
 error3:
+	cat srcCodesNes/Errors/OperatorError5.nes
+	cat srcCodesNes/Errors/BadStatementError.nes
+	echo "Passing a file that doesnt exist called 'BadStatementError.txt'"
 
 error3x: compile
+	java -classpath classfiles nntndohrs.NntndoHRs srcCodesNes/Errors/OperatorError5.nes
+	java -classpath classfiles nntndohrs.NntndoHRs srcCodesNes/Errors/BadStatementError.nes
+	java -classpath classfiles nntndohrs.NntndoHRs srcCodesNes/Errors/BadStatementError.txt
 
 conditionals:
 	cat srcCodesNes/ConditionalTest.nes

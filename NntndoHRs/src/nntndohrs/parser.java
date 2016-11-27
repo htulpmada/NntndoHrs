@@ -29,13 +29,13 @@ static lexeme t;
     }
     
     public static void fatal(String problem){
-        System.out.println("\nERROR; "+problem);
+        System.out.println("\nERROR: "+problem);
         gameOver();
         System.exit(0);
     }
     
     public static void fatal(String problem, int i){
-        System.out.println("\nERROR; "+problem +" line: "+ i);
+        System.out.println("\nERROR: "+problem +" line: "+ i);
         gameOver();
         System.exit(0);
     }

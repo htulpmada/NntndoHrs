@@ -26,9 +26,9 @@ func main(){
 
 
 
-@------	real r =1.25; @real not supported yet
-@	print("r = " + r);
-@	print("");
+	real r =1.25; @real not supported yet
+	print("r = " + r);
+	print("");
 
 
 

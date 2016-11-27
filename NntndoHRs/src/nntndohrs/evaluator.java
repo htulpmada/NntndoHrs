@@ -298,7 +298,7 @@ public class evaluator {
         //System.out.println("# of params: "+j);
         //System.out.println("# of args: "+i);
         }
-        if((eargs==null&&params!=null)||(eargs!=null&&params==null)){
+        if((args.left==null&&params!=null)||(args.left!=null&&params==null)){
             fatal("Wrong number of arguments",funcName.line);
         }
         //if(eargs !=null && eargs.size()==1){eargs=cons("JOIN",eargs,null);}//size==1
@@ -390,7 +390,7 @@ public class evaluator {
             //arr = makeArgList(elements, env);
         }
         else if(tree.left.type == "NOT"){//maybe issue here
-            return not(evaluate(tree.left, env));
+            return not(evaluate(tree.right.left, env));
         }
         return evaluate(new lexeme("ARRAY", "ARRAY", elements, null), env);//not sure about that
     }
@@ -697,7 +697,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("ERROR: Can't compare less: "+l.string+" and "+r.string,l.line);
+            fatal("Can't compare less: "+l.string+" and "+r.string,l.line);
             return null;
         }
     }
@@ -738,7 +738,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", "FALSE");
         }
         else{
-            fatal("ERROR: Can't compare greater equal: "+l.string+" and "+r.string,l.line);
+            fatal("Can't compare greater equal: "+l.string+" and "+r.string,l.line);
             return null;
         }
     }
@@ -819,7 +819,7 @@ public class evaluator {
              return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) + Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't add: "+l.type+" and "+r.type,l.line);
+            fatal("Can't add: "+l.type+" and "+r.type,l.line);
             return null;
         }
       }
@@ -847,7 +847,7 @@ public class evaluator {
              return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) - Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't subtract: "+l.type+" and "+r.type,l.line);
+            fatal("Can't subtract: "+l.type+" and "+r.type,l.line);
             return null;
         }
       }
@@ -875,7 +875,7 @@ public class evaluator {
              return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) * Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't multiply: "+l.type+" and "+r.type,l.line);
+            fatal("Can't multiply: "+l.type+" and "+r.type,l.line);
             return null;
         }
      }
@@ -887,11 +887,11 @@ public class evaluator {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
      try{   
-        if(r.string=="0"){fatal("EEROR: divide by zero Paradox???????",l.line);return null;}
+        if(r.string=="0"){fatal("Divide by zero Paradox???????",l.line);return null;}
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
            try{ return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
            }
-           catch(ArithmeticException a){fatal("EEROR: divide by zero Paradox???????",l.line);return null;}
+           catch(ArithmeticException a){fatal("Divide by zero Paradox???????",l.line);return null;}
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
@@ -906,7 +906,7 @@ public class evaluator {
             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't divide: "+l.type+" and "+r.type,l.line);
+            fatal("Can't divide: "+l.type+" and "+r.type,l.line);
             return null;
         }
      }
@@ -918,7 +918,7 @@ public class evaluator {
         lexeme l = evaluate(tree.left, env);
         lexeme r = evaluate(tree.right, env);
      try{
-        if(r.string=="0"){fatal("EEROR: divide by zero Paradox???????",l.line);return null;}
+        if(r.string=="0"){fatal("Divide by zero Paradox???????",l.line);return null;}
         if((l.type == "INTEGER") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }
@@ -935,7 +935,7 @@ public class evaluator {
             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't divide: "+l.type+" and "+r.type,l.line);
+            fatal("Can't divide: "+l.type+" and "+r.type,l.line);
             return null;
         }
      }
@@ -963,7 +963,7 @@ public class evaluator {
             return new lexeme("REAL",  Float.toString((int) Math.pow(Float.parseFloat(l.string) , Float.parseFloat(r.string))));
         }
         else{
-            fatal("ERROR: Can't raise: "+l.type+" to "+r.type+" power ",l.line);
+            fatal("Can't raise: "+l.type+" to "+r.type+" power ",l.line);
             return null;
         }
      }
@@ -994,7 +994,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", Boolean.toString(Boolean.parseBoolean(l.string) & Boolean.parseBoolean(r.string)));
         }
         else{
-            fatal("ERROR: Can't AND: "+l.type+" and "+r.type,l.line);
+            fatal("Can't AND: "+l.type+" and "+r.type,l.line);
             return null;
         }
      }
@@ -1024,7 +1024,7 @@ public class evaluator {
             return new lexeme("BOOLEAN", Boolean.toString(Boolean.parseBoolean(l.string) | Boolean.parseBoolean(r.string)));
         }
         else{
-            fatal("ERROR: Can't OR: "+l.type+" and "+r.type,l.line);
+            fatal("Can't OR: "+l.type+" and "+r.type,l.line);
             return null;
         }
 

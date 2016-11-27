@@ -1,0 +1,13 @@
+@------Divide by Zero error
+yoshi main(){
+
+        int i = 4;
+	int j = 0;
+
+        pit(i/j);
+
+}
+
+main()
+
+

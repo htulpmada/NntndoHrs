@@ -33,7 +33,7 @@ static lexeme e=evaluator.create();
         try{
             String file = args[0]; 
             boolean b =checkFileExtension(file);
-            if(!b){parser.fatal("Bad File Extension: must be  .NtdHrs ");}
+            if(!b){parser.fatal("Bad File Extension: must be  .nes ");}
             n=new lexer(file,false);
         }
         catch(ArrayIndexOutOfBoundsException e){n=new lexer("file.txt",false);}
