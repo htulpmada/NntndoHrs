@@ -252,6 +252,48 @@ static lexeme t;
             lexeme c = match("CPAREN");
             return cons("PRINT", f, cons("JOIN", e, null));
         }
+        else if (check("sNodeV")){
+            lexeme f = match("sNodeV");
+            lexeme o = match("OPAREN");
+            lexeme e = exprList();
+            lexeme c = match("CPAREN");
+            return cons("sNodeV", f, cons("JOIN", e, null));
+        }
+        else if (check("sNodeL")){
+            lexeme f = match("sNodeL");
+            lexeme o = match("OPAREN");
+            lexeme e = exprList();
+            lexeme c = match("CPAREN");
+            return cons("sNodeL", f, cons("JOIN", e, null));
+        }
+        else if (check("sNodeR")){
+            lexeme f = match("sNodeR");
+            lexeme o = match("OPAREN");
+            lexeme e = exprList();
+            lexeme c = match("CPAREN");
+            return cons("sNodeR", f, cons("JOIN", e, null));
+        }
+        else if (check("gNodeV")){
+            lexeme f = match("gNodeV");
+            lexeme o = match("OPAREN");
+            lexeme e = exprList();
+            lexeme c = match("CPAREN");
+            return cons("gNodeV", f, cons("JOIN", e, null));
+        }
+        else if (check("gNodeL")){
+            lexeme f = match("gNodeL");
+            lexeme o = match("OPAREN");
+            lexeme e = exprList();
+            lexeme c = match("CPAREN");
+            return cons("gNodeL", f, cons("JOIN", e, null));
+        }
+        else if (check("gNodeR")){
+            lexeme f = match("gNodeR");
+            lexeme o = match("OPAREN");
+            lexeme e = exprList();
+            lexeme c = match("CPAREN");
+            return cons("gNodeR", f, cons("JOIN", e, null));
+        }
         else if (check("BREAK")){
             lexeme b = match("BREAK");
             //lexeme s = match("SEMI");
@@ -495,7 +537,13 @@ static lexeme t;
                 | check("REMOVE") 
                 | check("SET") 
                 | check("BREAK") 
-                | check("LENGTH");
+                | check("LENGTH")
+                | check("sNodeV")
+                | check("gNodeV")
+                | check("sNodeL")
+                | check("gNodeL")
+                | check("sNodeR")
+                | check("gNodeR");
         //^^^^^^^^^^^BUILT-INS go here^^^^^^//
     }
     public boolean opPending(){

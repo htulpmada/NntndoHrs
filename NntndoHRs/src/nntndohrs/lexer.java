@@ -159,6 +159,13 @@ public static lexeme lex() throws IOException{
         else if(token.equals("integer")||token.equals("int")||token.equals("mario")){return new lexeme("TYPE","int");}
         else if(token.equals("string")||token.equals("str")||token.equals("luigi")){return new lexeme("TYPE","string");}
         else if(token.equals("real")||token.equals("kirby")){return new lexeme("TYPE","real");}
+        else if (token.equals("node")||token.equals("pika")){return new lexeme("TYPE", "node");}//need to document
+        else if (token.equals("setNodeV")||token.equals("chu")){return new lexeme("sNodeV", "Vnode");}
+        else if (token.equals("getNodeV")||token.equals("iChooseU")){return new lexeme("gNodeV", "Vnode");}
+        else if (token.equals("setNodeL")||token.equals("pi")){return new lexeme("sNodeL", "Lnode");}
+        else if (token.equals("setNodeR")||token.equals("ka")){return new lexeme("sNodeR", "Rnode");}
+        else if (token.equals("getNodeL")||token.equals("iChooseL")){return new lexeme("gNodeL", "Lnode");}
+        else if (token.equals("getNodeR")||token.equals("iChooseR")){return new lexeme("gNodeR", "Rnode");}//end of new stuff
         else if(token.equals("while")||token.equals("game")){return new lexeme("WHILE","while");}
         else if(token.equals("return")||token.equals("gameOver")){return new lexeme("RETURN","return");}
         else if (token.equals("func")||token.equals("yoshi")){return new lexeme("FUNC", "func");}
