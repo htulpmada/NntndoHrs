@@ -562,6 +562,21 @@ public class evaluator {
             v=(i==0)?"TRUE":"FALSE";
             return new lexeme("BOOLEAN", v);
         }
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i==0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i==0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i==0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
         else if(l.type == "NIL"){
             if(r.type == "NIL"){
                 return new lexeme("BOOLEAN", "TRUE");
@@ -926,13 +941,13 @@ public class evaluator {
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }//parse real<-------vvvvvv
         else if((l.type == "REAL") && (r.type == "INTEGER")){
-           return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }
         else if((l.type == "INTEGER") && (r.type == "REAL")){
-             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }
         else if((l.type == "REAL") && (r.type == "REAL")){
-            return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }
         else{
             fatal("Can't divide: "+l.type+" and "+r.type,l.line);

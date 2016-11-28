@@ -9,39 +9,55 @@ Rules:
 
 	Program: 	consists of multiple definitions
 
-	File Ext: .NtdHrs
+	File Ext:	.nes
 
-	Intro:
+	Intro:		Designer Programming Language for Dr. j,
+			CS403 at University of Alabama ROll Tide!!!
+			Java like syntax with a couple exceptions.
+			Dynamically typed, with all the basic stuff
+			and a little extra. NOT Object Oriented.
 
 
 
-	Types: 	string and ints for now
-		must be declared,
-		does not support empty assignment
+	Types: 	Strings, Integers, Reals and Booleans.
+		Functions are kind of considered a type as you can 
+		assign them like you would a variable!!!
+
+
+	Programs: Consist of definitions(see below...)
 
 
 	Definitions are either:
 
-		variable definition:	
-			must declare variable type before variable name
+		Variable Definition:	
+
+			Must declare variable type before variable name
 
 				  ex...  [ int a = 5 ; ]
 				  ex...  [ int a=5; ]
 
 			white space optional in expression but must have 
-			space after type and semi-colon after expression
+			space after type and semi-colon after expression.
+			Does NOT support empty declaration, must initialize!!!
 
-		function definition:  
-			must declare function keyword before function name
+
+
+		Function Definition:  
+
+			Must declare function keyword before function name
 
 				  ex...  [ func main ( param ) { body } ]
 
-			again whitespace only needed after keywords
+			Again, whitespace only needed after keywords.
 
-		id definition: (other)
+
+
+		Id definition: (other)
 			really ends up being function calls and array accessors
 			
-			function call is [ name ( args ) ]<-- no semi colon
+			function call is [ name ( args ) ]<-- 	no semi colon for
+								top level but need 
+								for non-global scope
 
 				  ex...  main()
 
@@ -49,9 +65,12 @@ Rules:
 			expression in square brackets 
 
 				  ex...  arr [ 2 ]
+				  ex...  arr [ 5 + 3 ]
 		
 
 	Array functions:
+		
+		Uses Java's Arraylists<> so O(1) time!!!
 
 		Initializer(): array var = [] or [1,] or [1,2,3,4]
 			single item array MUST have comma!!!
@@ -66,7 +85,10 @@ Rules:
 
 		length();  length( array ) ; <---  returns integer  duh!?*
 
+	Built-ins:
 
+		Print(): print with new line at end
+	
 	Conditionals:
 
 		if: if ( boolean expr ) { block } 
@@ -78,8 +100,59 @@ Rules:
 
 		while: while ( boolean expr ) { block }
 	
-	Operations:
 
-		see AllCombosOfOps.NtdHrs
+	Operators: 
 		
-(attempting javaDocs for this project)
+		+ 	plus			can add all types together except arrays and functions (takes on type of first operand)
+						can only add string to int if string is number)
+
+		- 	minus			only works on numbers!!!
+							|
+		* 	times				|
+							|
+		/ 	divide				|
+							|
+		//	integer division		|
+							|
+		^ 	exponent			V
+----------------------------------------------------------------------------------------
+		< 	less			can compare 	int <---> int	
+							|	str <---> str
+		<=	less or equal			|      bool <---> bool
+							|	int <---> str
+		> 	greater				|	str <---> int
+							|	int <---> real
+		>=	greater or equal		|      real <---> int
+							|      real <---> real
+		==	equlaity check			|
+							|			
+		&	logic AND			|
+							|
+		|	logic OR			|
+							|
+		!=	NOT equality check		V
+----------------------------------------------------------------------------------------		
+		!	NOT		<-------------	Only Booloean
+		
+		= 	assignment			
+							
+							
+
+		see AllCombosOfOps.nes for all errors
+			ints and real are interchangable in this file
+
+
+	Functions:
+
+		As First-Class objects you can save and pass function 
+		closures around as much as you want. Another cool thing is 
+		this language has Lambda functions, these can be returned 
+		from a function or saved as a FUNCTION typed varialbe.
+		function also exibit behavior know as Explicit return.
+		this means that the last thing to be evaluated is what
+		will be returned by function call.
+
+	Lambdas:	
+		
+		lambda( params ) { body } returns a closure
+
