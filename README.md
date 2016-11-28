@@ -156,3 +156,33 @@ Rules:
 		
 		lambda( params ) { body } returns a closure
 
+	Alternates:
+		
+		Below are some base keywords followed by alternate 
+		words with the exact same usage and effect as 
+		the 'base' keyword.
+
+		---------------------------------------------------
+		integer		[ int , mario ]
+		string		[ str , luigi ]
+		real		[ kirby ]
+		boolean		[ bool , player ]
+		func		[ yoshi ]
+		if 		[ doubleDragon ]
+		else 		[ battleToads ]
+		else if		[ battleToads doubleDragon ]
+		while		[ game ]
+		nil		[ null , dk ]
+		true		[ bubble ]
+		false		[ bobble ]
+		print		[ pit ]
+		array		[ triforce ]
+		append		[ link ]
+		insert		[ zelda ]
+		set		[ shiek ]
+		remove		[ gannon ]
+		length		[ size , quest ]
+		lambda		[ samus ]
+
+	
+
