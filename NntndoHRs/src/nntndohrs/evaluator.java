@@ -194,7 +194,7 @@ public class evaluator {
     else if(tree.type == "BOOLEAN"){return evalBOOLEAN(tree, env);}
     else if(tree.type == "PRINT"){return evalPRINT(tree, env);}
     //-----------operators-------------vvvvvvvvvv-------//
-    else if(tree.type == "EQUAL"){return evalASSIGN(tree, env);}//maybe needs to be evalASSIGN()
+    else if(tree.type == "EQUAL"){return evalASSIGN(tree, env);}
     else if(tree.type == "NOTEQUAL"){return evalNOTEQUAL(tree, env);}
     else if(tree.type == "NOT"){return evalUNARY(tree, env);}
     else if(tree.type == "GREATER"){return evalGREATER(tree, env);}
@@ -210,6 +210,12 @@ public class evaluator {
     else if(tree.type == "AND"){return evalAND(tree, env);}
     else if(tree.type == "OR"){return evalOR(tree, env);}
     else if(tree.type == "DOUBLEEQUAL"){return evalDOUBLEEQUAL(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "sNodeV"){return evalSetNodeV(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "sNodeL"){return evalSetNodeL(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "sNodeR"){return evalSetNodeR(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "gNodeV"){return evalGetNodeV(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "gNodeL"){return evalGetNodeL(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "gNodeR"){return evalGetNodeR(tree, env);}//maybe needs to be evalEQUAL()
 
     else{
         fatal(tree.type+" : "+tree.string+"line#: "+tree.line);}
@@ -235,6 +241,7 @@ public class evaluator {
     private lexeme evalVDEF(lexeme tree, lexeme env) {
         lexeme variable = tree.right.left;
         lexeme value = evaluate(tree.right.right.right.left, env);
+        if(tree.left.string=="node"){value.type="NODE";}
         lexeme ret = insert(variable, value, env);
         return ret;//returning environment here
     }
@@ -1183,6 +1190,59 @@ public class evaluator {
     private lexeme evalBREAK(lexeme tree, lexeme env){
         //displayEnv(env);
         return tree;
+    }
+
+    private lexeme evalSetNodeV(lexeme tree, lexeme env) {
+        lexeme node = getNodeId(tree, env);
+        lexeme value = evaluate(tree.right.left, env).right;
+        value.type="NODE";
+        lexeme nvalue = update(env,node.string,value,value.line);
+        lexeme x = evaluate(node,env);//operation here
+        return nvalue;
+    }
+    
+    private lexeme evalSetNodeL(lexeme tree, lexeme env) {
+        lexeme eargs = evaluate(tree.right.left, env);
+        lexeme arr = eargs.left;
+        lexeme value = eargs.right;
+        //operation here
+        return value;
+    }
+    
+    private lexeme evalSetNodeR(lexeme tree, lexeme env) {
+        lexeme eargs = evaluate(tree.right.left, env);
+        lexeme arr = eargs.left;
+        lexeme value = eargs.right;
+        //operation here
+        return value;
+    }
+    
+    private lexeme evalGetNodeV(lexeme tree, lexeme env) {
+        lexeme eargs = evaluate(tree.right.left, env);
+        //lexeme arr = eargs.left;
+        //lexeme value = eargs.right;
+        //operation here
+        return evaluate(tree.right.left, env);
+    }
+    
+    private lexeme evalGetNodeL(lexeme tree, lexeme env) {
+        lexeme eargs = evaluate(tree.right.left, env);
+        lexeme arr = eargs.left;
+        lexeme value = eargs.right;
+        //operation here
+        return value;
+    }
+    
+    private lexeme evalGetNodeR(lexeme tree, lexeme env) {
+        lexeme eargs = evaluate(tree.right.left, env);
+        lexeme arr = eargs.left;
+        lexeme value = eargs.right;
+        //operation here
+        return value;
+    }
+    
+    private static lexeme getNodeId(lexeme tree,lexeme env){
+        return tree.right.left.left.left.left.left;
     }
     
 }
