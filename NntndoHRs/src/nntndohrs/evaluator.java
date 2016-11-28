@@ -364,19 +364,15 @@ public class evaluator {
     }
 
     private lexeme evalEXPR(lexeme tree, lexeme env) {
-        //if(tree.right == null){
-            return evaluate(tree.left, env);
-        //}
-        //else{
-            //return evaluate(tree.right, env);
-        //}
+        return evaluate(tree.left, env);
     }
+
     private lexeme not(lexeme l){
         if(l.type=="BOOLEAN"){l.string=Boolean.toString(!Boolean.parseBoolean(l.string));return l;}//probably wrong
-        //else if(l.type=="INTEGER"){l.string=Integer.toString(!Integer.parseInt(l.string));return l;}
         else{fatal("Can't Not type:"+l.type,l.line);}
         return null;
     }
+
     private lexeme evalUNARY(lexeme tree, lexeme env) {
         lexeme elements = null;
         if(tree.right == null){
@@ -436,7 +432,7 @@ public class evaluator {
         else if(tree.left.type == "RETURN"){
             return evaluate(tree.right.left, env);
         }
-        else if(tree.left.type == "PRINT"){//not sure if this is used
+        else if(tree.left.type == "PRINT"){
             return evaluate(tree.left, env);
         }
         else{
@@ -530,7 +526,7 @@ public class evaluator {
             else{System.out.print(eargs.string+"\n");}
         }
         catch(NullPointerException n){fatal("null pointer ",tree.line);}//should rename error message
-        return eargs;//might be wrong 
+        return eargs;
     }
 
     private lexeme evalEQUAL(lexeme tree, lexeme env) {
@@ -659,6 +655,21 @@ public class evaluator {
             v=(i>0)?"TRUE":"FALSE";
             return new lexeme("BOOLEAN", v);
         }
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i>0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i>0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i>0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
         else if(l.type == "NIL"){
             if(r.type == "NIL"){
                 return new lexeme("BOOLEAN", "TRUE");
@@ -698,7 +709,22 @@ public class evaluator {
         else if((l.type == "STRING") && (r.type == "INTEGER")){
             i=l.string.compareTo(r.string);
             v=(i<0)?"TRUE":"FALSE";
-            return new lexeme("BOOLEAN", v);//add fatal if r is not actually number
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i<0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i<0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i<0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
         }
         else if(l.type == "NIL"){
             if(r.type == "NIL"){
@@ -741,6 +767,21 @@ public class evaluator {
             v=(i>=0)?"TRUE":"FALSE";
             return new lexeme("BOOLEAN", v);
         }
+                else if((l.type == "REAL") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i>=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i>=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i>=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
         else if(l.type == "NIL"){
             if(r.type == "NIL"){
                 return new lexeme("BOOLEAN", "TRUE");
@@ -778,6 +819,21 @@ public class evaluator {
             return new lexeme("BOOLEAN", v);
         }
         else if((l.type == "STRING") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i<=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+                else if((l.type == "REAL") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i<=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i<=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
             i=l.string.compareTo(r.string);
             v=(i<=0)?"TRUE":"FALSE";
             return new lexeme("BOOLEAN", v);
@@ -917,7 +973,7 @@ public class evaluator {
         else if((l.type == "INTEGER") && (r.type == "REAL")){
              return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
-        else if((l.type == "REAL") && (r.type == "REAL")){// parses as integer needs to fix
+        else if((l.type == "REAL") && (r.type == "REAL")){
             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else{
@@ -939,7 +995,7 @@ public class evaluator {
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
-        }//parse real<-------vvvvvv
+        }
         else if((l.type == "REAL") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }
@@ -967,7 +1023,7 @@ public class evaluator {
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
-        }//parse real<-------vvvvvv
+        }
         else if((l.type == "REAL") && (r.type == "INTEGER")){
             return new lexeme("REAL", Float.toString((int) Math.pow(Float.parseFloat(l.string) , Float.parseFloat(r.string))));
         }
@@ -995,7 +1051,7 @@ public class evaluator {
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) & Integer.parseInt(r.string)));
-        }//parse real<-------vvvvvv
+        }
         else if((l.type == "REAL") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) & Integer.parseInt(r.string)));
         }
@@ -1025,7 +1081,7 @@ public class evaluator {
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) | Integer.parseInt(r.string)));
-        }//parse real<-------vvvvvv
+        }
         else if((l.type == "REAL") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) | Integer.parseInt(r.string)));
         }

@@ -93,7 +93,8 @@ Rules:
 
 		if: if ( boolean expr ) { block } 
 		
-		optional: else { block }
+		optional: 	if else { block }
+				else { block }
 		
 	
 	Loops:
