@@ -1,5 +1,6 @@
 @---------varDef test
 
+<<<<<<< HEAD
 func main(){
 
 @--must initialize vars
@@ -21,6 +22,17 @@ func main(){
    
    a=a+a;
    print("the reassignment of variable a+a= " + a);
+=======
+	node root = 6;
+	setNodeV(root, 5);
+	pit(getNodeV(root));
+	node left = 3;
+	node right = 7;
+	setNodeL(root, left);
+	pit(getNodeL(root));
+	setNodeR(root, right);
+	pit(getNodeR(root));
+>>>>>>> sidebranch
 
 
 
