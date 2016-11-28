@@ -1,0 +1,7 @@
+@-------  argument error
+yoshi main(i){
+
+}
+
+main( 7 , 11 )
+

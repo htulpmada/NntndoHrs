@@ -1,0 +1,822 @@
+@---------conditional test
+
+func main(){
+
+@------- inintialize test
+
+
+	string a = "a";
+	print("a = " + a);
+	print("");
+
+	
+	string s = "5";
+	print("s = " + s);
+	print("");
+
+	int i = 10;
+	print("i = " + i);
+	print("");
+
+	boolean bt = true;
+	boolean bf = false;
+	print("bt = " + bt);
+	print("bf = " + bf);
+	print("");
+
+
+
+	real r =1.25; @real not supported yet
+	print("r = " + r);
+	print("");
+
+
+
+
+
+
+
+
+print("++++++++++++++++++plus op test++++++++++++++++++++++++++++++++++++++++++++++");
+
+@----------int + int 
+
+	print("i + i = ");
+	print(i+i);
+	print("");
+
+@----------int + str 
+
+	print("i + s = ");
+	print(i+s);
+	print("");
+
+@----------str + int 
+
+	print("s + i = ");
+	print(s+i);
+	print("");
+
+@----------str + str 
+
+	print("s + s = ");
+	print(s+s);
+	print("");
+
+@----------str + bol 
+
+	print("s + bt = ");
+	print(s+bt);
+	print("");
+
+@----------bol + str 
+
+	print("bt + s = ");
+	print(bt+s);
+	print("");
+
+@----------bol + bol 
+@---error
+	print("bt + bt = error");
+@	print(bt+bt);
+	print("");
+
+@---------real + real 
+@---------real + int 
+@----------int + real 
+
+
+
+
+
+
+
+
+print("-------------minus op test---------------------------");
+
+@----------int - int 
+
+	print("i - i =");
+	print(i-i);
+	print("");
+
+@----------int - str 
+
+	print("i - s =");
+	print(i-s);
+	print("");
+
+@----------str - int 
+@---error
+
+	print("s - i = error");
+@	print(s-i);
+	print("");
+
+@----------str - str 
+@---error
+
+	print("s - s = error");
+@	print(s-s);
+	print("");
+
+@----------str - bol 
+@---error
+
+	print("s - bt = error");
+@	print(s-bt);
+	print("");
+
+@----------bol - str 
+@---error
+
+	print("bt - s = error");
+@	print(bt-s);
+	print("");
+
+@----------bol - bol 
+@---error
+
+	print("bt - bt = error");
+@	print(bt-bt);
+	print("");
+
+@---------real - real 
+@---------real - int 
+@----------int - real 
+
+
+
+
+
+
+
+print("******************TIMES op test**********************************************");
+
+@----------int * int 
+
+	print("i * i = ");
+	print(i*i);
+	print("");
+
+@----------int * str 
+
+	print("i * s = ");
+	print(i*s);
+	print("");
+
+@----------str * int 
+@---error
+
+	print("s * i = ");
+@	print(s*i);
+	print("");
+ 
+@----------str * str 
+@---error
+
+	print("s * s = ");
+@	print(s*s);
+	print("");
+
+@----------str * bol 
+@---error
+
+	print("s * bt = ");
+@	print(s*bt);
+	print("");
+
+@----------bol * str 
+@---error
+
+	print("bt * s = ");
+@	print(bt*s);
+	print("");
+
+@----------bol * bol 
+@---error
+	print("bt * bt = error");
+@	print(bt*bt);
+	print("");
+
+@---------real * real 
+@---------real * int 
+@----------int * real 
+
+
+
+
+
+
+
+
+
+print("  ----------- divide op test-------");
+
+@----------int / int 
+
+	print("i / i = ");
+	print(i/i);
+	print("");
+	
+@print(i/0);@/////////divide by zero error<----------
+
+
+@----------int / str 
+
+	print("i / s = ");
+	print(i/s);
+	print("");
+
+@----------str / int 
+@---error
+
+	print("s / i = ");
+@	print(s/i);
+	print("");
+
+@----------str / str 
+@---error
+
+	print("s / s = ");
+@	print(s/s);
+	print("");
+
+@----------str / bol 
+@---error
+
+	print("s / bt = ");
+@	print(s/bt);
+	print("");
+
+@----------bol / str 
+@---error
+
+	print("bt / s = ");
+@	print(bt/s);
+	print("");
+
+@----------bol / bol 
+@---error
+	print("bt / bt = error");
+@	print(bt/bt);
+	print("");
+
+@---------real / real 
+@---------real / int 
+@----------int / real 
+
+
+
+
+
+
+
+
+print("^^^^^^^^^^^^^^^^^^power op test^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+
+@----------int ^ int 
+
+	print("i ^ i = ");
+	print(i^i);
+	print("");
+
+@----------int ^ str 
+@---error
+
+	print("i ^ s = ");
+@	print(i^s);
+	print("");
+
+@----------str ^ int 
+@---error
+
+	print("s ^ i = ");
+@	print(s^i);
+	print("");
+
+@----------str ^ str 
+@---error
+
+	print("s ^ s = ");
+@	print(s^s);
+	print("");
+
+@----------str ^ bol 
+@---error
+
+	print("s ^ bt = ");
+@	print(s^bt);
+	print("");
+
+@----------bol ^ str 
+@---error
+
+	print("bt ^ s = ");
+@	print(bt^s);
+	print("");
+
+@----------bol ^ bol 
+@---error
+	print("bt ^ bt = error");
+@	print(bt^bt);
+	print("");
+
+@---------real ^ real 
+@---------real ^ int 
+@----------int ^ real 
+
+
+
+
+
+
+
+
+
+
+print("&&&&&&&&&&&&&&&&&& and  op test&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+@----------int & int 
+
+	print("i & i = ");
+	print(i&i);
+	print("");
+
+@----------int & str 
+
+	print("i & s = ");
+	print(i&s);
+	print("");
+
+@----------str & int 
+@---error
+
+	print("s & i = ");
+@	print(s&i);
+	print("");
+
+@----------str & str 
+@---error
+
+	print("s & s = ");
+@	print(s&s);
+	print("");
+
+@----------str & bol 
+@---error
+
+	print("s & bt = ");
+@	print(s&bt);
+	print("");
+
+@----------bol & str 
+@---error
+
+	print("bt & s = ");
+@	print(bt&s);
+	print("");
+
+@----------bol & bol 
+
+	print("bt & bt = error");
+	print(bt&bt);
+	print("");
+
+@---------real & real 
+@---------real & int 
+@----------int & real 
+
+
+
+
+
+
+
+
+
+
+
+print("|||||||||||||||||| OR op test||||||||||||||||||||||||||||||||||||||||||||||");
+
+@----------int | int 
+
+	print("i | i = ");
+	print(i|i);
+	print("");
+
+@----------int | str 
+
+	print("i | s = ");
+	print(i|s);
+	print("");
+
+@----------str | int 
+@---error
+
+	print("s | i = ");
+@	print(s|i);
+	print("");
+
+@----------str | str 
+@---error
+
+	print("s | s = ");
+@	print(s|s);
+	print("");
+
+@----------str | bol 
+@---error
+
+	print("s | bt = ");
+@	print(s|bt);
+	print("");
+
+@----------bol | str 
+@---error
+
+	print("bt | s = ");
+@	print(bt|s);
+	print("");
+
+@----------bol | bol 
+
+	print("bt | bt = error");
+	print(bt|bt);
+	print("");
+
+@---------real | real 
+@---------real | int 
+@----------int | real 
+
+
+
+
+
+
+
+
+
+
+print("====================================Equality op test=================================================================");
+
+@----------int == int 
+
+	print("i == i = ");
+	print(i==i);
+	print("");
+
+@----------int == str 
+
+	print("i == s = ");
+	print(i==s);
+	print("");
+
+@----------str == int 
+
+	print("s == i = ");
+	print(s==i);
+	print("");
+
+@----------str == str 
+
+	print("s == s = ");
+	print(s==s);
+	print("");
+
+@----------str == bol 
+@---error
+
+	print("s == bt = ");
+@	print(s==bt);
+	print("");
+
+@----------bol == str 
+@---error
+
+	print("bt == s = ");
+@	print(bt==s);
+	print("");
+
+@----------bol == bol 
+
+	print("bt == bt = error");
+	print(bt==bt);
+	print("");
+
+@---------real == real 
+@---------real == int 
+@----------int == real 
+
+
+
+
+
+
+
+
+print(">>>>>>>>>>>>>>>>>>GREATER op test>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+@----------int > int 
+
+	print("i > i = ");
+	print(i>i);
+	print("");
+
+@----------int > str 
+
+	print("i > s = ");
+	print(i>s);
+	print("");
+
+@----------str > int 
+
+	print("s > i = ");
+	print(s>i);
+	print("");
+
+@----------str > str 
+
+	print("s > s = ");
+	print(s>s);
+	print("");
+
+@----------str > bol 
+@---error
+
+	print("s > bt = ");
+@	print(s>bt);
+	print("");
+
+@----------bol > str 
+@---error
+
+	print("bt > s = ");
+@	print(bt>s);
+	print("");
+
+@----------bol > bol 
+@---error
+
+	print("bt > bt = error");
+@	print(bt>bt);
+	print("");
+
+@---------real > real 
+@---------real > int 
+@----------int > real 
+
+
+
+
+
+
+
+
+
+print(">=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=GREATER EQUALS op test>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=");
+
+@----------int >= int 
+
+	print("i >= i = ");
+	print(i>=i);
+	print("");
+
+@----------int >= str 
+
+	print("i >= s = ");
+	print(i>=s);
+	print("");
+
+@----------str >= int 
+
+	print("s >= i = ");
+	print(s>=i);
+	print("");
+
+@----------str >= str 
+
+	print("s >= s = ");
+	print(s>=s);
+	print("");
+
+@----------str >= bol 
+@---error
+
+	print("s >= bt = ");
+@	print(s>=bt);
+	print("");
+
+@----------bol >= str 
+@---error
+
+	print("bt >= s = ");
+@	print(bt>=s);
+	print("");
+
+@----------bol >= bol 
+@---error
+	print("bt >= bt = error");
+@	print(bt>=bt);
+	print("");
+
+@---------real >= real 
+@---------real >= int 
+@----------int >= real 
+
+
+
+
+
+
+print("<<<<<<<<<<<<<<<<<< LESS op test<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+
+@----------int < int 
+
+	print("i < i = ");
+	print(i<i);
+	print("");
+
+@----------int < str 
+
+	print("i < s = ");
+	print(i<s);
+	print("");
+
+@----------str < int 
+
+	print("s < i = ");
+	print(s<i);
+	print("");
+
+@----------str < str 
+
+	print("s < s = ");
+	print(s<s);
+	print("");
+
+@----------str < bol 
+@---error
+
+	print("s < bt = ");
+@	print(s<bt);
+	print("");
+
+@----------bol < str 
+@---error
+
+	print("bt < s = ");
+@	print(bt<s);
+	print("");
+
+@----------bol < bol 
+@---error
+	print("bt < bt = error");
+@	print(bt<bt);
+	print("");
+
+@---------real < real 
+@---------real < int 
+@----------int < real 
+
+
+
+
+
+print("<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=LESS EQUAL op test<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=<=");
+
+@----------int <= int 
+
+	print("i <= i = ");
+	print(i<=i);
+	print("");
+
+@----------int <= str 
+
+	print("i <= s = ");
+	print(i<=s);
+	print("");
+
+@----------str <= int 
+
+	print("s <= i = ");
+	print(s<=i);
+	print("");
+
+@----------str <= str 
+
+	print("s <= s = ");
+	print(s<=s);
+	print("");
+
+@----------str <= bol 
+@---error
+
+	print("s <= bt = ");
+@	print(s<=bt);
+	print("");
+
+@----------bol <= str 
+@---error
+
+	print("bt <= s = ");
+@	print(bt<=s);
+	print("");
+
+@----------bol <= bol 
+@---error
+	print("bt <= bt = error");
+@	print(bt<=bt);
+	print("");
+
+@---------real <= real 
+@---------real <= int 
+@----------int <= real 
+
+
+
+
+
+print("!!!!!!!!!!!!!!!!!! NOT op test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+@----------! int 
+@---error
+
+	print("!i = ");
+@	print(!i);
+	print("");
+
+@----------! str 
+@---error
+
+	print("!s = ");
+@	print(!s);
+	print("");
+
+@----------! bol 
+@---error
+
+	print("bt = !bt ");
+@	print(bt=! bt);
+	print("a");
+
+@---------! real 
+@---error
+
+
+print("!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!= NOT EQUAL op test!=!=!=!=!=!=!=!=!=!=!=!=!!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=");
+
+@----------int != int 
+
+	print("i != i = ");
+	print(i!=i);
+	print("");
+
+@----------int != str 
+
+	print("i != s = ");
+	print(i!=s);
+	print("");
+
+@----------str != int 
+
+	print("s != i = ");
+	print(s!=i);
+	print("");
+
+@----------str != str 
+
+	print("s != s = ");
+	print(s!=s);
+	print("");
+
+@----------str != bol 
+@---error
+
+@	print("s != bt = ");
+@	print(s!=bt);
+@	print("");
+
+@----------bol != str 
+@---error
+
+@	print("bt != s = ");
+@	print(bt!=s);
+@	print("");
+
+@----------bol != bol 
+
+@	print("bt != bt = error");
+@	print(bt!=bt);
+@	print("");
+
+@---------real != real 
+@---------real != int 
+@----------int != real 
+
+
+	
+}
+
+
+main()

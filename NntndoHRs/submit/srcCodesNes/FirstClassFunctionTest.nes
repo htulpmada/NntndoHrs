@@ -1,0 +1,27 @@
+@----------------lambda  and paramater test
+
+yoshi main(){
+
+	yoshi x2( i, j, x, y, z, a){
+		
+		yoshi q = lambda(t){pit(t);};
+		q(i);
+		q(j);
+		q(x);
+		q(y);
+		q(z);
+		q(a);
+
+	}
+
+	x2(1,2,3,4,5,6);
+
+	yoshi passFun = x2;
+
+	pit("");
+
+	passFun(6,5,4,3,2,1);
+
+}
+
+main()

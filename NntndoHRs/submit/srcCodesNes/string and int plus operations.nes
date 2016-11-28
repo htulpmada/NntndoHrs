@@ -1,0 +1,73 @@
+@--------- string and int  operator test
+
+func main(){
+	int a=10;
+	string b = "00";
+
+	@string b=" 00"; @ example bad number format
+	
+@-------------int + string
+	print("");
+	print("int + string");
+	print("");
+	print("");
+
+	print("int a = " + a); 
+	print("string b = " + b); 
+	print("");
+
+
+@-------can add int to strings as long as it is a number string
+
+	print("int a + string b = " + a + b); 
+
+        b = "2";
+	
+	print("b = 2 is " + b);         
+
+	print("int a + string b = " + a + b);
+	print("");
+
+	a = a - 1; 
+
+        print("(a = a - 1) + b = " + a + b); 
+
+@-----------string + string
+	print("");
+	print("string + string");
+	print("");
+	print("");
+
+	string c=b+"2";
+	print("b = " + b);         
+        print("string c = b + 2 is " + c);
+
+
+@-----------string + int
+	print("");
+	print("string + int");
+	print("");
+
+	print("c = " + c);
+	print("a = " + a);
+
+	print("c + a = "+c+a);
+@	print(c+a);
+
+
+
+@---------int + int 
+	print("");
+	print("int + int");
+	print("");
+
+	int x=2;
+	int y=5;
+	print("x = " + x);
+	print("y = " + y);
+
+	print("x + y = " + x + y);
+
+}
+
+main()

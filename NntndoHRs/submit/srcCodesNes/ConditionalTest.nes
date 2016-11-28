@@ -1,0 +1,25 @@
+@---------conditional test
+
+func main(){
+	int i = 10;
+	while (i > 0){
+		
+		@empty is ok
+		if(){ }		
+		else{}
+
+		if(i == 8){print(i);}
+
+		else if(i == 6){print(i);}
+
+		else if(i == 4){print(i);}
+
+		if(i == 2){print(i);}
+
+		@print("i = " + i); 
+
+		i = i - 1; 
+
+	}	
+}
+main()

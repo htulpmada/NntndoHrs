@@ -1,0 +1,28 @@
+@---------varDef test
+
+func main(){
+
+@--must initialize vars
+@  int a;   @error
+
+   print("the string a");
+
+   int a = 0;
+   print("the variable a: " + a);
+
+  @		 		  		vv issue with spacing on escape characters not sure if its lexer or evaluator
+  print("spacing issue with escape the variable a:" + a);
+
+   a=2;
+   @a="2"; syntax error
+   print("the reassignment of variable a=2;  " + a);
+
+   print("the reassignment of variable a=5 in print statement   " + a=5);
+   
+   a=a+a;
+   print("the reassignment of variable a+a= " + a);
+
+
+
+}
+main()

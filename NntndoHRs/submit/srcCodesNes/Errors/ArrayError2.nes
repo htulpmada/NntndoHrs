@@ -1,0 +1,8 @@
+@--------- syntax error from un initialized variable
+yoshi main(){
+	triforce t;
+	pit(t);
+}
+
+main()
+

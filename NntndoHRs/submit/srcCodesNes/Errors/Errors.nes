@@ -1,0 +1,32 @@
+@--------------------basic errors----------------
+
+@---array access out of bounds and remove from empty array
+
+@---null pointer from uninitialized array?
+
+@---undefined variable
+
+@---bad function call from setting func var to wrong value
+@---^^ ex.. yoshi x = 5;
+
+@---wrongnumber of arguments to functions
+
+
+
+
+@--------------------bad operands------------------
+
+@---bad operations(alot of them) including adding different types
+
+
+@--------------------funny Errors-------------------
+
+
+@---Divide by zero error
+
+@---bad statment?
+@---what are you talking about?
+
+@---bad file extension
+
+@--- unknown file argument error

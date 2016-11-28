@@ -1,0 +1,12 @@
+@------ error
+yoshi main(){
+
+	str s = "123";
+	int i = 3;
+        pit(s-i);
+
+}
+
+main()
+
+

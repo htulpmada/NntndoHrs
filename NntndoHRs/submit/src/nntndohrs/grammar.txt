@@ -1,0 +1,90 @@
+pro:  def 
+    | def pro
+
+def : vDef
+    | fDef
+    | idDef
+
+vDef : TYPE ID EQUALS expr SEMI
+
+fDef : ID OPAREN optPList CPAREN block
+
+idDef : ID
+    |   ID OPAREN optExprList CPAREN
+    |   ID OBRACKET expr CBRACKET
+
+op : 
+      PLUS 
+    | MINUS 
+    | TIMES 
+    | DIVIDE
+    | EQUAL
+    | NOTEQUAL
+    | GREATER
+    | LESSTHAN
+    | GREATEREQUAL
+    | LESSEQUAL
+    | INTDIVIDE
+    | POWER
+    | AND
+    | OR
+    | DOUBLEEQUAL
+
+unary : INTEGER
+    | STRING
+    | REAL
+    | idDef
+    | NOT unary
+    | OPAREN expr CPAREN
+    | lambda
+    | fDef
+    | OBRACKET optExprList CBRACKET
+    | NIL
+    | BOOLEAN
+    | PRINT OPAREN exprList CPAREN
+    | APPEND OPAREN exprList CPAREN
+    | INSERT OPAREN exprList CPAREN
+    | REMOVE OPAREN exprList CPAREN
+    | SET OPAREN exprList CPAREN
+    | LENGTH OPAREN exprList CPAREN
+
+optExprList:  exprList | EMPTY
+
+exprList: expr
+        |   expr COMMA exprList
+
+expr : unary 
+    |  unary op expr
+
+optPList : EMPTY
+    | pList
+
+pList : ID
+    | ID COMMA pList
+
+block : OCURLY optSList CCURLY
+
+optSList : EMPTY
+    | sList
+
+sList : state
+    | state sList
+
+state : vDef
+    | fDef
+    | expr SEMI
+    | whileLoop
+    | ifState
+    | RETURN expr SEMI
+
+whileLoop : WHILE OPAREN expr CPAREN block
+
+ifState : IF OPAREN expr CPAREN block optElseState
+
+optElseState : EMPTY
+    | elseState
+
+elseState : ELSE block
+    | ELSE ifState
+
+lambda : LAMBDA OPAREN optPList CPAREN block

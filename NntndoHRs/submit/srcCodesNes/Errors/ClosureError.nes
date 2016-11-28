@@ -1,0 +1,14 @@
+@-------  Closure error
+yoshi main(){
+
+	int i = 5;
+
+	yoshi f = i;
+	
+	f();
+
+}
+
+main()
+
+

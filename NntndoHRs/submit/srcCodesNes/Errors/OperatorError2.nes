@@ -1,0 +1,12 @@
+@------Not error
+yoshi main(){
+
+        str m = "string";
+
+        pit(!m);
+
+}
+
+main()
+
+
