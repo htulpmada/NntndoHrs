@@ -50,9 +50,18 @@ import java.util.ArrayList;
         getline();
         makeArr();
     }
+
+    lexeme(String t, String value, lexeme l, lexeme r, ArrayList<lexeme> str) {
+        type=t;
+        string=value;
+        left=l;
+        right=r;
+        getline();
+        strings=str;
+    }
     private void getline(){line=lexer.lineNum;}
 
-    private void makeArr(){if(type.equals("ARRAY")){strings=new ArrayList<>();}}
+    public void makeArr(){if(type.equals("ARRAY")||type.equals("NODE")){strings=new ArrayList<>();}}
 
         @Override
     public String toString(){
