@@ -1,0 +1,30 @@
+@---------varDef test
+
+
+func main(){
+
+
+	node root = 6;
+	setNodeV(root, 5);
+	pit(getNodeV(root));
+	node left = 3;
+	node right = 7;
+	setNodeL(root, left);
+	pit(getNodeV(root));
+	pit(getNodeL(root));
+	setNodeR(root, right);
+	pit(getNodeV(root));
+	pit(getNodeL(root));
+	pit(getNodeR(root));
+
+@-------vvvv doesnt work as expected
+
+	node L = getNodeL(root);
+	setNodeV(L,0);
+	setNodeL(left,2);
+	pit(getNodeV(getNodeL(root)));
+
+
+
+}
+main()

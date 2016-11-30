@@ -36,7 +36,7 @@ static lexeme e=evaluator.create();
             if(!b){parser.fatal("Bad File Extension: must be  .nes ");}
             n=new lexer(file,false);
         }
-        catch(ArrayIndexOutOfBoundsException e){n=new lexer("file.txt",false);}
+        catch(ArrayIndexOutOfBoundsException e){n=new lexer("file.nes",false);}
         catch(FileNotFoundException e){parser.fatal("Disc error game not found!!!!!");}
         p=new parser();
         tree=p.parse();
