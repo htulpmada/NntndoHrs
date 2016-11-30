@@ -419,8 +419,22 @@ public class evaluator {
 
     private lexeme evalSTATELIST(lexeme tree, lexeme env) {
         lexeme result=null;
+        lexeme prev=null;
+            System.out.println("in slist");
         while(tree!=null){
+            prev=result;
+            System.out.println(tree.left.type);
             result = evaluate(tree.left, env);
+            System.out.println("back from state");
+            System.out.println("result is "+result);
+        
+            if(result!=null&&result.type=="BREAK"){
+                if(result.right==null){
+                    result.right=prev;
+                }
+                //System.out.println("break type"+result.right.type);
+                break;
+            }
             if(tree.right!=null){
                 tree = tree.right.left;
             }
@@ -454,12 +468,13 @@ public class evaluator {
         lexeme x = null;
         while((evaluate(conditional, env)).string == "TRUE"){
             x = evaluate(block, env);
-            //if(){}// if(x contains lexeme BREAK){ break; }
+            if(x.type=="BREAK"){return x.right;}// if(x contains lexeme BREAK){ break; }
         }
         return x;
     }
 
     private lexeme evalIFSTATE(lexeme tree, lexeme env) {
+        System.out.println("in if ");
         lexeme conditional = tree.right.right.left;
         lexeme block = tree.right.right.right.right.left;
         lexeme optElse = tree.right.right.right.right.right.left;
