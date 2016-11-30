@@ -260,10 +260,6 @@ public class evaluator {
         //passing a function from one var to another
             lexeme variable = tree.right.left;
             lexeme close = evaluate(tree.right.right.right.left,env);//maybe lookUp instead 
-            //lexeme params = tree.right.right.right.left.left;
-            //lexeme body = tree.right.right.right.right.right.left;
-            //lexeme right = cons("JOIN", body, env);
-            //lexeme close = cons("CLOSURE", params, right);
             lexeme ret = insert(variable, close, env);
             return ret;
         }
