@@ -1,12 +1,6 @@
-@---array access out of bounds
+@---array initialize error
 yoshi main(){
-	triforce t = [];
-	link(t,1);
-	link(t,2);
-	link(t,3);
-	pit(t);
-	pit("t[4]: ");
-	pit(t[4]);
+	triforce t = ;
 }
 
 main()

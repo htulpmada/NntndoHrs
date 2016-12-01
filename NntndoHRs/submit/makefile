@@ -1,8 +1,7 @@
 
 
 
-run: compile error1 error1x error2 error2x error3 error3x arrays arraysx conditionals condtionalsx recursion recursionx iteration iterationx functions functionsx dictionary dictionaryx problem problemx
-
+run: compile 
 
 arrays: 
 	cat srcCodesNes/ArrayTest.nes
@@ -40,6 +39,8 @@ error3:
 	cat srcCodesNes/Errors/OperatorError5.nes
 	cat srcCodesNes/Errors/BadStatementError.nes
 	echo "Passing a file that doesnt exist called 'BadStatementError.txt'"
+	cat srcCodesNes/Errors/BadStatementError.txt
+	
 
 error3x: compile
 	java -classpath classfiles nntndohrs.NntndoHRs srcCodesNes/Errors/OperatorError5.nes
@@ -49,7 +50,7 @@ error3x: compile
 conditionals:
 	cat srcCodesNes/ConditionalTest.nes
 
-condtionalsx: compile
+conditionalsx: compile
 	java -classpath classfiles nntndohrs.NntndoHRs srcCodesNes/ConditionalTest.nes
 
 recursion:

@@ -1,6 +1,6 @@
-@-------undefined variable error
+@-------parenthasis error
 yoshi main(){
-	pit(i);
+	pit i);
 }
 
 main()
