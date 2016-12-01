@@ -71,18 +71,19 @@ functionsx: compile
 	java -classpath classfiles nntndohrs.NntndoHRs srcCodesNes/FirstClassFunctionTest.nes
 
 dictionary:
+	echo dictionary not implemented yet
 
 dictionaryx:compile
+	echo dictionaryx not implemented yet
 
 problem:
+	echo problem not implemented yet
 
 problemx: compile
+	echo problemx not implemented yet
 
 compile: 
 	javac -d classfiles -sourcepath src src/nntndohrs/NntndoHRs.java
 
 clean:
 	rm -f classfiles/nntndohrs/*.class
-
-
-

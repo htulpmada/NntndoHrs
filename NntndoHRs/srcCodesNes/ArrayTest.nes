@@ -7,7 +7,7 @@ func main(){
 @--------initialize test
 
 	print("");
-	print("------set test-----");
+	print("------initialize test-----");
 	print("");
 
 	print("array a = [1,2,3,4];");
@@ -92,26 +92,6 @@ func main(){
 	print(i);
 	print("");
 
-	print("insert on single item initialize");
-	print("");
-
-	array i = [1,];
-	print("i = [1,] ");
-
-	print("i[0] = " + i[0]);
-
-	print("");
-	print("insert(i,1,2)");
-	print("");
-	
-	insert(i,1,2);
-
-	print("i should be [1,2] ");
-	print(i);
-
-	print("");
-
-
 	print("insert on empty initialize");
 
 	array i = [];
@@ -167,25 +147,6 @@ func main(){
 	print(a);
 	print("");
 
-	print("append on single item initialize");
-	print("");
-
-	array a = [1,];
-	print("a = [1,] ");
-
-	print(a);
-
-	print("");
-	print("append(a,2)");
-	print("");
-	
-	append(a,2);
-
-	print("a should be [1,2] ");
-	print(a);
-
-	print("");
-
 
 	print("append on empty initialize");
 	print("");
@@ -234,26 +195,6 @@ func main(){
 	print("r  should [2,3,4,5,6] ");
 	print(r);
 	print("");
-
-	print("remove on single item initialize");
-	print("");
-
-	array r = [1,];
-	print("r = [1,] ");
-
-	print(r);
-
-	print("");
-	print("remove(r,0)");
-	print("");
-	
-	remove(r,0);
-
-	print("r should be [] ");
-@	print("r[0] == null " + r[0]);
-
-	print("");
-
 
 	print("remove on empty initialize throws error");
 

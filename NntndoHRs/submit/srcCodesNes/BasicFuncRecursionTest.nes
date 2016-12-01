@@ -2,6 +2,8 @@
 
 func main( k ){
 
+	if(k==2){return k;}
+
 	if(k>0){
 
 		print(k);
@@ -22,7 +24,7 @@ func main( k ){
 
 func Opening(){
 
-	print("recursively count down to zero ");
+	print("recursively count down to zero stops at 2 because return statment");
 	print("");
 
 }

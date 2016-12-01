@@ -16,7 +16,7 @@ func main(){
 
 		if(i == 2){print(i);}
 
-		@print("i = " + i); 
+		else{print("minus 1 and keep going");} 
 
 		i = i - 1; 
 
