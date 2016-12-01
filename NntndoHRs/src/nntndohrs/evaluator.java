@@ -125,7 +125,7 @@ public class evaluator {
         while(list.type=="JOIN"){
             l.strings.add(list.left);
             list=list.right;
-            if(list.type=="INTEGER"){l.strings.add(list);}
+            if(list.type!="JOIN"){l.strings.add(list);}
         }
         //l.strings.add(list.left);
         return l;
@@ -425,19 +425,22 @@ public class evaluator {
     private lexeme evalSTATELIST(lexeme tree, lexeme env) {
         lexeme result=null;
         lexeme prev=null;
-            System.out.println("in slist");
+        //System.out.println("in slist");
         while(tree!=null){
             prev=result;
-            System.out.println(tree.left.type);
             result = evaluate(tree.left, env);
-            System.out.println("back from state");
-            System.out.println("result is "+result);
-        
+            if(result!=null&&result.type=="RETURNED"){
+                result=result.left;
+                break;
+            }
+            if(result!=null&&result.left!=null&&result.left.type=="RETURN"){
+                result=cons("RETURNED",evaluate(result.right.left,env),null);
+                break;
+            }    
             if(result!=null&&result.type=="BREAK"){
                 if(result.right==null){
                     result.right=prev;
                 }
-                //System.out.println("break type"+result.right.type);
                 break;
             }
             if(tree.right!=null){
@@ -456,7 +459,7 @@ public class evaluator {
             return evaluate(tree.left, env);
         }
         else if(tree.left.type == "RETURN"){
-            return evaluate(tree.right.left, env);
+            return tree;
         }
         else if(tree.left.type == "PRINT"){
             return evaluate(tree.left, env);
@@ -479,7 +482,7 @@ public class evaluator {
     }
 
     private lexeme evalIFSTATE(lexeme tree, lexeme env) {
-        System.out.println("in if ");
+    //5    System.out.println("in if ");
         lexeme conditional = tree.right.right.left;
         lexeme block = tree.right.right.right.right.left;
         lexeme optElse = tree.right.right.right.right.right.left;
@@ -524,7 +527,7 @@ public class evaluator {
     }
 
     private lexeme evalRETURN(lexeme tree, lexeme env) {//not sure if its used
-        return evaluate(tree,env);
+        return tree;
     }
 
     //private lexeme evalINCLUDE(lexeme tree, lexeme env) {}

@@ -112,7 +112,7 @@ public static lexeme lex() throws IOException{
         }
         return new lexeme("unknown");
     }
-    
+
     /**
      *  skips all whitespace and pushes back extra char after end of whitespace
      */
@@ -167,7 +167,7 @@ public static lexeme lex() throws IOException{
         else if (token.equals("getNodeL")||token.equals("iChooseL")){return new lexeme("gNodeL", "Lnode");}
         else if (token.equals("getNodeR")||token.equals("iChooseR")){return new lexeme("gNodeR", "Rnode");}//end of new stuff
         else if(token.equals("while")||token.equals("game")){return new lexeme("WHILE","while");}
-        else if(token.equals("return")||token.equals("gameOver")){return new lexeme("RETURN","return");}
+        else if(token.equals("return")||token.equals("quit")){return new lexeme("RETURN","return");}
         else if (token.equals("func")||token.equals("yoshi")){return new lexeme("FUNC", "func");}
         else if (token.equals("nil")||token.equals("null")||token.equals("dk")){return new lexeme("NIL", "nil");}
         else if (token.equals("true")||token.equals("bubble")){return new lexeme("BOOLEAN", "TRUE");}
@@ -179,7 +179,7 @@ public static lexeme lex() throws IOException{
         else if (token.equals("remove")||token.equals("gannon")){return new lexeme("REMOVE", "remove");}
         else if (token.equals("set")||token.equals("sheik")){return new lexeme("SET", "set");}
         else if (token.equals("length")||token.equals("size")||token.equals("quest")){return new lexeme("LENGTH", "length");}
-        else if (token.equals("break")||token.equals("smash")){return new lexeme("BREAK", "break");}
+        else if (token.equals("break")||token.equals("gameover")){return new lexeme("BREAK", "break");}
         else if (token.equals("lambda")||token.equals("samus")){return new lexeme("LAMBDA", "lambda");}
         else {return new lexeme("ID",token);}
         

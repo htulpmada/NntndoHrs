@@ -1,31 +1,58 @@
-Nintend oh Heros  (copyright infringe?)
+
+
+		 <<^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^>>
+		<<<  Nintend oh Heros  (copyright infringe?)  >>>
+		 <<vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv>>
+
 
 Designer language made by Adam Pluth for cs 403 Dr. J. University of Alabama
+
+Intro:
+	The year was 1986 and it was a hot day of October in the desert
+	when a small code monkey was born in the middle of a digital 
+	revolution, he grew and wandered through existance trying to figure 
+	out what to do with his life when he was faced with the challenge
+	of creating the greatest language in the world. As this code monkey
+	was well educated by the finest institute the state of Alabama has
+	to offer, he accepted the challenge and created something that 
+	reminded this narrartor of his youth when he was a still 
+	stumbling through childhood trying and ultimately failing in 
+	an attemp to resist the pixelized grip of control that was....
+
+
+			VIDEO GAMES!!!!!!!!
+
+
+
+Intro:		Designer Programming Language for Dr. j,
+		CS403 at University of Alabama ROll Tide!!!
+		Java like syntax with a couple exceptions.
+		Dynamically typed, with all the basic stuff
+		and a little extra. 
+
+		NOT Object Oriented.
+
+		EVERYTHING IS A STRING!!!
+		when the lexer reads a token it saves as a string until 
+		proper evaluation is needed (usually with operators)
+		afterwhich the result is stored as a string.
+	
+		The execption to the is Arrays which is a lexeme 
+		with an array of lexemes(whitch are strings).
 
 
 
 Rules:
-	COMMENT: 	(single line only) symbol = @
-
-	Program: 	consists of multiple definitions
 
 	File Ext:	.nes
+	
+	COMMENT: 	(single line only) symbol = @
 
-	Intro:		Designer Programming Language for Dr. j,
-			CS403 at University of Alabama ROll Tide!!!
-			Java like syntax with a couple exceptions.
-			Dynamically typed, with all the basic stuff
-			and a little extra. NOT Object Oriented.
-
-
+	Programs: 	Consist of multiple definitions(see below...)
 
 	Types: 	Strings, Integers, Reals and Booleans.
 		Functions are kind of considered a type as you can 
 		assign them like you would a variable!!!
-
-
-	Programs: Consist of definitions(see below...)
-
 
 	Definitions are either:
 
@@ -53,12 +80,12 @@ Rules:
 
 
 		Id definition: (other)
+
 			really ends up being function calls and array accessors
 			
 			function call is [ name ( args ) ]<-- 	no semi colon for
 								top level but need 
 								for non-global scope
-
 				  ex...  main()
 
 			array accesor should be  var name with 
@@ -74,6 +101,7 @@ Rules:
 
 		Initializer(): array var = [] or [1,] or [1,2,3,4]
 			single item array MUST have comma!!!
+			supports mixed types in same array!!!
 
 		set(): set( array , index , value ) ; <-----------  will append if out of bounds!!!!!
 
@@ -88,6 +116,8 @@ Rules:
 	Built-ins:
 
 		Print(): print with new line at end
+		return <-- does whats expected
+		break <--- also does whats expected
 	
 	Conditionals:
 
@@ -163,6 +193,8 @@ Rules:
 		words with the exact same usage and effect as 
 		the 'base' keyword.
 
+
+		base word	  alternates
 		---------------------------------------------------
 		integer		[ int , mario ]
 		string		[ str , luigi ]
@@ -177,6 +209,8 @@ Rules:
 		true		[ bubble ]
 		false		[ bobble ]
 		print		[ pit ]
+		break		[ gameover ]
+		return		[ quit ]
 		array		[ triforce ]
 		append		[ link ]
 		insert		[ zelda ]

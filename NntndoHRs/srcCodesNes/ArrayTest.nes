@@ -310,9 +310,10 @@ func main(){
 	print("array l = [1,2,3,4,5];");
 	print("");
 
-	array l = [1,2,3,4,5];
-
-	print("length(Aray)");
+	array l = [1,2,3,4,"five"];@<---supports multi-types
+	
+	pit(l);
+	pit(l[4]);
 	print("");
 	print("length(l)");
 	print(length(l));
