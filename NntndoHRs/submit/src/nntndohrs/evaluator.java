@@ -99,7 +99,7 @@ public class evaluator {
             vals=cdr(table);
             while(vars!=null){
                 if(var.equals(car(vars).string)){//maybe an issue not sure yett
-                    setcar(vals,new lexeme(val.type,val.string,null,null));
+                    setcar(vals,new lexeme(val.type,val.string,null,null,val.strings));
                     setcar(vars,new lexeme(var,var,null,null));
                     return car(vals);
                 }
@@ -113,7 +113,7 @@ public class evaluator {
     }
     
     public lexeme insert(lexeme var, lexeme val,lexeme env){
-        if(val.type=="ARRAY"){val=makeArray(val);}
+        //if(val.type=="ARRAY"){val=makeArray(val);}
         lexeme table=car(env);
         setcar(table,cons("JOIN",var,car(table)));
         setcdr(table,cons("JOIN",val,cdr(table)));
@@ -125,7 +125,7 @@ public class evaluator {
         while(list.type=="JOIN"){
             l.strings.add(list.left);
             list=list.right;
-            if(list.type=="INTEGER"){l.strings.add(list);}
+            if(list.type!="JOIN"){l.strings.add(list);}
         }
         //l.strings.add(list.left);
         return l;
@@ -194,7 +194,7 @@ public class evaluator {
     else if(tree.type == "BOOLEAN"){return evalBOOLEAN(tree, env);}
     else if(tree.type == "PRINT"){return evalPRINT(tree, env);}
     //-----------operators-------------vvvvvvvvvv-------//
-    else if(tree.type == "EQUAL"){return evalASSIGN(tree, env);}//maybe needs to be evalASSIGN()
+    else if(tree.type == "EQUAL"){return evalASSIGN(tree, env);}
     else if(tree.type == "NOTEQUAL"){return evalNOTEQUAL(tree, env);}
     else if(tree.type == "NOT"){return evalUNARY(tree, env);}
     else if(tree.type == "GREATER"){return evalGREATER(tree, env);}
@@ -210,6 +210,12 @@ public class evaluator {
     else if(tree.type == "AND"){return evalAND(tree, env);}
     else if(tree.type == "OR"){return evalOR(tree, env);}
     else if(tree.type == "DOUBLEEQUAL"){return evalDOUBLEEQUAL(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "sNodeV"){return evalSetNodeV(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "sNodeL"){return evalSetNodeL(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "sNodeR"){return evalSetNodeR(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "gNodeV"){return evalGetNodeV(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "gNodeL"){return evalGetNodeL(tree, env);}//maybe needs to be evalEQUAL()
+    else if(tree.type == "gNodeR"){return evalGetNodeR(tree, env);}//maybe needs to be evalEQUAL()
 
     else{
         fatal(tree.type+" : "+tree.string+"line#: "+tree.line);}
@@ -235,8 +241,18 @@ public class evaluator {
     private lexeme evalVDEF(lexeme tree, lexeme env) {
         lexeme variable = tree.right.left;
         lexeme value = evaluate(tree.right.right.right.left, env);
+        if(tree.left.string=="node"){value.type="NODE";value.makeArr();value.strings.add(null);value.strings.add(null);}
+        if(value.type=="ARRAY"){
+            lexeme temp=value.left;
+            while(temp!=null&&temp.type=="JOIN"){
+                value.strings.add(temp.left);
+                temp=temp.right;
+            }
+            value.strings.add(temp);
+            value.left=null;
+        }
         lexeme ret = insert(variable, value, env);
-        return ret;//returning environment here
+        return ret;//returning newly inserted value
     }
 
     private lexeme evalFDEF(lexeme tree, lexeme env) {
@@ -244,10 +260,6 @@ public class evaluator {
         //passing a function from one var to another
             lexeme variable = tree.right.left;
             lexeme close = evaluate(tree.right.right.right.left,env);//maybe lookUp instead 
-            //lexeme params = tree.right.right.right.left.left;
-            //lexeme body = tree.right.right.right.right.right.left;
-            //lexeme right = cons("JOIN", body, env);
-            //lexeme close = cons("CLOSURE", params, right);
             lexeme ret = insert(variable, close, env);
             return ret;
         }
@@ -364,19 +376,15 @@ public class evaluator {
     }
 
     private lexeme evalEXPR(lexeme tree, lexeme env) {
-        //if(tree.right == null){
-            return evaluate(tree.left, env);
-        //}
-        //else{
-            //return evaluate(tree.right, env);
-        //}
+        return evaluate(tree.left, env);
     }
+
     private lexeme not(lexeme l){
         if(l.type=="BOOLEAN"){l.string=Boolean.toString(!Boolean.parseBoolean(l.string));return l;}//probably wrong
-        //else if(l.type=="INTEGER"){l.string=Integer.toString(!Integer.parseInt(l.string));return l;}
         else{fatal("Can't Not type:"+l.type,l.line);}
         return null;
     }
+
     private lexeme evalUNARY(lexeme tree, lexeme env) {
         lexeme elements = null;
         if(tree.right == null){
@@ -416,8 +424,25 @@ public class evaluator {
 
     private lexeme evalSTATELIST(lexeme tree, lexeme env) {
         lexeme result=null;
+        lexeme prev=null;
+        //System.out.println("in slist");
         while(tree!=null){
+            prev=result;
             result = evaluate(tree.left, env);
+            if(result!=null&&result.type=="RETURNED"){
+                result=result.left;
+                break;
+            }
+            if(result!=null&&result.left!=null&&result.left.type=="RETURN"){
+                result=cons("RETURNED",evaluate(result.right.left,env),null);
+                break;
+            }    
+            if(result!=null&&result.type=="BREAK"){
+                if(result.right==null){
+                    result.right=prev;
+                }
+                break;
+            }
             if(tree.right!=null){
                 tree = tree.right.left;
             }
@@ -434,9 +459,9 @@ public class evaluator {
             return evaluate(tree.left, env);
         }
         else if(tree.left.type == "RETURN"){
-            return evaluate(tree.right.left, env);
+            return tree;
         }
-        else if(tree.left.type == "PRINT"){//not sure if this is used
+        else if(tree.left.type == "PRINT"){
             return evaluate(tree.left, env);
         }
         else{
@@ -451,12 +476,13 @@ public class evaluator {
         lexeme x = null;
         while((evaluate(conditional, env)).string == "TRUE"){
             x = evaluate(block, env);
-            //if(){}// if(x contains lexeme BREAK){ break; }
+            if(x.type=="BREAK"){return x.right;}// if(x contains lexeme BREAK){ break; }
         }
         return x;
     }
 
     private lexeme evalIFSTATE(lexeme tree, lexeme env) {
+    //5    System.out.println("in if ");
         lexeme conditional = tree.right.right.left;
         lexeme block = tree.right.right.right.right.left;
         lexeme optElse = tree.right.right.right.right.right.left;
@@ -501,7 +527,7 @@ public class evaluator {
     }
 
     private lexeme evalRETURN(lexeme tree, lexeme env) {//not sure if its used
-        return evaluate(tree,env);
+        return tree;
     }
 
     //private lexeme evalINCLUDE(lexeme tree, lexeme env) {}
@@ -519,18 +545,50 @@ public class evaluator {
     }
 
     private lexeme evalPRINT(lexeme tree, lexeme env) {
-        lexeme eargs = evaluate(tree.right.left, env);
+        lexeme eargs;
+        if(tree.right!=null){eargs = evaluate(tree.right.left, env);}
+        else{eargs = evaluate(tree, env);}
         try{
             if(eargs.type=="JOIN"){System.out.print(eargs.left.string+"\n");return eargs;}
             if(eargs.type=="ARRAY"){
                 System.out.print("[ ");
-                for(lexeme l : eargs.strings){System.out.print(l.string+", ");}
+                for(lexeme l : eargs.strings){
+                    if((l!=null)&&(l.type=="NIL")){System.out.print(", ");continue;}
+                    if((l!=null)&&(l.type!="ARRAY")){System.out.print(l.string+", ");}
+                    else if (l!=null){//should be nested array
+                        evalPRINT(l,env,false);
+                    }
+                }
                 System.out.print("] \n");
+                
             }
             else{System.out.print(eargs.string+"\n");}
         }
         catch(NullPointerException n){fatal("null pointer ",tree.line);}//should rename error message
-        return eargs;//might be wrong 
+        return eargs;
+    }
+     private lexeme evalPRINT(lexeme tree, lexeme env,boolean newl) {
+        lexeme eargs;
+        if(tree.right!=null){eargs = evaluate(tree.right.left, env);}
+        else{eargs = evaluate(tree, env);}
+        try{
+            if(eargs.type=="JOIN"){System.out.print(eargs.left.string+"\n");return eargs;}
+            if(eargs.type=="ARRAY"){
+                System.out.print("[ ");
+                for(lexeme l : eargs.strings){
+                    if((l!=null)&&(l.type=="NIL")){System.out.print(", ");continue;}
+                    if((l!=null)&&(l.type!="ARRAY")){System.out.print(l.string+", ");}
+                    else if (l!=null){//should be nested array
+                        evalPRINT(l,env,true);
+                    }
+                }
+                System.out.print("] ");
+                
+            }
+            else{System.out.print(eargs.string+"\n");}
+        }
+        catch(NullPointerException n){fatal("null pointer ",tree.line);}//should rename error message
+        return eargs;
     }
 
     private lexeme evalEQUAL(lexeme tree, lexeme env) {
@@ -558,6 +616,21 @@ public class evaluator {
             return new lexeme("BOOLEAN", v);
         }
         else if((l.type == "STRING") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i==0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i==0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i==0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
             i=l.string.compareTo(r.string);
             v=(i==0)?"TRUE":"FALSE";
             return new lexeme("BOOLEAN", v);
@@ -644,6 +717,21 @@ public class evaluator {
             v=(i>0)?"TRUE":"FALSE";
             return new lexeme("BOOLEAN", v);
         }
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i>0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i>0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i>0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
         else if(l.type == "NIL"){
             if(r.type == "NIL"){
                 return new lexeme("BOOLEAN", "TRUE");
@@ -683,7 +771,22 @@ public class evaluator {
         else if((l.type == "STRING") && (r.type == "INTEGER")){
             i=l.string.compareTo(r.string);
             v=(i<0)?"TRUE":"FALSE";
-            return new lexeme("BOOLEAN", v);//add fatal if r is not actually number
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i<0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i<0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i<0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
         }
         else if(l.type == "NIL"){
             if(r.type == "NIL"){
@@ -726,6 +829,21 @@ public class evaluator {
             v=(i>=0)?"TRUE":"FALSE";
             return new lexeme("BOOLEAN", v);
         }
+                else if((l.type == "REAL") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i>=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i>=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i>=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
         else if(l.type == "NIL"){
             if(r.type == "NIL"){
                 return new lexeme("BOOLEAN", "TRUE");
@@ -763,6 +881,21 @@ public class evaluator {
             return new lexeme("BOOLEAN", v);
         }
         else if((l.type == "STRING") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i<=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+                else if((l.type == "REAL") && (r.type == "INTEGER")){
+            i=l.string.compareTo(r.string);
+            v=(i<=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "INTEGER") && (r.type == "REAL")){
+            i=l.string.compareTo(r.string);
+            v=(i<=0)?"TRUE":"FALSE";
+            return new lexeme("BOOLEAN", v);
+        }
+        else if((l.type == "REAL") && (r.type == "REAL")){
             i=l.string.compareTo(r.string);
             v=(i<=0)?"TRUE":"FALSE";
             return new lexeme("BOOLEAN", v);
@@ -902,7 +1035,7 @@ public class evaluator {
         else if((l.type == "INTEGER") && (r.type == "REAL")){
              return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
-        else if((l.type == "REAL") && (r.type == "REAL")){// parses as integer needs to fix
+        else if((l.type == "REAL") && (r.type == "REAL")){
             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
         }
         else{
@@ -924,15 +1057,15 @@ public class evaluator {
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
-        }//parse real<-------vvvvvv
+        }
         else if((l.type == "REAL") && (r.type == "INTEGER")){
-           return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }
         else if((l.type == "INTEGER") && (r.type == "REAL")){
-             return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }
         else if((l.type == "REAL") && (r.type == "REAL")){
-            return new lexeme("REAL", Float.toString((Float.parseFloat(l.string) / Float.parseFloat(r.string))));
+            return new lexeme("INTEGER", Integer.toString((Integer.parseInt(l.string) / Integer.parseInt(r.string))));
         }
         else{
             fatal("Can't divide: "+l.type+" and "+r.type,l.line);
@@ -952,7 +1085,7 @@ public class evaluator {
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             return new lexeme("INTEGER", Integer.toString((int) Math.pow(Integer.parseInt(l.string) , Integer.parseInt(r.string))));
-        }//parse real<-------vvvvvv
+        }
         else if((l.type == "REAL") && (r.type == "INTEGER")){
             return new lexeme("REAL", Float.toString((int) Math.pow(Float.parseFloat(l.string) , Float.parseFloat(r.string))));
         }
@@ -980,7 +1113,7 @@ public class evaluator {
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) & Integer.parseInt(r.string)));
-        }//parse real<-------vvvvvv
+        }
         else if((l.type == "REAL") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) & Integer.parseInt(r.string)));
         }
@@ -1010,7 +1143,7 @@ public class evaluator {
         }
         else if((l.type == "INTEGER") && (r.type == "STRING")){
             return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) | Integer.parseInt(r.string)));
-        }//parse real<-------vvvvvv
+        }
         else if((l.type == "REAL") && (r.type == "INTEGER")){
             return new lexeme("INTEGER", Integer.toString(Integer.parseInt(l.string) | Integer.parseInt(r.string)));
         }
@@ -1112,6 +1245,57 @@ public class evaluator {
     private lexeme evalBREAK(lexeme tree, lexeme env){
         //displayEnv(env);
         return tree;
+    }
+
+    private lexeme evalSetNodeV(lexeme tree, lexeme env) {
+        lexeme node = getNodeId(tree, env);
+        lexeme value = evaluate(tree.right.left, env).right;
+        if(value.type!="NODE"){
+                    value.type="NODE";
+                    value.makeArr();
+                    value.strings.add(null);
+                    value.strings.add(null);
+        }
+        lexeme nvalue = update(env,node.string,value,value.line);
+        return nvalue;
+    }
+    
+    private lexeme evalSetNodeL(lexeme tree, lexeme env) {
+        lexeme node = getNodeId(tree, env);
+        lexeme nodeval = evaluate(node ,env);
+        lexeme value = evaluate(tree.right.left, env).right;
+        nodeval.strings.set(0,value);        
+        lexeme nvalue = update(env,node.string,nodeval,value.line);
+        return nvalue;
+    }
+    
+    private lexeme evalSetNodeR(lexeme tree, lexeme env) {
+        lexeme node = getNodeId(tree, env);
+        lexeme nodeval = evaluate(node ,env);
+        lexeme value = evaluate(tree.right.left, env).right;
+        nodeval.strings.set(1,value);        
+        lexeme nvalue = update(env,node.string,nodeval,value.line);
+        return nvalue;
+    }
+    
+    private lexeme evalGetNodeV(lexeme tree, lexeme env) {
+        return evaluate(tree.right.left, env);
+    }
+    
+    private lexeme evalGetNodeL(lexeme tree, lexeme env) {
+        return evaluate(tree.right.left, env).strings.get(0);
+    }
+    
+    private lexeme evalGetNodeR(lexeme tree, lexeme env) {
+        
+        return evaluate(tree.right.left, env).strings.get(1);
+    }
+    
+    private lexeme getNodeId(lexeme tree,lexeme env){
+        if(tree.right.left.left.left.left.left==null){
+            return evaluate(tree.right.left.left.left,env);
+        }
+        return tree.right.left.left.left.left.left;
     }
     
 }
