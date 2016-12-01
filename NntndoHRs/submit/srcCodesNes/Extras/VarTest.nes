@@ -5,10 +5,8 @@ func main(){
 @--must initialize vars
 @  int a;   @error
 
-   print("the string a");
-
    int a = 0;
-   print("the variable a: " + a);
+   print("the integer a: " + a);
 
   @		 		  		vv issue with spacing on escape characters not sure if its lexer or evaluator
   print("spacing issue with escape the variable a:" + a);
