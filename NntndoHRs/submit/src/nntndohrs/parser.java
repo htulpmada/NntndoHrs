@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package nntndohrs;
 
 import java.io.FileNotFoundException;
@@ -47,7 +43,7 @@ static lexeme t;
     public lexeme advance(){
         lexeme old = t;
         t=t.left;
-        old.left=null;//not sure if this will cause problems
+        old.left=null;
         //System.out.println(old.type+" "+old.string);
         return old;
     }
@@ -296,8 +292,7 @@ static lexeme t;
         }
         else if (check("BREAK")){
             lexeme b = match("BREAK");
-            //lexeme s = match("SEMI");
-            return b;//cons("BREAK", b, s);
+            return b;
         }
         else if (check("APPEND")){
             lexeme f = match("APPEND");
@@ -568,7 +563,7 @@ static lexeme t;
     public boolean builtInPending() {
         return check("print");
         //| check();
-    }// | check() all builut in functions
+    }  // | check() all builut in functions
 
 
 }
